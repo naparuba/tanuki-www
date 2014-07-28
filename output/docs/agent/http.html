@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>HTTP API / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/http.html" rel="bookmark">
+                        HTTP API
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>HTTP API</h1>
+<p>The main interface to Consul is a RESTful HTTP API. The API can be
+used for CRUD for nodes, services, checks, and configuration. The endpoints are
+versioned to enable changes without breaking backwards compatibility.</p>
+<p>All endpoints fall into one of several categories:</p>
+<ul>
+<li>kv - Key/Value store</li>
+<li>agent - Agent control</li>
+<li>catalog - Manages nodes and services</li>
+<li>health - Manages health checks</li>
+<li>session - Session manipulation</li>
+<li>status - Consul system status</li>
+<li>internal - Internal APIs. Purposely undocumented, subject to change.</li>
+</ul>
+<p>Each of the categories and their respective endpoints are documented below.</p>
+<h2>Blocking Queries</h2>
+<p>Certain endpoints support a feature called a "blocking query." A blocking query
+is used to wait for a change to potentially take place using long polling.</p>
+<p>Queries that support this will mention it specifically, however the use of this
+feature is the same for all. If supported, the query will set an HTTP header
+"X-Consul-Index". This is an opaque handle that the client will use.</p>
+<p>To cause a query to block, the query parameters "?wait=\&lt;interval>&amp;index=\&lt;idx>" are added
+to a request. The "?wait=" query parameter limits how long the query will potentially
+block for. It not set, it will default to 10 minutes. It can be specified in the form of
+"10s" or "5m", which is 10 seconds or 5 minutes respectively. The "?index=" parameter is an
+opaque handle, which is used by Consul to detect changes. The  "X-Consul-Index" header for a
+query provides this value, and can be used to wait for changes since the query was run.</p>
+<p>When provided, Consul blocks sending a response until there is an update that
+could have cause the output to change, and thus advancing the index. A critical
+note is that when the query returns there is <strong>no guarantee</strong> of a change. It is
+possible that the timeout was reached, or that there was an idempotent write that
+does not affect the result.</p>
+<h2>Consistency Modes</h2>
+<p>Most of the read query endpoints support multiple levels of consistency.
+These are to provide a tuning knob that clients can be used to find a happy
+medium that best matches their needs.</p>
+<p>The three read modes are:</p>
+<ul>
+<li>
+<p>default - If not specified, this mode is used. It is strongly consistent
+  in almost all cases. However, there is a small window in which an new
+  leader may be elected, and the old leader may service stale values. The
+  trade off is fast reads, but potentially stale values. This condition is
+  hard to trigger, and most clients should not need to worry about the stale read.
+  This only applies to reads, and a split-brain is not possible on writes.</p>
+</li>
+<li>
+<p>consistent - This mode is strongly consistent without caveats. It requires
+  that a leader verify with a quorum of peers that it is still leader. This
+  introduces an additional round-trip to all server nodes. The trade off is
+  always consistent reads, but increased latency due to an extra round trip.
+  Most clients should not use this unless they cannot tolerate a stale read.</p>
+</li>
+<li>
+<p>stale - This mode allows any server to service the read, regardless of if
+  it is the leader. This means reads can be arbitrarily stale, but are generally
+  within 50 milliseconds of the leader. The trade off is very fast and scalable
+  reads but values will be stale. This mode allows reads without a leader, meaning
+  a cluster that is unavailable will still be able to respond.</p>
+</li>
+</ul>
+<p>To switch these modes, either the "?stale" or "?consistent" query parameters
+are provided. It is an error to provide both.</p>
+<p>To support bounding how stale data is, there is an "X-Consul-LastContact"
+which is the last time a server was contacted by the leader node in
+milliseconds. The "X-Consul-KnownLeader" also indicates if there is a known
+leader. These can be used to gauge if a stale read should be used.</p>
+<h2>KV</h2>
+<p>The KV endpoint is used to expose a simple key/value store. This can be used
+to store service configurations or other meta data in a simple way. It has only
+a single endpoint:</p>
+<div class="highlight"><pre><span class="p">/</span><span class="nx">v1</span><span class="p">/</span><span class="nx">kv</span><span class="o">/&lt;</span><span class="nb">key</span><span class="o">&gt;</span>
+</pre></div>
+
+
+<p>This is the only endpoint that is used with the Key/Value store.
+Its use depends on the HTTP method. The <code>GET</code>, <code>PUT</code> and <code>DELETE</code> methods
+are all supported. It is important to note that each datacenter has its
+own K/V store, and that there is no replication between datacenters.
+By default the datacenter of the agent is queried, however the dc can
+be provided using the "?dc=" query parameter. If a client wants to write
+to all Datacenters, one request per datacenter must be made.</p>
+<h3>GET Method</h3>
+<p>When using the <code>GET</code> method, Consul will return the specified key,
+or if the "?recurse" query parameter is provided, it will return
+all keys with the given prefix.</p>
+<p>Each object will look like:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;CreateIndex&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s2">&quot;ModifyIndex&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+        <span class="s2">&quot;LockIndex&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+        <span class="s2">&quot;Key&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Flags&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="s2">&quot;dGVzdA==&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Session&quot;</span><span class="p">:</span> <span class="s2">&quot;adf4238a-882b-9ddc-4a9d-5b6758e4159e&quot;</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>The <code>CreateIndex</code> is the internal index value that represents
+when the entry was created. The <code>ModifyIndex</code> is the last index
+that modified this key. This index corresponds to the <code>X-Consul-Index</code>
+header value that is returned. A blocking query can be used to wait for
+a value to change. If "?recurse" is used, the <code>X-Consul-Index</code> corresponds
+to the latest <code>ModifyIndex</code> and so a blocking query waits until any of the
+listed keys are updated.  The <code>LockIndex</code> is the last index of a successful
+lock acquisition. If the lock is held, the <code>Session</code> key provides the
+session that owns the lock.</p>
+<p>The <code>Key</code> is simply the full path of the entry. <code>Flags</code> are an opaque
+unsigned integer that can be attached to each entry. The use of this is
+left totally to the user. Lastly, the <code>Value</code> is a base64 key value.</p>
+<p>It is possible to also only list keys without their values by using the
+"?keys" query parameter along with a <code>GET</code> request. This will return
+a list of the keys under the given prefix. The optional "?separator="
+can be used to list only up to a given separator.</p>
+<p>For example, listing "/web/" with a "/" seperator may return:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+<span class="s2">&quot;/web/bar&quot;</span><span class="p">,</span>
+<span class="s2">&quot;/web/foo&quot;</span><span class="p">,</span>
+<span class="s2">&quot;/web/subdir/&quot;</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>Using the key listing method may be suitable when you do not need
+the values or flags, or want to implement a key-space explorer.</p>
+<p>If the "?raw" query parameter is used with a non-recursive GET,
+then the response is just the raw value of the key, without any
+encoding.</p>
+<p>If no entries are found, a 404 code is returned.</p>
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>PUT method</h3>
+<p>When using the <code>PUT</code> method, Consul expects the request body to be the
+value corresponding to the key. There are a number of parameters that can
+be used with a PUT request:</p>
+<ul>
+<li>
+<p>?flags=\&lt;num> : This can be used to specify an unsigned value between
+  0 and 2^64-1. It is opaque to the user, but a client application may
+  use it.</p>
+</li>
+<li>
+<p>?cas=\&lt;index> : This flag is used to turn the <code>PUT</code> into a Check-And-Set
+  operation. This is very useful as it allows clients to build more complex
+  syncronization primitives on top. If the index is 0, then Consul will only
+  put the key if it does not already exist. If the index is non-zero, then
+  the key is only set if the index matches the <code>ModifyIndex</code> of that key.</p>
+</li>
+<li>
+<p>?acquire=\&lt;session> : This flag is used to turn the <code>PUT</code> into a lock acquisition
+  operation. This is useful as it allows leader election to be built on top
+  of Consul. If the lock is not held and the session is valid, this increments
+  the <code>LockIndex</code> and sets the <code>Session</code> value of the key in addition to updating
+  the key contents. A key does not need to exist to be acquired.</p>
+</li>
+<li>
+<p>?release=\&lt;session> : This flag is used to turn the <code>PUT</code> into a lock release
+  operation. This is useful when paired with "?acquire=" as it allows clients to
+  yield a lock. This will leave the <code>LockIndex</code> unmodified but will clear the associated
+  <code>Session</code> of the key. The key must be held by this session to be unlocked.</p>
+</li>
+</ul>
+<p>The return value is simply either <code>true</code> or <code>false</code>. If <code>false</code> is returned,
+then the update has not taken place.</p>
+<h3>DELETE method</h3>
+<p>Lastly, the <code>DELETE</code> method can be used to delete a single key or all
+keys sharing a prefix. If the "?recurse" query parameter is provided,
+then all keys with the prefix are deleted, otherwise only the specified
+key.</p>
+<h2>Agent</h2>
+<p>The Agent endpoints are used to interact with a local Consul agent. Usually,
+services and checks are registered with an agent, which then takes on the
+burden of registering with the Catalog and performing anti-entropy to recover from
+outages. There are also various control APIs that can be used instead of the
+msgpack RPC protocol.</p>
+<p>The following endpoints are supported:</p>
+<ul>
+<li>/v1/agent/checks : Returns the checks the local agent is managing</li>
+<li>/v1/agent/services : Returns the services local agent is managing</li>
+<li>/v1/agent/members : Returns the members as seen by the local serf agent</li>
+<li>/v1/agent/self : Returns the local node configuration</li>
+<li>/v1/agent/join/\&lt;address> : Trigger local agent to join a node</li>
+<li>/v1/agent/force-leave/\&lt;node>: Force remove node</li>
+<li>/v1/agent/check/register : Registers a new local check</li>
+<li>/v1/agent/check/deregister/\&lt;checkID> : Deregister a local check</li>
+<li>/v1/agent/check/pass/\&lt;checkID> : Mark a local test as passing</li>
+<li>/v1/agent/check/warn/\&lt;checkID> : Mark a local test as warning</li>
+<li>/v1/agent/check/fail/\&lt;checkID> : Mark a local test as critical</li>
+<li>/v1/agent/service/register : Registers a new local service</li>
+<li>/v1/agent/service/deregister/\&lt;serviceID> : Deregister a local service</li>
+</ul>
+<h3>/v1/agent/checks</h3>
+<p>This endpoint is used to return the all the checks that are registered with
+the local agent. These checks were either provided through configuration files,
+or added dynamically using the HTTP API. It is important to note that the checks
+known by the agent may be different than those reported by the Catalog. This is usually
+due to changes being made while there is no leader elected. The agent performs active
+anti-entropy, so in most situations everything will be in sync within a few seconds.</p>
+<p>This endpoint is hit with a GET and returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;service:redis&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s">&quot;CheckID&quot;</span><span class="o">:</span> <span class="s">&quot;service:redis&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Name&quot;</span><span class="o">:</span> <span class="s">&quot;Service &#39;redis&#39; check&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Status&quot;</span><span class="o">:</span> <span class="s">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Notes&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Output&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;ServiceID&quot;</span><span class="o">:</span> <span class="s">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s">&quot;ServiceName&quot;</span><span class="o">:</span> <span class="s">&quot;redis&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>/v1/agent/services</h3>
+<p>This endpoint is used to return the all the services that are registered with
+the local agent. These services were either provided through configuration files,
+or added dynamically using the HTTP API. It is important to note that the services
+known by the agent may be different than those reported by the Catalog. This is usually
+due to changes being made while there is no leader elected. The agent performs active
+anti-entropy, so in most situations everything will be in sync within a few seconds.</p>
+<p>This endpoint is hit with a GET and returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;redis&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;ID&quot;</span><span class="o">:</span> <span class="s">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Service&quot;</span><span class="o">:</span> <span class="s">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Tags&quot;</span><span class="o">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s">&quot;Port&quot;</span><span class="o">:</span> <span class="mi">8000</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>/v1/agent/members</h3>
+<p>This endpoint is hit with a GET and returns the members the agent sees in the
+cluster gossip pool. Due to the nature of gossip, this is eventually consistent
+and the results may differ by agent. The strongly consistent view of nodes is
+instead provided by "/v1/catalog/nodes".</p>
+<p>For agents running in server mode, providing a "?wan=1" query parameter returns
+the list of WAN members instead of the LAN members which is default.</p>
+<p>This endpoint returns a JSON body like:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Addr&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1.10.12&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Port&quot;</span><span class="p">:</span> <span class="mi">8301</span><span class="p">,</span>
+        <span class="s2">&quot;Tags&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;bootstrap&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dc&quot;</span><span class="p">:</span> <span class="s2">&quot;dc1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;8300&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;consul&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;ProtocolMin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;ProtocolMax&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;ProtocolCur&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;DelegateMin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;DelegateMax&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;DelegateCur&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<h3>/v1/agent/self</h3>
+<p>This endpoint is used to return configuration of the local agent and member information.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;Config&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;Bootstrap&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
+        <span class="s">&quot;Server&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
+        <span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;DataDir&quot;</span><span class="o">:</span> <span class="s">&quot;/tmp/consul&quot;</span><span class="p">,</span>
+        <span class="s">&quot;DNSRecursor&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Domain&quot;</span><span class="o">:</span> <span class="s">&quot;consul.&quot;</span><span class="p">,</span>
+        <span class="s">&quot;LogLevel&quot;</span><span class="o">:</span> <span class="s">&quot;INFO&quot;</span><span class="p">,</span>
+        <span class="s">&quot;NodeName&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s">&quot;ClientAddr&quot;</span><span class="o">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;BindAddr&quot;</span><span class="o">:</span> <span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span>
+        <span class="s">&quot;AdvertiseAddr&quot;</span><span class="o">:</span> <span class="s">&quot;10.1.10.12&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Ports&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;DNS&quot;</span><span class="o">:</span> <span class="mi">8600</span><span class="p">,</span>
+            <span class="s">&quot;HTTP&quot;</span><span class="o">:</span> <span class="mi">8500</span><span class="p">,</span>
+            <span class="s">&quot;RPC&quot;</span><span class="o">:</span> <span class="mi">8400</span><span class="p">,</span>
+            <span class="s">&quot;SerfLan&quot;</span><span class="o">:</span> <span class="mi">8301</span><span class="p">,</span>
+            <span class="s">&quot;SerfWan&quot;</span><span class="o">:</span> <span class="mi">8302</span><span class="p">,</span>
+            <span class="s">&quot;Server&quot;</span><span class="o">:</span> <span class="mi">8300</span>
+        <span class="p">},</span>
+        <span class="s">&quot;LeaveOnTerm&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;SkipLeaveOnInt&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;StatsiteAddr&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Protocol&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">&quot;EnableDebug&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;VerifyIncoming&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;VerifyOutgoing&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;CAFile&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;CertFile&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;KeyFile&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;StartJoin&quot;</span><span class="o">:</span> <span class="p">[],</span>
+        <span class="s">&quot;UiDir&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;PidFile&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+        <span class="s">&quot;EnableSyslog&quot;</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span>
+        <span class="s">&quot;RejoinAfterLeave&quot;</span><span class="o">:</span> <span class="nb">false</span>
+    <span class="p">},</span>
+    <span class="s">&quot;Member&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;Name&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Addr&quot;</span><span class="o">:</span> <span class="s">&quot;10.1.10.12&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Port&quot;</span><span class="o">:</span> <span class="mi">8301</span><span class="p">,</span>
+        <span class="s">&quot;Tags&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s">&quot;bootstrap&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;dc&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;port&quot;</span><span class="o">:</span> <span class="s">&quot;8300&quot;</span><span class="p">,</span>
+            <span class="s">&quot;role&quot;</span><span class="o">:</span> <span class="s">&quot;consul&quot;</span><span class="p">,</span>
+            <span class="s">&quot;vsn&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;vsn_max&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;vsn_min&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span>
+        <span class="p">},</span>
+        <span class="s">&quot;Status&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">&quot;ProtocolMin&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">&quot;ProtocolMax&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s">&quot;ProtocolCur&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s">&quot;DelegateMin&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s">&quot;DelegateMax&quot;</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s">&quot;DelegateCur&quot;</span><span class="o">:</span> <span class="mi">4</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>/v1/agent/join/\&lt;address></h3>
+<p>This endpoint is hit with a GET and is used to instruct the agent to attempt to
+connect to a given address.  For agents running in server mode, providing a "?wan=1"
+query parameter causes the agent to attempt to join using the WAN pool.</p>
+<p>The endpoint returns 200 on successful join.</p>
+<h3>/v1/agent/force-leave/\&lt;node></h3>
+<p>This endpoint is hit with a GET and is used to instructs the agent to force a node into the left state.
+If a node fails unexpectedly, then it will be in a "failed" state. Once in this state, Consul will
+attempt to reconnect, and additionally the services and checks belonging to that node will not be
+cleaned up. Forcing a node into the left state allows its old entries to be removed.</p>
+<p>The endpoint always returns 200.</p>
+<h3>/v1/agent/check/register</h3>
+<p>The register endpoint is used to add a new check to the local agent.
+There is more documentation on checks <a href="/docs/agent/checks.html">here</a>.
+Checks are either a script or TTL type. The agent is responsible for managing
+the status of the check and keeping the Catalog in sync.</p>
+<p>The register endpoint expects a JSON request body to be PUT. The request
+body must look like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;ID&quot;</span><span class="o">:</span> <span class="s">&quot;mem&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Name&quot;</span><span class="o">:</span> <span class="s">&quot;Memory utilization&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Notes&quot;</span><span class="o">:</span> <span class="s">&quot;Ensure we don&#39;t oversubscribe memory&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Script&quot;</span><span class="o">:</span> <span class="s">&quot;/usr/local/bin/check_mem.py&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Interval&quot;</span><span class="o">:</span> <span class="s">&quot;10s&quot;</span><span class="p">,</span>
+    <span class="s">&quot;TTL&quot;</span><span class="o">:</span> <span class="s">&quot;15s&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The <code>Name</code> field is mandatory, as is either <code>Script</code> and <code>Interval</code>
+or <code>TTL</code>. Only one of <code>Script</code> and <code>Interval</code> or <code>TTL</code> should be provided.
+If an <code>ID</code> is not provided, it is set to <code>Name</code>. You cannot have duplicate
+<code>ID</code> entries per agent, so it may be necessary to provide an ID. The <code>Notes</code>
+field is not used by Consul, and is meant to be human readable.</p>
+<p>If a <code>Script</code> is provided, the check type is a script, and Consul will
+evaluate the script every <code>Interval</code> to update the status. If a <code>TTL</code> type
+is used, then the TTL update APIs must be used to periodically update
+the state of the check.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/check/deregister/\&lt;checkId></h3>
+<p>The deregister endpoint is used to remove a check from the local agent.
+The CheckID must be passed after the slash. The agent will take care
+of deregistering the check with the Catalog.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/check/pass/\&lt;checkId></h3>
+<p>This endpoint is used with a check that is of the <a href="/docs/agent/checks.html">TTL type</a>.
+When this endpoint is accessed via a GET, the status of the check is set to "passing",
+and the TTL clock is reset.</p>
+<p>The optional "?note=" query parameter can be used to associate output with
+the status of the check. This should be human readable for operators.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/check/warn/\&lt;checkId></h3>
+<p>This endpoint is used with a check that is of the <a href="/docs/agent/checks.html">TTL type</a>.
+When this endpoint is accessed via a GET, the status of the check is set to "warning",
+and the TTL clock is reset.</p>
+<p>The optional "?note=" query parameter can be used to associate output with
+the status of the check. This should be human readable for operators.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/check/fail/\&lt;checkId></h3>
+<p>This endpoint is used with a check that is of the <a href="/docs/agent/checks.html">TTL type</a>.
+When this endpoint is accessed via a GET, the status of the check is set to "critical",
+and the TTL clock is reset.</p>
+<p>The optional "?note=" query parameter can be used to associate output with
+the status of the check. This should be human readable for operators.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/service/register</h3>
+<p>The register endpoint is used to add a new service to the local agent.
+There is more documentation on services <a href="/docs/agent/services.html">here</a>.
+Services may also provide a health check. The agent is responsible for managing
+the status of the check and keeping the Catalog in sync.</p>
+<p>The register endpoint expects a JSON request body to be PUT. The request
+body must look like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;redis1&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;Name&quot;</span><span class="o">:</span> <span class="s2">&quot;redis&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;Tags&quot;</span><span class="o">:</span> <span class="cp">[</span>
+        <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;v1&quot;</span>
+    <span class="cp">]</span><span class="o">,</span>
+    <span class="s2">&quot;Port&quot;</span><span class="o">:</span> <span class="m">8000</span><span class="o">,</span>
+    <span class="s2">&quot;Check&quot;</span><span class="o">:</span> <span class="err">{</span>
+        <span class="s2">&quot;Script&quot;</span><span class="o">:</span> <span class="s2">&quot;/usr/local/bin/check_redis.py&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Interval&quot;</span><span class="o">:</span> <span class="s2">&quot;10s&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;TTL&quot;</span><span class="o">:</span> <span class="s2">&quot;15s&quot;</span>
+    <span class="p">}</span>
+<span class="err">}</span>
+</pre></div>
+
+
+<p>The <code>Name</code> field is mandatory,  If an <code>ID</code> is not provided, it is set to <code>Name</code>.
+You cannot have duplicate <code>ID</code> entries per agent, so it may be necessary to provide an ID.
+<code>Tags</code>, <code>Port</code> and <code>Check</code> are optional. If <code>Check</code> is provided, only one of <code>Script</code> and <code>Interval</code>
+or <code>TTL</code> should be provided. There is more information about checks <a href="/docs/agent/checks.html">here</a>.</p>
+<p>The created check will be named "service:\&lt;ServiceId>".</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/agent/service/deregister/\&lt;serviceId></h3>
+<p>The deregister endpoint is used to remove a service from the local agent.
+The ServiceID must be passed after the slash. The agent will take care
+of deregistering the service with the Catalog. If there is an associated
+check, that is also deregistered.</p>
+<p>The return code is 200 on success.</p>
+<h2>Catalog</h2>
+<p>The Catalog is the endpoint used to register and deregister nodes,
+services, and checks. It also provides a number of query endpoints.</p>
+<p>The following endpoints are supported:</p>
+<ul>
+<li>/v1/catalog/register : Registers a new node, service, or check</li>
+<li>/v1/catalog/deregister : Deregisters a node, service, or check</li>
+<li>/v1/catalog/datacenters : Lists known datacenters</li>
+<li>/v1/catalog/nodes : Lists nodes in a given DC</li>
+<li>/v1/catalog/services : Lists services in a given DC</li>
+<li>/v1/catalog/service/\&lt;service> : Lists the nodes in a given service</li>
+<li>/v1/catalog/node/\&lt;node> : Lists the services provided by a node</li>
+</ul>
+<p>The last 4 endpoints of the catalog support blocking queries and
+consistency modes.</p>
+<h3>/v1/catalog/register</h3>
+<p>The register endpoint is a low level mechanism for directly registering
+or updating entries in the catalog. It is usually recommended to use
+the agent local endpoints, as they are simpler and perform anti-entropy.</p>
+<p>The register endpoint expects a JSON request body to be PUT. The request
+body must look like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s2">&quot;dc1&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;Address&quot;</span><span class="o">:</span> <span class="s2">&quot;192.168.10.10&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="err">{</span>
+        <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;redis1&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="s2">&quot;redis&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Tags&quot;</span><span class="o">:</span> <span class="cp">[</span>
+            <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;v1&quot;</span>
+        <span class="cp">]</span><span class="o">,</span>
+        <span class="s2">&quot;Port&quot;</span><span class="o">:</span> <span class="m">8000</span>
+    <span class="p">}</span><span class="o">,</span>
+    <span class="s2">&quot;Check&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="o">:</span> <span class="s2">&quot;service:redis1&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="o">:</span> <span class="s2">&quot;Redis health check&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="o">:</span> <span class="s2">&quot;Script based health check&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="o">:</span> <span class="s2">&quot;passing&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="o">:</span> <span class="s2">&quot;redis1&quot;</span>
+    <span class="p">}</span>
+<span class="err">}</span>
+</pre></div>
+
+
+<p>The behavior of the endpoint depends on what keys are provided. The endpoint
+requires <code>Node</code> and <code>Address</code> to be provided, while <code>Datacenter</code> will be defaulted
+to match that of the agent. If only those are provided, the endpoint will register
+the node with the catalog.</p>
+<p>If the <code>Service</code> key is provided, then the service will also be registered. If
+<code>ID</code> is not provided, it will be defaulted to <code>Service</code>. It is mandated that the
+ID be node-unique. Both <code>Tags</code> and <code>Port</code> can be omitted.</p>
+<p>If the <code>Check</code> key is provided, then a health check will also be registered. It
+is important to remember that this register API is very low level. This manipulates
+the health check entry, but does not setup a script or TTL to actually update the
+status. For that behavior, an agent local check should be setup.</p>
+<p>The <code>CheckID</code> can be omitted, and will default to the <code>Name</code>. Like before, the
+<code>CheckID</code> must be node-unique. The <code>Notes</code> is an opaque field that is meant to
+hold human readable text. If a <code>ServiceID</code> is provided that matches the <code>ID</code>
+of a service on that node, then the check is treated as a service level health
+check, instead of a node level health check. Lastly, the status must be one of
+"unknown", "passing", "warning", or "critical". The "unknown" status is used
+to indicate that the initial check has not been performed yet.</p>
+<p>It is important to note that <code>Check</code> does not have to be provided with <code>Service</code>
+and visa-versa. They can be provided or omitted at will.</p>
+<p>If the API call succeeds a 200 status code is returned.</p>
+<h3>/v1/catalog/deregister</h3>
+<p>The deregister endpoint is a low level mechanism for direclty removing
+entries in the catalog. It is usually recommended to use the agent local
+endpoints, as they are simpler and perform anti-entropy.</p>
+<p>The deregister endpoint expects a JSON request body to be PUT. The request
+body must look like one of the following:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+    <span class="s">&quot;CheckID&quot;</span><span class="o">:</span> <span class="s">&quot;service:redis1&quot;</span>
+<span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+    <span class="s">&quot;ServiceID&quot;</span><span class="o">:</span> <span class="s">&quot;redis1&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The behavior of the endpoint depends on what keys are provided. The endpoint
+requires <code>Node</code> to be provided, while <code>Datacenter</code> will be defaulted
+to match that of the agent. If only <code>Node</code> is provided, then the node, and
+all associated services and checks are deleted. If <code>CheckID</code> is provided, only
+that check belonging to the node is removed. If <code>ServiceID</code> is provided, then the
+service along with its associated health check (if any) is removed.</p>
+<p>If the API call succeeds a 200 status code is returned.</p>
+<h3>/v1/catalog/datacenters</h3>
+<p>This endpoint is hit with a GET and is used to return all the
+datacenters that are known by the Consul server.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="s">&quot;dc1&quot;</span><span class="p">,</span> <span class="s">&quot;dc2&quot;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>This endpoint does not require a cluster leader, and as such
+will succeed even during an availability outage. It can thus be
+a simple check to see if any Consul servers are routable.</p>
+<h3>/v1/catalog/nodes</h3>
+<p>This endpoint is hit with a GET and returns the nodes known
+about in a given DC. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1.10.11&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1.10.12&quot;</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/catalog/services</h3>
+<p>This endpoint is hit with a GET and returns the services known
+about in a given DC. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;consul&quot;</span><span class="o">:</span> <span class="cp">[]</span><span class="o">,</span>
+    <span class="s2">&quot;redis&quot;</span><span class="o">:</span> <span class="cp">[]</span><span class="o">,</span>
+    <span class="s2">&quot;postgresql&quot;</span><span class="o">:</span> <span class="cp">[</span>
+        <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;slave&quot;</span>
+    <span class="cp">]</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The main object keys are the service names, while the array
+provides all the known tags for a given service.</p>
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/catalog/service/\&lt;service></h3>
+<p>This endpoint is hit with a GET and returns the nodes providing a service
+in a given DC. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>The service being queried must be provided after the slash. By default
+all nodes in that service are returned. However, the list can be filtered
+by tag using the "?tag=" query parameter.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1.10.12&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceTags&quot;</span><span class="p">:</span> <span class="kt">null</span><span class="p">,</span>
+        <span class="s2">&quot;ServicePort&quot;</span><span class="p">:</span> <span class="mi">8000</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/catalog/node/\&lt;node></h3>
+<p>This endpoint is hit with a GET and returns the node provided services.
+By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.
+The node being queried must be provided after the slash.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="err">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;Address&quot;</span><span class="o">:</span> <span class="s2">&quot;10.1.10.12&quot;</span>
+    <span class="p">}</span><span class="o">,</span>
+    <span class="s2">&quot;Services&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;consul&quot;</span><span class="o">:</span> <span class="err">{</span>
+            <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;consul&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="s2">&quot;consul&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;Tags&quot;</span><span class="o">:</span> <span class="n">null</span><span class="o">,</span>
+            <span class="s2">&quot;Port&quot;</span><span class="o">:</span> <span class="m">8300</span>
+        <span class="p">}</span><span class="o">,</span>
+        <span class="s2">&quot;redis&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;redis&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="s2">&quot;redis&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;Tags&quot;</span><span class="o">:</span> <span class="cp">[</span>
+                <span class="s2">&quot;v1&quot;</span>
+            <span class="cp">]</span><span class="o">,</span>
+            <span class="s2">&quot;Port&quot;</span><span class="o">:</span> <span class="m">8000</span>
+        <span class="p">}</span>
+    <span class="err">}</span>
+<span class="err">}</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h2>Health</h2>
+<p>The Health used to query health related information. It is provided separately
+from the Catalog, since users may prefer to not use the health checking mechanisms
+as they are totally optional. Additionally, some of the query results from the Health system are filtered, while the Catalog endpoints provide the raw entries.</p>
+<p>The following endpoints are supported:</p>
+<ul>
+<li>/v1/health/node/\&lt;node>: Returns the health info of a node</li>
+<li>/v1/health/checks/\&lt;service>: Returns the checks of a service</li>
+<li>/v1/health/service/\&lt;service>: Returns the nodes and health info of a service</li>
+<li>/v1/health/state/\&lt;state>: Returns the checks in a given state</li>
+</ul>
+<p>All of the health endpoints supports blocking queries and all consistency modes.</p>
+<h3>/v1/health/node/\&lt;node></h3>
+<p>This endpoint is hit with a GET and returns the node specific checks known.
+By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.
+The node being queried must be provided after the slash.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;serfHealth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Serf Health Status&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;service:redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Service &#39;redis&#39; check&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>In this case, we can see there is a system level check (no associated
+<code>ServiceID</code>, as well as a service check for Redis). The "serfHealth" check
+is special, in that all nodes automatically have this check. When a node
+joins the Consul cluster, it is part of a distributed failure detection
+provided by Serf. If a node fails, it is detected and the status is automatically
+changed to "critical".</p>
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/health/checks/\&lt;service></h3>
+<p>This endpoint is hit with a GET and returns the checks associated with
+a service in a given datacenter.
+By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.
+The service being queried must be provided after the slash.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;service:redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Service &#39;redis&#39; check&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/health/service/\&lt;service></h3>
+<p>This endpoint is hit with a GET and returns the service nodes providing
+a given service in a given datacenter.
+By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>The service being queried must be provided after the slash. By default
+all nodes in that service are returned. However, the list can be filtered
+by tag using the "?tag=" query parameter.</p>
+<p>This is very similar to the /v1/catalog/service endpoint however, this
+endpoint automatically returns the status of the associated health check,
+as well as any system level health checks. This allows a client to avoid
+sending traffic to nodes failing health tests, or who are reporting warnings.</p>
+<p>Providing the "?passing" query parameter will filter results to only nodes
+with all checks in the passing state. This can be used to avoid some filtering
+logic on the client side. (Added in Consul 0.2)</p>
+<p>Users can also built in support for dynamic load balancing and other features
+by incorporating the use of health checks.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1.10.12&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Service&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Service&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Tags&quot;</span><span class="p">:</span> <span class="kt">null</span><span class="p">,</span>
+            <span class="s2">&quot;Port&quot;</span><span class="p">:</span> <span class="mi">8000</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Checks&quot;</span><span class="p">:</span> <span class="err">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;service:redis&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Service &#39;redis&#39; check&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;serfHealth&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Serf Health Status&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">}</span>
+        <span class="cp">]</span>
+    <span class="err">}</span>
+<span class="o">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/health/state/\&lt;state></h3>
+<p>This endpoint is hit with a GET and returns the checks in a specific
+state for a given datacenter. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>The state being queried must be provided after the slash. The supported states
+are "any", "unknown", "passing", "warning", or "critical". The "any" state is
+a wildcard that can be used to return all the checks.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;serfHealth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Serf Health Status&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;Node&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CheckID&quot;</span><span class="p">:</span> <span class="s2">&quot;service:redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Service &#39;redis&#39; check&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;passing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Notes&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceID&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ServiceName&quot;</span><span class="p">:</span> <span class="s2">&quot;redis&quot;</span>
+    <span class="p">}</span>
+<span class="cp">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h2>Session</h2>
+<p>The Session endpoints are used to create, destroy and query sessions.
+The following endpoints are supported:</p>
+<ul>
+<li>/v1/session/create: Creates a new session</li>
+<li>/v1/session/destroy/\&lt;session>: Destroys a given session</li>
+<li>/v1/session/info/\&lt;session>: Queries a given session</li>
+<li>/v1/session/node/\&lt;node>: Lists sessions belonging to a node</li>
+<li>/v1/session/list: Lists all the active sessions</li>
+</ul>
+<p>All of the read session endpoints supports blocking queries and all consistency modes.</p>
+<h3>/v1/session/create</h3>
+<p>The create endpoint is used to initialize a new session.
+There is more documentation on sessions <a href="/docs/internals/sessions.html">here</a>.
+Sessions must be associated with a node, and optionally any number of checks.
+By default, the agent uses it's own node name, and provides the "serfHealth"
+check, along with a 15 second lock delay.</p>
+<p>By default, the agent's local datacenter is used, but another datacenter
+can be specified using the "?dc=" query parameter. It is not recommended
+to use cross-region sessions.</p>
+<p>The create endpoint expects a JSON request body to be PUT. The request
+body must look like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;LockDelay&quot;</span><span class="o">:</span> <span class="s">&quot;15s&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Name&quot;</span><span class="o">:</span> <span class="s">&quot;my-service-lock&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
+    <span class="s">&quot;Checks&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>None of the fields are mandatory, and in fact no body needs to be PUT
+if the defaults are to be used. The <code>LockDelay</code> field can be specified
+as a duration string using a "s" suffix for seconds. It can also be a numeric
+value. Small values are treated as seconds, and otherwise it is provided with
+nanosecond granularity.</p>
+<p>The <code>Node</code> field must refer to a node that is already registered. By default,
+the agent will use it's own name. The <code>Name</code> field can be used to provide a human
+readable name for the Session. Lastly, the <code>Checks</code> field is used to provide
+a list of associated health checks. By default the "serfHealth" check is provided.
+It is highly recommended that if you override this list, you include that check.</p>
+<p>The return code is 200 on success, along with a body like:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="s">&quot;ID&quot;</span><span class="o">:</span><span class="s">&quot;adf4238a-882b-9ddc-4a9d-5b6758e4159e&quot;</span><span class="p">}</span>
+</pre></div>
+
+
+<p>This is used to provide the ID of the newly created session.</p>
+<h3>/v1/session/destroy/\&lt;session></h3>
+<p>The destroy endpoint is hit with a PUT and destroys the given session.
+By default the local datacenter is used, but the "?dc=" query parameter
+can be used to specify the datacenter. The session being destroyed must
+be provided after the slash.</p>
+<p>The return code is 200 on success.</p>
+<h3>/v1/session/info/\&lt;session></h3>
+<p>This endpoint is hit with a GET and returns the session information
+by ID within a given datacenter. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.
+The session being queried must be provided after the slash.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;LockDelay&quot;</span><span class="p">:</span> <span class="mf">1.5e+10</span><span class="p">,</span>
+    <span class="s2">&quot;Checks&quot;</span><span class="p">:</span> <span class="err">[</span>
+      <span class="s2">&quot;serfHealth&quot;</span>
+    <span class="cp">]</span><span class="o">,</span>
+    <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;adf4238a-882b-9ddc-4a9d-5b6758e4159e&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;CreateIndex&quot;</span><span class="o">:</span> <span class="nt">1086449</span>
+  <span class="err">}</span>
+<span class="o">]</span>
+</pre></div>
+
+
+<p>If the session is not found, null is returned instead of a JSON list.
+This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/session/node/\&lt;node></h3>
+<p>This endpoint is hit with a GET and returns the active sessions
+for a given node and datacenter. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.
+The node being queried must be provided after the slash.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;LockDelay&quot;</span><span class="p">:</span> <span class="mf">1.5e+10</span><span class="p">,</span>
+    <span class="s2">&quot;Checks&quot;</span><span class="p">:</span> <span class="err">[</span>
+      <span class="s2">&quot;serfHealth&quot;</span>
+    <span class="cp">]</span><span class="o">,</span>
+    <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;adf4238a-882b-9ddc-4a9d-5b6758e4159e&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;CreateIndex&quot;</span><span class="o">:</span> <span class="nt">1086449</span>
+  <span class="err">}</span><span class="o">,</span>
+  <span class="o">...</span>
+<span class="o">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h3>/v1/session/list</h3>
+<p>This endpoint is hit with a GET and returns the active sessions
+for a given datacenter. By default the datacenter of the agent is queried,
+however the dc can be provided using the "?dc=" query parameter.</p>
+<p>It returns a JSON body like this:</p>
+<div class="highlight"><pre><span class="cp">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;LockDelay&quot;</span><span class="p">:</span> <span class="mf">1.5e+10</span><span class="p">,</span>
+    <span class="s2">&quot;Checks&quot;</span><span class="p">:</span> <span class="err">[</span>
+      <span class="s2">&quot;serfHealth&quot;</span>
+    <span class="cp">]</span><span class="o">,</span>
+    <span class="s2">&quot;Node&quot;</span><span class="o">:</span> <span class="s2">&quot;foobar&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;adf4238a-882b-9ddc-4a9d-5b6758e4159e&quot;</span><span class="o">,</span>
+    <span class="s2">&quot;CreateIndex&quot;</span><span class="o">:</span> <span class="nt">1086449</span>
+  <span class="err">}</span><span class="o">,</span>
+  <span class="o">...</span>
+<span class="o">]</span>
+</pre></div>
+
+
+<p>This endpoint supports blocking queries and all consistency modes.</p>
+<h2>Status</h2>
+<p>The Status endpoints are used to get information about the status
+of the Consul cluster. This are generally very low level, and not really
+useful for clients.</p>
+<p>The following endpoints are supported:</p>
+<ul>
+<li>/v1/status/leader : Returns the current Raft leader</li>
+<li>/v1/status/peers : Returns the current Raft peer set</li>
+</ul>
+<h3>/v1/status/leader</h3>
+<p>This endpoint is used to get the Raft leader for the datacenter
+the agent is running in. It returns only an address like:</p>
+<div class="highlight"><pre><span class="s">&quot;10.1.10.12:8300&quot;</span>
+</pre></div>
+
+
+<h3>/v1/status/peers</h3>
+<p>This endpoint is used to get the Raft peers for the datacenter
+the agent is running in. It returns a list of addresses like:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="s">&quot;10.1.10.12:8300&quot;</span><span class="p">,</span> <span class="s">&quot;10.1.10.11:8300&quot;</span><span class="p">,</span> <span class="s">&quot;10.1.10.10:8300&quot;</span><span class="p">]</span>
+</pre></div>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

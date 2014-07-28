@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>run the Agent / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="what">
+      <a href="/intro/index.html">What is Consul?</a>
+    </li>
+    <li class="vs-other">
+      <a href="/intro/vs/index.html">Consul vs. Other Software</a>
+      
+								 
+    </li>
+    <li class="gettingstarted">
+      <a href="/intro/getting-started/install.html">Getting Started</a>
+
+      <ul class="nav">
+	<li class="gettingstarted-install">
+	  <a href="/intro/getting-started/install.html">Install Consul</a>
+	  </li>
+
+	<li class="gettingstarted-agent">
+	  <a href="/intro/getting-started/agent.html">Run the Agent</a>
+	  </li>
+
+	<li class="gettingstarted-services">
+	  <a href="/intro/getting-started/services.html">Services</a>
+	  </li>
+
+	<li class="gettingstarted-join">
+	  <a href="/intro/getting-started/join.html">Consul Cluster</a>
+	  </li>
+
+	<li class="gettingstarted-checks">
+	  <a href="/intro/getting-started/checks.html">Health Checks</a>
+	  </li>
+
+	<li class="gettingstarted-kv">
+	  <a href="/intro/getting-started/kv.html">Key/Value Data</a>
+	  </li>
+
+	<li class="gettingstarted-ui">
+	  <a href="/intro/getting-started/ui.html">Web UI</a>
+	  </li>
+
+	<li class="gettingstarted-nextsteps">
+	  <a href="/intro/getting-started/next-steps.html">Next Steps</a>
+	  </li>
+
+	</ul>
+
+    </li>
+    
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/intro/getting-started/agent.html" rel="bookmark">
+                        run the Agent
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Run the Consul Agent</h1>
+<p>After Consul is installed, the agent must be run. The agent can either run
+in a server or client mode. Each datacenter must have at least one server,
+although 3 or 5 is recommended. A single server deployment is <em><strong>highly</strong></em> discouraged
+as data loss is inevitable in a failure scenario. <a href="/docs/guides/bootstrapping.html">This guide</a>
+covers bootstrapping a new datacenter. All other agents run in client mode, which
+is a very lightweight process that registers services, runs health checks,
+and forwards queries to servers. The agent must be run for every node that
+will be part of the cluster.</p>
+<h2>Starting the Agent</h2>
+<p>For simplicity, we'll run a single Consul agent in server mode right now:</p>
+<p>```
+$ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul
+==&gt; WARNING: BootstrapExpect Mode is specified as 1; this is the same as Bootstrap mode.
+==&gt; WARNING: Bootstrap mode enabled! Do not enable unless necessary
+==&gt; WARNING: It is highly recommended to set GOMAXPROCS higher than 1
+==&gt; Starting Consul agent...
+==&gt; Starting Consul agent RPC...
+==&gt; Consul agent running!
+       Node name: 'Armons-MacBook-Air'
+      Datacenter: 'dc1'
+          Server: true (bootstrap: true)
+     Client Addr: 127.0.0.1 (HTTP: 8500, DNS: 8600, RPC: 8400)
+    Cluster Addr: 10.1.10.38 (LAN: 8301, WAN: 8302)</p>
+<p>==&gt; Log data will now stream in as it occurs:</p>
+<p>[INFO] serf: EventMemberJoin: Armons-MacBook-Air.local 10.1.10.38
+[INFO] raft: Node at 10.1.10.38:8300 [Follower] entering Follower state
+[INFO] consul: adding server for datacenter: dc1, addr: 10.1.10.38:8300
+[ERR] agent: failed to sync remote state: rpc error: No cluster leader
+[WARN] raft: Heartbeat timeout reached, starting election
+[INFO] raft: Node at 10.1.10.38:8300 [Candidate] entering Candidate state
+[INFO] raft: Election won. Tally: 1
+[INFO] raft: Node at 10.1.10.38:8300 [Leader] entering Leader state
+[INFO] consul: cluster leadership acquired
+[INFO] consul: New leader elected: Armons-MacBook-Air
+[INFO] consul: member 'Armons-MacBook-Air' joined, marking health alive
+```</p>
+<p>As you can see, the Consul agent has started and has output some log
+data. From the log data, you can see that our agent is running in server mode,
+and has claimed leadership of the cluster. Additionally, the local member has
+been marked as a healthy member of the cluster.</p>
+<div class="alert alert-block alert-warning">
+<strong>Note for OS X Users:</strong> Consul uses your hostname as the
+default node name. If your hostname contains periods, DNS queries to
+that node will not work with Consul. To avoid this, explicitly set
+the name of your node with the <code>-node</code> flag.
+</div>
+
+<h2>Cluster Members</h2>
+<p>If you run <code>consul members</code> in another terminal, you can see the members of
+the Consul cluster. You should only see one member (yourself). We'll cover
+joining clusters in the next section.</p>
+<p><code>$ consul members
+Node                    Address             Status  Type    Build  Protocol
+Armons-MacBook-Air      10.1.10.38:8301     alive   server  0.3.0  2</code></p>
+<p>The output shows our own node, the address it is running on, its
+health state, its role in the cluster, as well as some versioning information.
+Additional metadata can be viewed by providing the <code>-detailed</code> flag.</p>
+<p>The output from the <code>members</code> command is generated based on the
+<a href="/docs/internals/gossip.html">gossip protocol</a> and is eventually consistent.
+For a strongly consistent view of the world, use the
+<a href="/docs/agent/http.html">HTTP API</a>, which forwards the request to the
+Consul servers:</p>
+<p><code>$ curl localhost:8500/v1/catalog/nodes
+[{"Node":"Armons-MacBook-Air","Address":"10.1.10.38"}]</code></p>
+<p>In addition to the HTTP API, the
+<a href="/docs/agent/dns.html">DNS interface</a> can be used to query the node. Note
+that you have to make sure to point your DNS lookups to the Consul agent's
+DNS server, which runs on port 8600 by default. The format of the DNS
+entries (such as "Armons-MacBook-Air.node.consul") will be covered later.</p>
+<p>```
+$ dig @127.0.0.1 -p 8600 Armons-MacBook-Air.node.consul
+...</p>
+<p>;; QUESTION SECTION:
+;Armons-MacBook-Air.node.consul.    IN  A</p>
+<p>;; ANSWER SECTION:
+Armons-MacBook-Air.node.consul. 0 IN    A   10.1.10.38
+```</p>
+<h2>Stopping the Agent</h2>
+<p>You can use <code>Ctrl-C</code> (the interrupt signal) to gracefully halt the agent.
+After interrupting the agent, you should see it leave the cluster gracefully
+and shut down.</p>
+<p>By gracefully leaving, Consul notifies other cluster members that the
+node <em>left</em>. If you had forcibly killed the agent process, other members
+of the cluster would have detected that the node <em>failed</em>. When a member leaves,
+its services and checks are removed from the catalog. When a member fails,
+its health is simply marked as critical, but is not removed from the catalog.
+Consul will automatically try to reconnect to <em>failed</em> nodes, which allows it
+to recover from certain network conditions, while <em>left</em> nodes are no longer contacted.</p>
+<p>Additionally, if an agent is operating as a server, a graceful leave is important
+to avoid causing a potential availability outage affecting the <a href="/docs/internals/consensus.html">consensus protocol</a>.
+See the <a href="/docs/guides/index.html">guides section</a> to safely add and remove servers.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

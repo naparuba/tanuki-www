@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Agent / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/basics.html" rel="bookmark">
+                        Agent
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Consul Agent</h1>
+<p>The Consul agent is the core process of Consul. The agent maintains membership
+information, registers services, runs checks, responds to queries
+and more. The agent must run on every node that is part of a Consul cluster.</p>
+<p>Any Agent may run in one of two modes: client or server. A server
+node takes on the additional responsibility of being part of the <a href="#">consensus quorum</a>.
+These nodes take part in Raft, and provide strong consistency and availability in
+the case of failure. The higher burden on the server nodes means that usually they
+should be run on dedicated instances, as they are more resource intensive than a client
+node. Client nodes make up the majority of the cluster, and they are very lightweight
+as they maintain very little state and interface with the server nodes for most operations.</p>
+<h2>Running an Agent</h2>
+<p>The agent is started with the <code>consul agent</code> command. This command blocks,
+running forever or until told to quit. The agent command takes a variety
+of configuration options but the defaults are usually good enough. When
+running <code>consul agent</code>, you should see output similar to that below:</p>
+<p>```
+$ consul agent -data-dir=/tmp/consul
+==&gt; Starting Consul agent...
+==&gt; Starting Consul agent RPC...
+==&gt; Consul agent running!
+       Node name: 'Armons-MacBook-Air'
+      Datacenter: 'dc1'
+          Server: false (bootstrap: false)
+     Client Addr: 127.0.0.1 (HTTP: 8500, DNS: 8600, RPC: 8400)
+    Cluster Addr: 192.168.1.43 (LAN: 8301, WAN: 8302)</p>
+<p>==&gt; Log data will now stream in as it occurs:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">serf</span><span class="o">:</span> <span class="n">EventMemberJoin</span><span class="o">:</span> <span class="n">Armons</span><span class="o">-</span><span class="n">MacBook</span><span class="o">-</span><span class="n">Air</span><span class="p">.</span><span class="n">local</span> <span class="mf">192.168.1.43</span>
+</pre></div>
+
+
+<p>...
+```</p>
+<p>There are several important components that <code>consul agent</code> outputs:</p>
+<ul>
+<li>
+<p><strong>Node name</strong>: This is a unique name for the agent. By default this
+  is the hostname of the machine, but you may customize it to whatever
+  you'd like using the <code>-node</code> flag.</p>
+</li>
+<li>
+<p><strong>Datacenter</strong>: This is the datacenter the agent is configured to run
+ in. Consul has first-class support for multiple datacenters, but to work efficiently
+ each node must be configured to correctly report its datacenter. The <code>-dc</code> flag
+ can be used to set the datacenter. For single-DC configurations, the agent
+ will default to "dc1".</p>
+</li>
+<li>
+<p><strong>Server</strong>: This shows if the agent is running in the server or client mode.
+  Server nodes have the extra burden of participating in the consensus quorum,
+  storing cluster state, and handling queries. Additionally, a server may be
+  in "bootstrap" mode. Multiple servers cannot be in bootstrap mode,
+  otherwise the cluster state will be inconsistent.</p>
+</li>
+<li>
+<p><strong>Client Addr</strong>: This is the address used for client interfaces to the agent.
+  This includes the ports for the HTTP, DNS, and RPC interfaces. The RPC
+  address is used for other <code>consul</code> commands. Other Consul commands such
+  as <code>consul members</code> connect to a running agent and use RPC to query and
+  control the agent. By default, this binds only to localhost. If you
+  change this address or port, you'll have to specify an <code>-rpc-addr</code> whenever
+  you run commands such as <code>consul members</code> so they know how to talk to the
+  agent. This is also the address other applications can use over <a href="/docs/agent/rpc.html">RPC to control Consul</a>.</p>
+</li>
+<li>
+<p><strong>Cluster Addr</strong>: This is the address and ports used for communication between
+  Consul agents in a cluster. Every Consul agent in a cluster does not have to
+  use the same port, but this address <strong>MUST</strong> be reachable by all other nodes.</p>
+</li>
+</ul>
+<h2>Stopping an Agent</h2>
+<p>An agent can be stopped in two ways: gracefully or forcefully. To gracefully
+halt an agent, send the process an interrupt signal, which is usually
+<code>Ctrl-C</code> from a terminal. When gracefully exiting, the agent first notifies
+the cluster it intends to leave the cluster. This way, other cluster members
+notify the cluster that the node has <em>left</em>.</p>
+<p>Alternatively, you can force kill the agent by sending it a kill signal.
+When force killed, the agent ends immediately. The rest of the cluster will
+eventually (usually within seconds) detect that the node has died and will
+notify the cluster that the node has <em>failed</em>.</p>
+<p>It is especially important that a server node be allowed to gracefully leave,
+so that there will be a minimal impact on availability as the server leaves
+the consensus quorum.</p>
+<p>For client agents, the difference between a node <em>failing</em> and a node <em>leaving</em>
+may not be important for your use case. For example, for a web server and load
+balancer setup, both result in the same action: remove the web node
+from the load balancer pool. But for other situations, you may handle
+each scenario differently.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

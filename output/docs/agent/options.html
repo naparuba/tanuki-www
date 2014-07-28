@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Configuration / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/options.html" rel="bookmark">
+                        Configuration
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Configuration</h1>
+<p>The agent has various configuration options that can be specified via
+the command-line or via configuration files. All of the configuration
+options are completely optional and their defaults will be specified
+with their descriptions.</p>
+<p>When loading configuration, Consul loads the configuration from files
+and directories in the order specified. Configuration specified later
+will be merged into configuration specified earlier. In most cases,
+"merge" means that the later version will override the earlier. But in
+some cases, such as event handlers, merging just appends the handlers.
+The exact merging behavior will be specified.</p>
+<p>Consul also supports reloading of configuration when it receives the
+SIGHUP signal. Not all changes are respected, but those that are
+are documented below. The <a href="/docs/commands/reload.html">reload command</a>
+can also be used to trigger a configuration reload.</p>
+<h2>Command-line Options</h2>
+<p>The options below are all specified on the command-line.</p>
+<ul>
+<li>
+<p><code>-advertise</code> - The advertise address is used to change the address that we
+  advertise to other nodes in the cluster. By default, the <code>-bind</code> address is
+  advertised. However, in some cases, there may be a routable address that cannot
+  be bound to. This flag enables gossiping a different address to support this.
+  If this address is not routable, the node will be in a constant flapping state,
+  as other nodes will treat the non-routability as a failure.</p>
+</li>
+<li>
+<p><code>-bootstrap</code> - This flag is used to control if a server is in "bootstrap" mode. It is important that
+  no more than one server <em>per</em> datacenter be running in this mode. Technically, a server in bootstrap mode
+  is allowed to self-elect as the Raft leader. It is important that only a single node is in this mode,
+  because otherwise consistency cannot be guaranteed if multiple nodes are able to self-elect.
+  It is not recommended to use this flag after a cluster has been bootstrapped.</p>
+</li>
+<li>
+<p><code>-bootstrap-expect</code> - This flag provides the number of expected servers in the datacenter.
+  Either this value should not be provided, or the value must agree with other servers in
+  the cluster. When provided, Consul waits until the specified number of servers are
+  available, and then bootstraps the cluster. This allows an initial leader to be elected
+  automatically. This cannot be used in conjunction with the <code>-bootstrap</code> flag.</p>
+</li>
+<li>
+<p><code>-bind</code> - The address that should be bound to for internal cluster communications.
+  This is an IP address that should be reachable by all other nodes in the cluster.
+  By default this is "0.0.0.0", meaning Consul will use the first available private
+  IP address. Consul uses both TCP and UDP and use the same port for both, so if you
+  have any firewalls be sure to allow both protocols.</p>
+</li>
+<li>
+<p><code>-client</code> - The address that Consul will bind to client interfaces. This
+  includes the HTTP, DNS, and RPC servers. By default this is "127.0.0.1"
+  allowing only loopback connections. The RPC address is used by other Consul
+  commands, such as <code>consul members</code>, in order to query a running Consul agent.</p>
+</li>
+<li>
+<p><code>-config-file</code> - A configuration file to load. For more information on
+  the format of this file, read the "Configuration Files" section below.
+  This option can be specified multiple times to load multiple configuration
+  files. If it is specified multiple times, configuration files loaded later
+  will merge with configuration files loaded earlier, with the later values
+  overriding the earlier values.</p>
+</li>
+<li>
+<p><code>-config-dir</code> - A directory of configuration files to load. Consul will
+  load all files in this directory ending in ".json" as configuration files
+  in alphabetical order. For more information on the format of the configuration
+  files, see the "Configuration Files" section below.</p>
+</li>
+<li>
+<p><code>-data-dir</code> - This flag provides a data directory for the agent to store state.
+  This is required for all agents. The directory should be durable across reboots.
+  This is especially critical for agents that are running in server mode, as they
+  must be able to persist the cluster state.</p>
+</li>
+<li>
+<p><code>-dc</code> - This flag controls the datacenter the agent is running in. If not provided
+  it defaults to "dc1". Consul has first class support for multiple data centers but
+  it relies on proper configuration. Nodes in the same datacenter should be on a single
+  LAN.</p>
+</li>
+<li>
+<p><code>-join</code> - Address of another agent to join upon starting up. This can be
+  specified multiple times to specify multiple agents to join. If Consul is
+  unable to join with any of the specified addresses, agent startup will
+  fail. By default, the agent won't join any nodes when it starts up.</p>
+</li>
+<li>
+<p><code>-log-level</code> - The level of logging to show after the Consul agent has
+  started. This defaults to "info". The available log levels are "trace",
+  "debug", "info", "warn", "err". This is the log level that will be shown
+  for the agent output, but note you can always connect via <code>consul monitor</code>
+  to an agent at any log level. The log level can be changed during a
+  config reload.</p>
+</li>
+<li>
+<p><code>-node</code> - The name of this node in the cluster. This must be unique within
+  the cluster. By default this is the hostname of the machine.</p>
+</li>
+<li>
+<p><code>-protocol</code> - The Consul protocol version to use. This defaults to the latest
+  version. This should be set only when <a href="/docs/upgrading.html">upgrading</a>.
+  You can view the protocol versions supported by Consul by running <code>consul -v</code>.</p>
+</li>
+<li>
+<p><code>-rejoin</code> - When provided Consul will ignore a previous leave and attempt to
+  rejoin the cluster when starting. By default, Consul treats leave as a permanent
+  intent, and does not attempt to join the cluster again when starting. This flag
+  allows the previous state to be used to rejoin the cluster.</p>
+</li>
+<li>
+<p><code>-server</code> - This flag is used to control if an agent is in server or client mode. When provided,
+  an agent will act as a Consul server. Each Consul cluster must have at least one server, and ideally
+  no more than 5 <em>per</em> datacenter. All servers participate in the Raft consensus algorithm, to ensure that
+  transactions occur in a consistent, linearizable manner. Transactions modify cluster state, which
+  is maintained on all server nodes to ensure availability in the case of node failure. Server nodes also
+  participate in a WAN gossip pool with server nodes in other datacenters. Servers act as gateways
+  to other datacenters and forward traffic as appropriate.</p>
+</li>
+<li>
+<p><code>-syslog</code> - This flag enables logging to syslog. This is only supported on Linux
+  and OSX. It will result in an error if provided on Windows.</p>
+</li>
+<li>
+<p><code>-ui-dir</code> - This flag provides a the directory containing the Web UI resources
+  for Consul. This must be provided to enable the Web UI. Directory must be readable.</p>
+</li>
+<li>
+<p><code>-pid-file</code> - This flag provides the file path for the agent to store it's PID. This is useful for
+  sending signals to the agent, such as <code>SIGINT</code> to close it or <code>SIGHUP</code> to update check definitions.</p>
+</li>
+</ul>
+<h2>Configuration Files</h2>
+<p>In addition to the command-line options, configuration can be put into
+files. This may be easier in certain situations, for example when Consul is
+being configured using a configuration management system.</p>
+<p>The configuration files are JSON formatted, making them easily readable
+and editable by both humans and computers. The configuration is formatted
+at a single JSON object with configuration within it.</p>
+<p>Configuration files are used for more than just setting up the agent,
+they are also used to provide check and service definitions. These are used
+to announce the availability of system servers to the rest of the cluster.
+They are documented seperately under <a href="/docs/agent/checks.html">check configuration</a> and
+<a href="/docs/agent/services.html">service configuration</a> respectively. The service and check
+definitions support being updated during a reload.</p>
+<h4>Example Configuration File</h4>
+<pre class="prettyprint lang-json">
+{
+  "datacenter": "east-aws",
+  "data_dir": "/opt/consul",
+  "log_level": "INFO",
+  "node_name": "foobar",
+  "server": true
+}
+</pre>
+
+<h4>Configuration Key Reference</h4>
+<ul>
+<li>
+<p><code>bootstrap</code> - Equivalent to the <code>-bootstrap</code> command-line flag.</p>
+</li>
+<li>
+<p><code>bootstrap_expect</code> - Equivalent to the <code>-bootstrap-expect</code> command-line flag.</p>
+</li>
+<li>
+<p><code>bind_addr</code> - Equivalent to the <code>-bind</code> command-line flag.</p>
+</li>
+<li>
+<p><code>client_addr</code> - Equivalent to the <code>-client</code> command-line flag.</p>
+</li>
+<li>
+<p><code>datacenter</code> - Equivalent to the <code>-dc</code> command-line flag.</p>
+</li>
+<li>
+<p><code>data_dir</code> - Equivalent to the <code>-data-dir</code> command-line flag.</p>
+</li>
+<li>
+<p><code>log_level</code> - Equivalent to the <code>-log-level</code> command-line flag.</p>
+</li>
+<li>
+<p><code>node_name</code> - Equivalent to the <code>-node</code> command-line flag.</p>
+</li>
+<li>
+<p><code>protocol</code> - Equivalent to the <code>-protocol</code> command-line flag.</p>
+</li>
+<li>
+<p><code>server</code> - Equivalent to the <code>-server</code> command-line flag.</p>
+</li>
+<li>
+<p><code>ui_dir</code> - Equivalent to the <code>-ui-dir</code> command-line flag.</p>
+</li>
+<li>
+<p><code>advertise_addr</code> - Equivalent to the <code>-advertise</code> command-line flag.</p>
+</li>
+<li>
+<p><code>enable_syslog</code> - Equivalent to the <code>-syslog</code> command-line flag.</p>
+</li>
+<li>
+<p><code>rejoin_after_leave</code> - Equivalent to the <code>-rejoin</code> command-line flag.</p>
+</li>
+<li>
+<p><code>ca_file</code> - This provides a the file path to a PEM encoded certificate authority.
+  The certificate authority is used to check the authenticity of client and server
+  connections with the appropriate <code>verify_incoming</code> or <code>verify_outgoing</code> flags.</p>
+</li>
+<li>
+<p><code>cert_file</code> - This provides a the file path to a PEM encoded certificate.
+  The certificate is provided to clients or servers to verify the agents authenticity.
+  Must be provided along with the <code>key_file</code>.</p>
+</li>
+<li>
+<p><code>check_update_interval</code> - This interval controls how often check output from
+  checks in a steady state is syncronized with the server. By default, this is
+  set to 5 minutes ("5m"). Many checks which are in a steady state produce
+  slightly different output per run (timestamps, etc) which cause constant writes.
+  This configuration allows defering the sync of check output for a given interval to
+  reduce write pressure. If a check ever changes state, the new state and associated
+  output is syncronized immediately. To disable this behavior, set the value to "0s".</p>
+</li>
+<li>
+<p><code>domain</code> - By default, Consul responds to DNS queries in the "consul." domain.
+  This flag can be used to change that domain. All queries in this domain are assumed
+  to be handled by Consul, and will not be recursively resolved.</p>
+</li>
+<li>
+<p><code>dns_config</code> - This object allows a number of sub-keys to be set which can tune
+  how DNS queries are perfomed. See this guide on <a href="/docs/guides/dns-cache.html">DNS caching</a>.
+  The following sub-keys are available:</p>
+</li>
+<li>
+<p><code>node_ttl</code> - By default, this is "0s", which means all node lookups are served with
+  a 0 TTL value. This can be set to allow node lookups to set a TTL value, which enables
+  DNS caching. This should be specified with the "s" suffix for second, or "m" for minute.</p>
+</li>
+<li>
+<p><code>service_ttl</code> - This is a sub-object, which allows for setting a TTL on service lookups
+  with a per-service policy. The "*" wildcard service can be specified and is used when
+  there is no specific policy available for a service. By default, all services are served
+  with a 0 TTL value. Setting this enables DNS caching.</p>
+</li>
+<li>
+<p><code>allow_stale</code> - Enables a stale query for DNS information. This allows any Consul
+  server to service the request, instead of only the leader. The advantage of this is
+  you get linear read scalability with Consul servers. By default, this is false, meaning
+  all requests are serviced by the leader. This provides stronger consistency but
+  with less throughput and higher latency.</p>
+</li>
+<li>
+<p><code>max_stale</code> - When <code>allow_stale</code> is specified, this is used to limit how
+  stale of a result will be used. By default, this is set to "5s", which means
+  if a Consul server is more than 5 seconds behind the leader, the query will be
+  re-evaluated on the leader to get more up-to-date results.</p>
+</li>
+<li>
+<p><code>enable_debug</code> - When set, enables some additional debugging features. Currently,
+  only used to set the runtime profiling HTTP endpoints.</p>
+</li>
+<li>
+<p><code>encrypt</code> - Specifies the secret key to use for encryption of Consul
+  network traffic. This key must be 16-bytes that are base64 encoded. The
+  easiest way to create an encryption key is to use <code>consul keygen</code>. All
+  nodes within a cluster must share the same encryption key to communicate.</p>
+</li>
+<li>
+<p><code>key_file</code> - This provides a the file path to a PEM encoded private key.
+  The key is used with the certificate to verify the agents authenticity.
+  Must be provided along with the <code>cert_file</code>.</p>
+</li>
+<li>
+<p><code>leave_on_terminate</code> - If enabled, when the agent receives a TERM signal,
+  it will send a Leave message to the rest of the cluster and gracefully
+  leave. Defaults to false.</p>
+</li>
+<li>
+<p><code>ports</code> - This is a nested object that allows setting the bind ports
+   for the following keys:</p>
+<ul>
+<li><code>dns</code> - The DNS server, -1 to disable. Default 8600.</li>
+<li><code>http</code> - The HTTP api, -1 to disable. Default 8500.</li>
+<li><code>rpc</code> - The RPC endpoint. Default 8400.</li>
+<li><code>serf_lan</code> - The Serf LAN port. Default 8301.</li>
+<li><code>serf_wan</code> - The Serf WAN port. Default 8302.</li>
+<li><code>server</code> - Server RPC address. Default 8300.</li>
+</ul>
+</li>
+<li>
+<p><code>recursor</code> - This flag provides an address of an upstream DNS server that is used to
+  recursively resolve queries if they are not inside the service domain for consul. For example,
+  a node can use Consul directly as a DNS server, and if the record is outside of the "consul." domain,
+  the query will be resolved upstream using this server.</p>
+</li>
+<li>
+<p><code>skip_leave_on_interrupt</code> - This is the similar to<code>leave_on_terminate</code> but
+  only affects interrupt handling. By default, an interrupt causes Consul to
+  gracefully leave, but setting this to true disables that. Defaults to false.
+  Interrupts are usually from a Control-C from a shell.</p>
+</li>
+<li>
+<p><code>start_join</code> - An array of strings specifying addresses of nodes to
+  join upon startup.</p>
+</li>
+<li>
+<p><code>server_name</code> - When give, this overrides the <code>node_name</code> for the TLS certificate.
+  It can be used to ensure that the certificate name matches the hostname we
+  declare.</p>
+</li>
+<li>
+<p><code>statsite_addr</code> - This provides the address of a statsite instance. If provided
+  Consul will stream various telemetry information to that instance for aggregation.
+  This can be used to capture various runtime information.</p>
+</li>
+<li>
+<p><code>syslog_facility</code> - When <code>enable_syslog</code> is provided, this controls which
+  facility messages are sent to. By default, <code>LOCAL0</code> will be used.</p>
+</li>
+<li>
+<p><code>verify_incoming</code> - If set to True, Consul requires that all incoming
+  connections make use of TLS, and that the client provides a certificate signed
+  by the Certificate Authority from the <code>ca_file</code>. By default, this is false, and
+  Consul will not enforce the use of TLS or verify a client's authenticity. This
+  only applies to Consul servers, since a client never has an incoming connection.</p>
+</li>
+<li>
+<p><code>verify_outgoing</code> - If set to True, Consul requires that all outgoing connections
+  make use of TLS, and that the server provide a certificate that is signed by
+  the Certificate Authority from the <code>ca_file</code>. By default, this is false, and Consul
+  will not make use of TLS for outgoing connections. This applies to clients and servers,
+  as both will make outgoing connections.</p>
+</li>
+</ul>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

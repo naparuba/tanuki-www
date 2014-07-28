@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Telemetry / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/telemetry.html" rel="bookmark">
+                        Telemetry
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Telemetry</h1>
+<p>The Consul agent collects various metrics data at runtime about the performance
+of different libraries and sub-systems. These metrics are aggregated on a ten second
+interval and are retained for one minute.</p>
+<p>To view the telemetry information, you must send a <code>USR1</code> signal to the Consul
+process. Windows users must use the <code>BREAK</code> signal instead.
+Once Consul receives the signal, it will dump the current telemetry
+information to the stderr of the agent.</p>
+<p>In general, the telemetry information is used for debugging or otherwise
+getting a better view into what Consul is doing.</p>
+<p>Additionally, if the <code>statsite_addr</code> <a href="/docs/agent/options.html">configuration option</a>
+is provided, then the telemetry information will be streamed to a
+<a href="http://github.com/armon/statsite">statsite</a> server where it can be
+aggregate and flushed to Graphite or any other metrics store.</p>
+<p>Below is an example output:</p>
+<p><code>[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.num_goroutines': 19.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.alloc_bytes': 755960.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.malloc_count': 7550.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.free_count': 4387.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.heap_objects': 3163.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.total_gc_pause_ns': 1151002.000
+[2014-01-29 10:56:50 -0800 PST][G] 'consul-agent.runtime.total_gc_runs': 4.000
+[2014-01-29 10:56:50 -0800 PST][C] 'consul-agent.agent.ipc.accept': Count: 5 Sum: 5.000
+[2014-01-29 10:56:50 -0800 PST][C] 'consul-agent.agent.ipc.command': Count: 10 Sum: 10.000
+[2014-01-29 10:56:50 -0800 PST][C] 'consul-agent.serf.events': Count: 5 Sum: 5.000
+[2014-01-29 10:56:50 -0800 PST][C] 'consul-agent.serf.events.foo': Count: 4 Sum: 4.000
+[2014-01-29 10:56:50 -0800 PST][C] 'consul-agent.serf.events.baz': Count: 1 Sum: 1.000
+[2014-01-29 10:56:50 -0800 PST][S] 'consul-agent.memberlist.gossip': Count: 50 Min: 0.007 Mean: 0.020 Max: 0.041 Stddev: 0.007 Sum: 0.989
+[2014-01-29 10:56:50 -0800 PST][S] 'consul-agent.serf.queue.Intent': Count: 10 Sum: 0.000
+[2014-01-29 10:56:50 -0800 PST][S] 'consul-agent.serf.queue.Event': Count: 10 Min: 0.000 Mean: 2.500 Max: 5.000 Stddev: 2.121 Sum: 25.000</code></p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

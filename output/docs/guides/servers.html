@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Adding/Removing Servers / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+      <ul class="nav">
+	<li class="docs-guides-servers">
+	  <a href="/docs/guides/servers.html">Adding/Removing Servers</a>
+        </li>
+
+	<li class="docs-guides-bootstrapping">
+	  <a href="/docs/guides/bootstrapping.html">Bootstrapping</a>
+        </li>
+
+	<li class="docs-guides-dns-cache">
+	  <a href="/docs/guides/dns-cache.html">DNS Caching</a>
+	</li>
+
+	<li class="docs-guides-forwarding">
+	  <a href="/docs/guides/forwarding.html">DNS Forwarding</a>
+	</li>
+
+	<li class="docs-guides-external">
+	  <a href="/docs/guides/external.html">External Services</a>
+        </li>
+
+        <li class="docs-guides-leader">
+	  <a href="/docs/guides/leader-election.html">Leader Election</a>
+        </li>
+
+        <li class="docs-guides-datacenters">
+	  <a href="/docs/guides/datacenters.html">Multiple Datacenters</a>
+        </li>
+
+        <li class="docs-guides-outage">
+	  <a href="/docs/guides/outage.html">Outage Recovery</a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/guides/servers.html" rel="bookmark">
+                        Adding/Removing Servers
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Adding/Removing Servers</h1>
+<p>Consul is designed to require minimal operator involvement, however any changes
+to the set of Consul servers must be handled carefully. To better understand
+why, reading about the <a href="/docs/internals/consensus.html">consensus protocol</a> will
+be useful. In short, the Consul servers perform leader election and replication.
+For changes to be processed, a minimum quorum of servers (N/2)+1 must be available.
+That means if there are 3 server nodes, at least 2 must be available.</p>
+<p>In general, if you are ever adding and removing nodes simultaneously, it is better
+to first add the new nodes and then remove the old nodes.</p>
+<h2>Adding New Servers</h2>
+<p>Adding new servers is generally straightforward. Simply start the new
+server with the <code>-server</code> flag. At this point, the server will not be a member of
+any cluster, and should emit something like:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">WARN</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">EnableSingleNode</span> <span class="n">disabled</span><span class="p">,</span> <span class="n">and</span> <span class="n">no</span> <span class="n">known</span> <span class="n">peers</span><span class="p">.</span> <span class="n">Aborting</span> <span class="n">election</span><span class="p">.</span>
+</pre></div>
+
+
+<p>This means that it does not know about any peers and is not configured to elect itself.
+This is expected, and we can now add this node to the existing cluster using <code>join</code>.
+From the new server, we can join any member of the existing cluster:</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">Address</span><span class="o">&gt;</span>
+<span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">1</span> <span class="n">nodes</span><span class="p">.</span>
+</pre></div>
+
+
+<p>It is important to note that any node, including a non-server may be specified for
+join. The gossip protocol is used to properly discover all the nodes in the cluster.
+Once the node has joined, the existing cluster leader should log something like:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">Added</span> <span class="n">peer</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span><span class="p">,</span> <span class="n">starting</span> <span class="n">replication</span>
+</pre></div>
+
+
+<p>This means that raft, the underlying consensus protocol, has added the peer and begun
+replicating state. Since the existing cluster may be very far ahead, it can take some
+time for the new node to catch up. To check on this, run <code>info</code> on the leader:</p>
+<p><code>$ consul info
+...
+raft:
+    applied_index = 47244
+    commit_index = 47244
+    fsm_pending = 0
+    last_log_index = 47244
+    last_log_term = 21
+    last_snapshot_index = 40966
+    last_snapshot_term = 20
+    num_peers = 2
+    state = Leader
+    term = 21
+...</code></p>
+<p>This will provide various information about the state of Raft. In particular
+the <code>last_log_index</code> shows the last log that is on disk. The same <code>info</code> command
+can be run on the new server to see how far behind it is. Eventually the server
+will be caught up, and the values should match.</p>
+<p>It is best to add servers one at a time, allowing them to catch up. This avoids
+the possibility of data loss in case the existing servers fail while bringing
+the new servers up-to-date.</p>
+<h2>Removing Servers</h2>
+<p>Removing servers must be done carefully to avoid causing an availability outage.
+For a cluster of N servers, at least (N/2)+1 must be available for the cluster
+to function. See this <a href="/docs/internals/consensus.html#toc_3">deployment table</a>.
+If you have 3 servers, and 1 of them is currently failed, removing any servers
+will cause the cluster to become unavailable.</p>
+<p>To avoid this, it may be necessary to first add new servers to the cluster,
+increasing the failure tolerance of the cluster, and then to remove old servers.
+Even if all 3 nodes are functioning, removing one leaves the cluster in a state
+that cannot tolerate the failure of any node.</p>
+<p>Once you have verified the existing servers are healthy, and that the cluster
+can handle a node leaving, the actual process is simple. You simply issue a
+<code>leave</code> command to the server.</p>
+<p>The server leaving should contain logs like:</p>
+<div class="highlight"><pre><span class="p">...</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">server</span> <span class="n">starting</span> <span class="n">leave</span>
+<span class="p">...</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">Removed</span> <span class="n">ourself</span><span class="p">,</span> <span class="n">transitioning</span> <span class="n">to</span> <span class="n">follower</span>
+<span class="p">...</span>
+</pre></div>
+
+
+<p>The leader should also emit various logs including:</p>
+<div class="highlight"><pre><span class="p">...</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">member</span> <span class="err">&#39;</span><span class="n">node</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">8</span><span class="err">&#39;</span> <span class="n">left</span><span class="p">,</span> <span class="n">deregistering</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">Removed</span> <span class="n">peer</span> <span class="mf">10.0.1.8</span><span class="o">:</span><span class="mi">8300</span><span class="p">,</span> <span class="n">stopping</span> <span class="n">replication</span>
+<span class="p">...</span>
+</pre></div>
+
+
+<p>At this point the node has been gracefully removed from the cluster, and
+will shut down.</p>
+<h2>Forced Removal</h2>
+<p>In some cases, it may not be possible to gracefully remove a server. For example,
+if the server simply fails, then there is no ability to issue a leave. Instead,
+the cluster will detect the failure and replication will continuously retry.</p>
+<p>If the server can be recovered, it is best to bring it back online and then gracefully
+leave the cluster. However, if this is not a possibility, then the <code>force-leave</code> command
+can be used to force removal of a server.</p>
+<p>This is done by invoking that command with the name of the failed node. At this point,
+the cluster leader will mark the node as having left the cluster and it will stop attempting
+to replicate.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

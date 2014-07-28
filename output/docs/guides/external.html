@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>External Services / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+      <ul class="nav">
+	<li class="docs-guides-servers">
+	  <a href="/docs/guides/servers.html">Adding/Removing Servers</a>
+        </li>
+
+	<li class="docs-guides-bootstrapping">
+	  <a href="/docs/guides/bootstrapping.html">Bootstrapping</a>
+        </li>
+
+	<li class="docs-guides-dns-cache">
+	  <a href="/docs/guides/dns-cache.html">DNS Caching</a>
+	</li>
+
+	<li class="docs-guides-forwarding">
+	  <a href="/docs/guides/forwarding.html">DNS Forwarding</a>
+	</li>
+
+	<li class="docs-guides-external">
+	  <a href="/docs/guides/external.html">External Services</a>
+        </li>
+
+        <li class="docs-guides-leader">
+	  <a href="/docs/guides/leader-election.html">Leader Election</a>
+        </li>
+
+        <li class="docs-guides-datacenters">
+	  <a href="/docs/guides/datacenters.html">Multiple Datacenters</a>
+        </li>
+
+        <li class="docs-guides-outage">
+	  <a href="/docs/guides/outage.html">Outage Recovery</a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/guides/external.html" rel="bookmark">
+                        External Services
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Registering an External Service</h1>
+<p>Very few infrastructures are entirely self-contained, and often rely on
+a multitude of external service providers. Most services are registered
+in Consul through the use of a <a href="/docs/agent/services.html">service definition</a>,
+however that registers the local node as the service provider. In the case
+of external services, we want to register a service as being provided by
+an external provider.</p>
+<p>Consul supports this, however it requires manually registering the service
+with the catalog. Once registered, the DNS interface will be able to return
+the appropriate A records or CNAME records for the service. The service will
+also appear in standard queries against the API.</p>
+<p>Let us suppose we want to register a "search" service that is provided by
+"www.google.com", we could do the following:</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="o">-</span><span class="n">d</span> <span class="err">&#39;</span><span class="p">{</span><span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span> <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;google&quot;</span><span class="p">,</span> <span class="s">&quot;Address&quot;</span><span class="o">:</span> <span class="s">&quot;www.google.com&quot;</span><span class="p">,</span>
+<span class="s">&quot;Service&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s">&quot;Service&quot;</span><span class="o">:</span> <span class="s">&quot;search&quot;</span><span class="p">,</span> <span class="s">&quot;Port&quot;</span><span class="o">:</span> <span class="mi">80</span><span class="p">}}</span><span class="err">&#39;</span> <span class="n">http</span><span class="o">:</span><span class="c1">//127.0.0.1:8500/v1/catalog/register</span>
+</pre></div>
+
+
+<p>If we do a DNS lookup now, we can see the new search service:</p>
+<div class="highlight"><pre><span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> search.service.consul.
+<span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
+<span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
+<span class="p">;;</span> Got answer<span class="o">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span>HEADER<span class="o">&lt;&lt;-</span> opcode<span class="o">:</span> QUERY<span class="p">,</span> status<span class="o">:</span> NOERROR<span class="p">,</span> id<span class="o">:</span> <span class="m">13313</span>
+<span class="p">;;</span> flags<span class="o">:</span> qr aa rd ra<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">4</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">0</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">0</span>
+
+<span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
+<span class="p">;</span>search.service.consul.     IN  A
+
+<span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
+search.service.consul.  <span class="m">0</span>   IN  CNAME   www.google.com.
+www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.114</span>
+www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.115</span>
+www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.116</span>
+
+<span class="p">;;</span> Query time<span class="o">:</span> <span class="m">41</span> msec
+<span class="p">;;</span> SERVER<span class="o">:</span> <span class="m">127.0.0.1</span><span class="c1">#8600(127.0.0.1)</span>
+<span class="p">;;</span> WHEN<span class="o">:</span> Tue Feb <span class="m">25</span> <span class="m">17</span><span class="o">:</span><span class="m">45</span><span class="o">:</span><span class="m">12</span> <span class="m">2014</span>
+<span class="p">;;</span> MSG SIZE  rcvd<span class="o">:</span> <span class="m">178</span>
+</pre></div>
+
+
+<p>If at any time we want to deregister the service, we can simply do:</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">PUT</span> <span class="o">-</span><span class="n">d</span> <span class="err">&#39;</span><span class="p">{</span><span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span> <span class="s">&quot;Node&quot;</span><span class="o">:</span> <span class="s">&quot;google&quot;</span><span class="p">}</span><span class="err">&#39;</span> <span class="n">http</span><span class="o">:</span><span class="c1">//127.0.0.1:8500/v1/catalog/deregister</span>
+</pre></div>
+
+
+<p>This will deregister the <code>google</code> node, along with all services it provides.
+To learn more, read about the <a href="/docs/agent/http.html">HTTP API</a>.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

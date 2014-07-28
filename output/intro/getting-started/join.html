@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Consul Cluster / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="what">
+      <a href="/intro/index.html">What is Consul?</a>
+    </li>
+    <li class="vs-other">
+      <a href="/intro/vs/index.html">Consul vs. Other Software</a>
+      
+								 
+    </li>
+    <li class="gettingstarted">
+      <a href="/intro/getting-started/install.html">Getting Started</a>
+
+      <ul class="nav">
+	<li class="gettingstarted-install">
+	  <a href="/intro/getting-started/install.html">Install Consul</a>
+	  </li>
+
+	<li class="gettingstarted-agent">
+	  <a href="/intro/getting-started/agent.html">Run the Agent</a>
+	  </li>
+
+	<li class="gettingstarted-services">
+	  <a href="/intro/getting-started/services.html">Services</a>
+	  </li>
+
+	<li class="gettingstarted-join">
+	  <a href="/intro/getting-started/join.html">Consul Cluster</a>
+	  </li>
+
+	<li class="gettingstarted-checks">
+	  <a href="/intro/getting-started/checks.html">Health Checks</a>
+	  </li>
+
+	<li class="gettingstarted-kv">
+	  <a href="/intro/getting-started/kv.html">Key/Value Data</a>
+	  </li>
+
+	<li class="gettingstarted-ui">
+	  <a href="/intro/getting-started/ui.html">Web UI</a>
+	  </li>
+
+	<li class="gettingstarted-nextsteps">
+	  <a href="/intro/getting-started/next-steps.html">Next Steps</a>
+	  </li>
+
+	</ul>
+
+    </li>
+    
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/intro/getting-started/join.html" rel="bookmark">
+                        Consul Cluster
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Consul Cluster</h1>
+<p>By this point, we've started our first agent and registered and queried
+one or more services on that agent. This showed how easy it is to use
+Consul, but didn't show how this could be extended to a scalable production
+service discovery infrastructure. On this page, we'll create our first
+real cluster with multiple members.</p>
+<p>When starting a Consul agent, it begins without knowledge of any other node, and is
+an isolated cluster of one.  To learn about other cluster members, the agent must
+<em>join</em> an existing cluster.  To join an existing cluster, only needs to know
+about a <em>single</em> existing member. After it joins, the agent will gossip with this
+member and quickly discover the other members in the cluster. A Consul
+agent can join any other agent, it doesn't have to be an agent in server mode.</p>
+<h2>Starting the Agents</h2>
+<p>To simulate a more realistic cluster, we are using a two node cluster in
+Vagrant. The Vagrantfile can be found in the demo section of the repo
+<a href="https://github.com/hashicorp/consul/tree/master/demo/vagrant-cluster">here</a>.</p>
+<p>We start the first agent on our first node and also specify a node name.
+The node name must be unique and is how a machine is uniquely identified.
+By default it is the hostname of the machine, but we'll manually override it.
+We are also providing a bind address. This is the address that Consul listens on,
+and it <em>must</em> be accessible by all other nodes in the cluster. The first node
+will act as our server in this cluster. We're still not making a cluster
+of servers.</p>
+<p><code>$ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul \
+    -node=agent-one -bind=172.20.20.10
+...</code></p>
+<p>Then, in another terminal, start the second agent on the new node.
+This time, we set the bind address to match the IP of the second node
+as specified in the Vagrantfile. In production, you will generally want
+to provide a bind address or interface as well.</p>
+<p><code>$ consul agent -data-dir /tmp/consul -node=agent-two -bind=172.20.20.11
+...</code></p>
+<p>At this point, you have two Consul agents running, one server and one client.
+The two Consul agents still don't know anything about each other, and are each part of their own
+clusters (of one member). You can verify this by running <code>consul members</code>
+against each agent and noting that only one member is a part of each.</p>
+<h2>Joining a Cluster</h2>
+<p>Now, let's tell the first agent to join the second agent by running
+the following command in a new terminal:</p>
+<p><code>$ consul join 172.20.20.11
+Successfully joined cluster by contacting 1 nodes.</code></p>
+<p>You should see some log output in each of the agent logs. If you read
+carefully, you'll see that they received join information. If you
+run <code>consul members</code> against each agent, you'll see that both agents now
+know about each other:</p>
+<p><code>$ consul members -detailed
+Node        Address             Status  Tags
+agent-one   172.20.20.10:8301   alive   role=consul,dc=dc1,vsn=2,vsn_min=1,vsn_max=2,port=8300,bootstrap=1
+agent-two   172.20.20.11:8301   alive   role=node,dc=dc1,vsn=2,vsn_min=1,vsn_max=2</code></p>
+<div class="alert alert-block alert-info">
+<p><strong>Remember:</strong> To join a cluster, a Consul agent needs to only
+learn about <em>one existing member</em>. After joining the cluster, the
+agents gossip with each other to propagate full membership information.
+</p>
+</div>
+
+<p>In addition to using <code>consul join</code> you can use the <code>-join</code> flag on
+<code>consul agent</code> to join a cluster as part of starting up the agent.</p>
+<h2>Querying Nodes</h2>
+<p>Just like querying services, Consul has an API for querying the
+nodes themselves. You can do this via the DNS or HTTP API.</p>
+<p>For the DNS API, the structure of the names is <code>NAME.node.consul</code> or
+<code>NAME.DATACENTER.node.consul</code>. If the datacenter is omitted, Consul
+will only search the local datacenter.</p>
+<p>From "agent-one", query "agent-two":</p>
+<p>```
+$ dig @127.0.0.1 -p 8600 agent-two.node.consul
+...</p>
+<p>;; QUESTION SECTION:
+;agent-two.node.consul. IN  A</p>
+<p>;; ANSWER SECTION:
+agent-two.node.consul.  0 IN    A   172.20.20.11
+```</p>
+<p>The ability to look up nodes in addition to services is incredibly
+useful for system administration tasks. For example, knowing the address
+of the node to SSH into is as easy as making it part of the Consul cluster
+and querying it.</p>
+<h2>Leaving a Cluster</h2>
+<p>To leave the cluster, you can either gracefully quit an agent (using
+<code>Ctrl-C</code>) or force kill one of the agents. Gracefully leaving allows
+the node to transition into the <em>left</em> state, otherwise other nodes
+will detect it as having <em>failed</em>. The difference is covered
+in more detail <a href="/intro/getting-started/agent.html#toc_3">here</a>.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

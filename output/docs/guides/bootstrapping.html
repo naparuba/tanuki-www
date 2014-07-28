@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Bootstrapping / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+      <ul class="nav">
+	<li class="docs-guides-servers">
+	  <a href="/docs/guides/servers.html">Adding/Removing Servers</a>
+        </li>
+
+	<li class="docs-guides-bootstrapping">
+	  <a href="/docs/guides/bootstrapping.html">Bootstrapping</a>
+        </li>
+
+	<li class="docs-guides-dns-cache">
+	  <a href="/docs/guides/dns-cache.html">DNS Caching</a>
+	</li>
+
+	<li class="docs-guides-forwarding">
+	  <a href="/docs/guides/forwarding.html">DNS Forwarding</a>
+	</li>
+
+	<li class="docs-guides-external">
+	  <a href="/docs/guides/external.html">External Services</a>
+        </li>
+
+        <li class="docs-guides-leader">
+	  <a href="/docs/guides/leader-election.html">Leader Election</a>
+        </li>
+
+        <li class="docs-guides-datacenters">
+	  <a href="/docs/guides/datacenters.html">Multiple Datacenters</a>
+        </li>
+
+        <li class="docs-guides-outage">
+	  <a href="/docs/guides/outage.html">Outage Recovery</a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/guides/bootstrapping.html" rel="bookmark">
+                        Bootstrapping
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Bootstrapping a Datacenter</h1>
+<p>Before a Consul cluster can begin to service requests, it is necessary for a server node to
+be elected leader. For this reason, the first nodes that are started are generally the server nodes.
+Remember that an agent can run in both client and server mode. Server nodes are responsible for running
+the <a href="/docs/internals/consensus.html">consensus protocol</a>, and storing the cluster state.
+The client nodes are mostly stateless and rely on the server nodes, so they can be started easily.</p>
+<p>The recommended way to bootstrap is to use the <code>-bootstrap-expect</code> <a href="/docs/agent/options.html">configuration
+option</a>. This options informs Consul of the expected number of
+server nodes, and automatically bootstraps when that many servers are available. To prevent
+inconsistencies and split-brain situations, all servers should specify the same value for <code>-bootstrap-expect</code>
+or specify no value at all. Any server that does not specify a value will not attempt to
+bootstrap the cluster.</p>
+<p>There is a <a href="/docs/internals/consensus.html#toc_3">deployment table</a> that covers various options,
+but it is recommended to have 3 or 5 total servers per data center. A single server deployment is <em><strong>highly</strong></em>
+discouraged as data loss is inevitable in a failure scenario.</p>
+<p>Suppose we are starting a 3 server cluster, we can start <code>Node A</code>, <code>Node B</code> and <code>Node C</code> providing
+the <code>-bootstrap-expect 3</code> flag. Once the nodes are started, you should see a message to the effect of:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">WARN</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">EnableSingleNode</span> <span class="n">disabled</span><span class="p">,</span> <span class="n">and</span> <span class="n">no</span> <span class="n">known</span> <span class="n">peers</span><span class="p">.</span> <span class="n">Aborting</span> <span class="n">election</span><span class="p">.</span>
+</pre></div>
+
+
+<p>This indicates that the nodes are expecting 2 peers, but none are known yet. The servers will not elect
+themselves leader to prevent a split-brain. We can now join these machines together. Since a join operation
+is symmetric it does not matter which node initiates it. From any node you can do the following:</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">A</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">B</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">C</span> <span class="n">Address</span><span class="o">&gt;</span>
+<span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">3</span> <span class="n">nodes</span><span class="p">.</span>
+</pre></div>
+
+
+<p>Once the join is successful, one of the nodes will output something like:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">foo</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">bar</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">Attempting</span> <span class="n">bootstrap</span> <span class="n">with</span> <span class="n">nodes</span><span class="o">:</span> <span class="p">[</span><span class="mf">127.0.0.3</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">]</span>
+<span class="p">...</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">cluster</span> <span class="n">leadership</span> <span class="n">acquired</span>
+</pre></div>
+
+
+<p>As a sanity check, the <code>consul info</code> command is a useful tool. It can be used to
+verify <code>raft.num_peers</code> is now 2, and you can view the latest log index under <code>raft.last_log_index</code>.
+When running <code>consul info</code> on the followers, you should see <code>raft.last_log_index</code>
+converge to the same value as the leader begins replication. That value represents the last
+log entry that has been stored on disk.</p>
+<p>Now that the servers are all started and replicating to each other, all the remaining
+clients can be joined. Clients are much easier, as they can be started and perform
+a <code>join</code> against any existing node. All nodes participate in a gossip protocol to
+perform basic discovery, so clients will automatically find the servers and register
+themselves.</p>
+<p>It should be noted that it is not strictly necessary to start the server nodes
+before the clients, however most operations will fail until the servers are available.</p>
+<h2>Manual Bootstrapping</h2>
+<p>In versions of Consul previous to 0.4, bootstrapping was a more manual process.
+For a guide on using the <code>-bootstrap</code> flag directly, see the <a href="/docs/guides/manual-bootstrap.html">manual bootstrapping guide</a>.</p>
+<p>This is not recommended, as it is more error prone than automatic bootstrapping.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

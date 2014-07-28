@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>XXXXXXX vs. SkyDNS / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="what">
+      <a href="/intro/index.html">What is Consul?</a>
+    </li>
+    <li class="vs-other">
+      <a href="/intro/vs/index.html">Consul vs. Other Software</a>
+      
+      <ul class="nav">
+	<li class='vs-other-zk'>
+	  <a href="/intro/vs/zookeeper.html">ZooKeeper, doozerd, etcd</a>
+	  </li>
+
+	<li class="vs-other-chef">
+	  <a href="/intro/vs/chef-puppet.html">Chef, Puppet, etc.</a>
+                    </li>
+
+	<li class="vs-other-nagios-sensu">
+	  <a href="/intro/vs/nagios-sensu.html">Nagios, Sensu</a>
+                    </li>
+
+	<li class="vs-other-skydns">
+	  <a href="/intro/vs/skydns.html">SkyDNS</a>
+                    </li>
+
+	<li class="vs-other-smartstack">
+	  <a href="/intro/vs/smartstack.html">SmartStack</a>
+                    </li>
+
+	<li class="vs-other-serf">
+	  <a href="/intro/vs/serf.html">Serf</a>
+                    </li>
+
+	<li class="vs-other-custom">
+	  <a href="/intro/vs/custom.html">Custom Solutions</a>
+	  </li>
+	</ul>
+								 
+    </li>
+    <li class="gettingstarted">
+      <a href="/intro/getting-started/install.html">Getting Started</a>
+
+
+    </li>
+    
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/intro/vs/skydns.html" rel="bookmark">
+                        XXXXXXX vs. SkyDNS
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Consul vs. SkyDNS</h1>
+<p>SkyDNS is a relatively new tool designed to solve service discovery.
+It uses multiple central servers that are strongly consistent and
+fault tolerant. Nodes register services using an HTTP API, and
+queries can be made over HTTP or DNS to perform discovery.</p>
+<p>Consul is very similar, but provides a superset of features. Consul
+also relies on multiple central servers to provide strong consistency
+and fault tolerance. Nodes can use an HTTP API or use an agent to
+register services, and queries are made over HTTP or DNS.</p>
+<p>However, the systems differ in many ways. Consul provides a much richer
+health checking framework, with support for arbitrary checks and
+a highly scalable failure detection scheme. SkyDNS relies on naive
+heartbeating and TTLs, which have known scalability issues. Additionally,
+the heartbeat only provides a limited liveness check, versus the rich
+health checks that Consul is capable of.</p>
+<p>Multiple datacenters can be supported by using "regions" in SkyDNS,
+however the data is managed and queried from a single cluster. If servers
+are split between datacenters the replication protocol will suffer from
+very long commit times. If all the SkyDNS servers are in a central datacenter, then
+connectivity issues can cause entire datacenters to lose availability.
+Additionally, even without a connectivity issue, query performance will
+suffer as requests must always be performed in a remote datacenter.</p>
+<p>Consul supports multiple datacenters out of the box, and it purposely
+scopes the managed data to be per-datacenter. This means each datacenter
+runs an independent cluster of servers. Requests are forwarded to remote
+datacenters if necessary. This means requests for services within a datacenter
+never go over the WAN, and connectivity issues between datacenters do not
+affect availability within a datacenter. Additionally, the unavailability
+of one datacenter does not affect the service discovery of services
+in any other datacenter.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

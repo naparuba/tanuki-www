@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Forwarding / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+      <ul class="nav">
+	<li class="docs-guides-servers">
+	  <a href="/docs/guides/servers.html">Adding/Removing Servers</a>
+        </li>
+
+	<li class="docs-guides-bootstrapping">
+	  <a href="/docs/guides/bootstrapping.html">Bootstrapping</a>
+        </li>
+
+	<li class="docs-guides-dns-cache">
+	  <a href="/docs/guides/dns-cache.html">DNS Caching</a>
+	</li>
+
+	<li class="docs-guides-forwarding">
+	  <a href="/docs/guides/forwarding.html">DNS Forwarding</a>
+	</li>
+
+	<li class="docs-guides-external">
+	  <a href="/docs/guides/external.html">External Services</a>
+        </li>
+
+        <li class="docs-guides-leader">
+	  <a href="/docs/guides/leader-election.html">Leader Election</a>
+        </li>
+
+        <li class="docs-guides-datacenters">
+	  <a href="/docs/guides/datacenters.html">Multiple Datacenters</a>
+        </li>
+
+        <li class="docs-guides-outage">
+	  <a href="/docs/guides/outage.html">Outage Recovery</a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/guides/forwarding.html" rel="bookmark">
+                        Forwarding
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Forwarding DNS</h1>
+<p>By default, DNS is served from port 53 which requires root privileges.
+Instead of running Consul as root, it is possible to instead run Bind
+and forward queries to Consul as appropriate.</p>
+<p>In this example, Bind and Consul are running on the same machine for
+simplicity but this is not required.</p>
+<h3>Bind Setup</h3>
+<p>First, you have to disable DNSSEC so that Consul and Bind can communicate.
+This is an example configuration:</p>
+<div class="highlight"><pre><span class="n">options</span> <span class="p">{</span>
+    <span class="n">listen</span><span class="o">-</span><span class="n">on</span> <span class="n">port</span> <span class="mi">53</span> <span class="p">{</span> <span class="mf">127.0.0.1</span><span class="p">;</span> <span class="p">};</span>
+    <span class="n">listen</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">v6</span> <span class="n">port</span> <span class="mi">53</span> <span class="p">{</span> <span class="o">::</span><span class="mi">1</span><span class="p">;</span> <span class="p">};</span>
+    <span class="n">directory</span>       <span class="s">&quot;/var/named&quot;</span><span class="p">;</span>
+    <span class="n">dump</span><span class="o">-</span><span class="n">file</span>       <span class="s">&quot;/var/named/data/cache_dump.db&quot;</span><span class="p">;</span>
+    <span class="n">statistics</span><span class="o">-</span><span class="n">file</span> <span class="s">&quot;/var/named/data/named_stats.txt&quot;</span><span class="p">;</span>
+    <span class="n">memstatistics</span><span class="o">-</span><span class="n">file</span> <span class="s">&quot;/var/named/data/named_mem_stats.txt&quot;</span><span class="p">;</span>
+    <span class="n">allow</span><span class="o">-</span><span class="n">query</span>     <span class="p">{</span> <span class="n">localhost</span><span class="p">;</span> <span class="p">};</span>
+    <span class="n">recursion</span> <span class="n">yes</span><span class="p">;</span>
+
+    <span class="n">dnssec</span><span class="o">-</span><span class="n">enable</span> <span class="n">no</span><span class="p">;</span>
+    <span class="n">dnssec</span><span class="o">-</span><span class="n">validation</span> <span class="n">no</span><span class="p">;</span>
+
+    <span class="cm">/* Path to ISC DLV key */</span>
+    <span class="n">bindkeys</span><span class="o">-</span><span class="n">file</span> <span class="s">&quot;/etc/named.iscdlv.key&quot;</span><span class="p">;</span>
+
+    <span class="n">managed</span><span class="o">-</span><span class="n">keys</span><span class="o">-</span><span class="n">directory</span> <span class="s">&quot;/var/named/dynamic&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">include</span> <span class="s">&quot;/etc/named/consul.conf&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<h3>Zone File</h3>
+<p>Then we set up a zone for our Consul managed records in consul.conf:</p>
+<div class="highlight"><pre><span class="n">zone</span> <span class="s">&quot;consul&quot;</span> <span class="n">IN</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">forward</span><span class="p">;</span>
+    <span class="n">forward</span> <span class="n">only</span><span class="p">;</span>
+    <span class="n">forwarders</span> <span class="p">{</span> <span class="mf">127.0.0.1</span> <span class="n">port</span> <span class="mi">8600</span><span class="p">;</span> <span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<p>Here we assume Consul is running with default settings, and is serving
+DNS on port 8600.</p>
+<h3>Testing</h3>
+<p>First, perform a DNS query against Consul directly to be sure that the record exists:</p>
+<div class="highlight"><pre><span class="p">[</span>root<span class="o">@</span>localhost <span class="o">~</span><span class="p">]</span><span class="c1"># dig @localhost -p 8600 master.redis.service.dc-1.consul. A</span>
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.2</span>rc1<span class="o">-</span>RedHat<span class="m">-9.8.2-0.23</span>.rc1.32.amzn1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span>localhost master.redis.service.dc<span class="m">-1</span>.consul. A
+<span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
+<span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
+<span class="p">;;</span> Got answer<span class="o">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span>HEADER<span class="o">&lt;&lt;-</span> opcode<span class="o">:</span> QUERY<span class="p">,</span> status<span class="o">:</span> NOERROR<span class="p">,</span> id<span class="o">:</span> <span class="m">11536</span>
+<span class="p">;;</span> flags<span class="o">:</span> qr rd ra<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">1</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">0</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">0</span>
+
+<span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
+<span class="p">;</span>master.redis.service.dc<span class="m">-1</span>.consul. IN A
+
+<span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
+master.redis.service.dc<span class="m">-1</span>.consul. <span class="m">0</span> IN A <span class="m">172.31.3.234</span>
+
+<span class="p">;;</span> Query time<span class="o">:</span> <span class="m">4</span> msec
+<span class="p">;;</span> SERVER<span class="o">:</span> <span class="m">127.0.0.1</span><span class="c1">#53(127.0.0.1)</span>
+<span class="p">;;</span> WHEN<span class="o">:</span> Wed Apr  <span class="m">9</span> <span class="m">17</span><span class="o">:</span><span class="m">36</span><span class="o">:</span><span class="m">12</span> <span class="m">2014</span>
+<span class="p">;;</span> MSG SIZE  rcvd<span class="o">:</span> <span class="m">76</span>
+</pre></div>
+
+
+<p>Then run the same query against your Bind instance and make sure you get a result:</p>
+<div class="highlight"><pre><span class="p">[</span>root<span class="o">@</span>localhost <span class="o">~</span><span class="p">]</span><span class="c1"># dig @localhost -p 53 master.redis.service.dc-1.consul. A</span>
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.2</span>rc1<span class="o">-</span>RedHat<span class="m">-9.8.2-0.23</span>.rc1.32.amzn1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span>localhost master.redis.service.dc<span class="m">-1</span>.consul. A
+<span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
+<span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
+<span class="p">;;</span> Got answer<span class="o">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span>HEADER<span class="o">&lt;&lt;-</span> opcode<span class="o">:</span> QUERY<span class="p">,</span> status<span class="o">:</span> NOERROR<span class="p">,</span> id<span class="o">:</span> <span class="m">11536</span>
+<span class="p">;;</span> flags<span class="o">:</span> qr rd ra<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">1</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">0</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">0</span>
+
+<span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
+<span class="p">;</span>master.redis.service.dc<span class="m">-1</span>.consul. IN A
+
+<span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
+master.redis.service.dc<span class="m">-1</span>.consul. <span class="m">0</span> IN A <span class="m">172.31.3.234</span>
+
+<span class="p">;;</span> Query time<span class="o">:</span> <span class="m">4</span> msec
+<span class="p">;;</span> SERVER<span class="o">:</span> <span class="m">127.0.0.1</span><span class="c1">#53(127.0.0.1)</span>
+<span class="p">;;</span> WHEN<span class="o">:</span> Wed Apr  <span class="m">9</span> <span class="m">17</span><span class="o">:</span><span class="m">36</span><span class="o">:</span><span class="m">12</span> <span class="m">2014</span>
+<span class="p">;;</span> MSG SIZE  rcvd<span class="o">:</span> <span class="m">76</span>
+</pre></div>
+
+
+<h3>Troubleshooting</h3>
+<p>If you don't get an answer from Bind but you do get an answer from Consul then your
+best bet is to turn on the query log to see what's going on:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span><span class="p">]</span><span class="err">#</span> <span class="n">rndc</span> <span class="n">querylog</span>
+<span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span><span class="p">]</span><span class="err">#</span> <span class="n">tail</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">messages</span>
+</pre></div>
+
+
+<p>In there if you see errors like this:</p>
+<div class="highlight"><pre><span class="n">error</span> <span class="p">(</span><span class="n">no</span> <span class="n">valid</span> <span class="n">RRSIG</span><span class="p">)</span> <span class="n">resolving</span>
+<span class="n">error</span> <span class="p">(</span><span class="n">no</span> <span class="n">valid</span> <span class="n">DS</span><span class="p">)</span> <span class="n">resolving</span>
+</pre></div>
+
+
+<p>Then DNSSEC is not disabled properly.  If you see errors about network connections
+then verify that there are no firewall or routing problems between the servers
+running Bind and Consul.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

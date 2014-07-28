@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Upgrading XXXXXXX / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+      <ul class="nav">
+	<li class="docs-upgrading-upgrading">
+	  <a href="/docs/upgrading/upgrading.html">Upgrading Consul</a>
+	</li>
+
+	<li class="docs-upgrading-compat">
+	  <a href="/docs/upgrading/compatibility.html">Compatibility Promise</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/upgrading/upgrading.html" rel="bookmark">
+                        Upgrading XXXXXXX
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Upgrading Consul</h1>
+<p>Consul is meant to be a long-running agent on any nodes participating in a
+Consul cluster. These nodes consistently communicate with each other. As such,
+protocol level compatibility and ease of upgrades is an important thing to
+keep in mind when using Consul.</p>
+<p>This page documents how to upgrade Consul when a new version is released.</p>
+<h2>Standard Upgrades</h2>
+<p>For upgrades we strive to ensure backwards compatibility. To support this,
+nodes gossip their protocol version and builds. This enables clients and
+servers to intelligently enable new features when available, or to gracefully
+fallback to a backward compatible mode of operation otherwise.</p>
+<p>For most upgrades, the process is simple. Assuming the current version of
+Consul is A, and version B is released.</p>
+<ol>
+<li>
+<p>On each server, install version B of Consul.</p>
+</li>
+<li>
+<p>Shut down version A, restart with version B.</p>
+</li>
+<li>
+<p>Once all the servers are upgraded, begin a rollout of clients following
+   the same process.</p>
+</li>
+<li>
+<p>Done! You are now running the latest Consul agent. You can verify this
+   by running <code>consul members</code> to make sure all members have the latest
+   build and highest protocol version.</p>
+</li>
+</ol>
+<h2>Backward Incompatible Upgrades</h2>
+<p>In some cases, a backwards incompatible update may be released. This has not
+been an issue yet, but to support upgrades we support setting an explicit
+protocol version. This disables incompatible features and enables a 2-phase upgrade.</p>
+<p>For the steps below, assume you're running version A of Consul, and then
+version B comes out.</p>
+<ol>
+<li>
+<p>On each node, install version B of Consul.</p>
+</li>
+<li>
+<p>Shut down version A, and start version B with the <code>-protocol=PREVIOUS</code>
+   flag, where "PREVIOUS" is the protocol version of version A (which can
+   be discovered by running <code>consul -v</code> or <code>consul members</code>).</p>
+</li>
+<li>
+<p>Once all nodes are running version B, go through every node and restart
+   the version B agent <em>without</em> the <code>-protocol</code> flag.</p>
+</li>
+<li>
+<p>Done! You're now running the latest Consul agent speaking the latest protocol.
+   You can verify this is the case by running <code>consul members</code> to
+   make sure all members are speaking the same, latest protocol version.</p>
+</li>
+</ol>
+<p>The key to making this work is the <a href="/docs/compatibility.html">protocol compatibility</a>
+of Consul. The protocol version system is discussed below.</p>
+<h2>Protocol Versions</h2>
+<p>By default, Consul agents speak the latest protocol they can. However, each
+new version of Consul is also able to speak the previous protocol, if there
+were any protocol changes.</p>
+<p>You can see what protocol versions your version of Consul understands by
+running <code>consul -v</code>. You'll see output similar to that below:</p>
+<p><code>$ consul -v
+Consul v0.1.0
+Consul Protocol: 1 (Understands back to: 1)</code></p>
+<p>This says the version of Consul as well as the latest protocol version (1,
+in this case). It also says the earliest protocol version that this Consul
+agent can understand (0, in this case).</p>
+<p>By specifying the <code>-protocol</code> flag on <code>consul agent</code>, you can tell the
+Consul agent to speak any protocol version that it can understand. This
+only specifies the protocol version to <em>speak</em>. Every Consul agent can
+always understand the entire range of protocol versions it claims to
+on <code>consul -v</code>.</p>
+<div class="alert alert-block alert-warning">
+<strong>By running a previous protocol version</strong>, some features
+of Consul, especially newer features, may not be available. If this is the
+case, Consul will typically warn you. In general, you should always upgrade
+your cluster so that you can run the latest protocol version.
+</div>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

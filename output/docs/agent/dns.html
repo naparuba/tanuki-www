@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>DNS Interface / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/dns.html" rel="bookmark">
+                        DNS Interface
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>DNS Interface</h1>
+<p>One of the primary query interfaces for Consul is using DNS.
+The DNS interface allows applications to make use of service
+discovery without any high-touch integration with Consul. For
+example, instead of making any HTTP API requests to Consul,
+a host can use the DNS server directly and just do a name lookup
+for "redis.service.east-aws.consul".</p>
+<p>This query automatically translates to a lookup of nodes that
+provide the redis service, located in the "east-aws" datacenter,
+with no failing health checks. It's that simple!</p>
+<p>There are a number of <a href="/docs/agent/options.html">configuration options</a> that
+are important for the DNS interface. They are <code>client_addr</code>, <code>ports.dns</code>, <code>recursor</code>,
+<code>domain</code>, and <code>dns_config</code>. By default Consul will listen on 127.0.0.1:8600 for DNS queries
+in the "consul." domain, without support for DNS recursion. All queries are case-insensitive, a
+name lookup for <code>PostgreSQL.node.dc1.consul</code> will find all nodes named <code>postgresql</code>, no matter of case.</p>
+<p>There are a few ways to use the DNS interface. One option is to use a custom
+DNS resolver library and point it at Consul. Another option is to set Consul
+as the DNS server for a node, and provide a <code>recursor</code> so that non-Consul queries
+can also be resolved. The last method is to forward all queries for the "consul."
+domain to a Consul agent from the existing DNS server. To play with the DNS server
+on the command line, dig can be used:</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">dig</span> <span class="err">@</span><span class="mf">127.0.0.1</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8600</span> <span class="n">redis</span><span class="p">.</span><span class="n">service</span><span class="p">.</span><span class="n">dc1</span><span class="p">.</span><span class="n">consul</span><span class="p">.</span> <span class="n">ANY</span>
+</pre></div>
+
+
+<h2>Node Lookups</h2>
+<p>For Consul to resolve names, it relies on a very specific format for queries.
+There are fundamentally two types of queries, node lookups and service lookups.
+A node lookup is a simple query for the address of a named node, and takes on
+the following format:</p>
+<div class="highlight"><pre><span class="nt">&lt;node&gt;</span>.node.<span class="nt">&lt;datacenter&gt;</span>.<span class="nt">&lt;domain&gt;</span>
+</pre></div>
+
+
+<p>So, for example, if we have a "foo" node with default settings, we could look for
+"foo.node.dc1.consul." The datacenter is an optional part of the FQDN, and if not
+provided defaults to the datacenter of the agent. So if we know "foo" is running in our
+same datacenter, we can instead use "foo.node.consul." Alternatively, we can do a
+DNS lookup for nodes in other datacenters, with no additional effort.</p>
+<p>For a node lookup, the only records returned are A records with the IP address of
+the node.</p>
+<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.consul ANY
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.consul ANY
+<span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
+<span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
+<span class="p">;;</span> Got answer<span class="o">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span>HEADER<span class="o">&lt;&lt;-</span> opcode<span class="o">:</span> QUERY<span class="p">,</span> status<span class="o">:</span> NOERROR<span class="p">,</span> id<span class="o">:</span> <span class="m">24355</span>
+<span class="p">;;</span> flags<span class="o">:</span> qr aa rd<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">1</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">0</span>
+<span class="p">;;</span> WARNING<span class="o">:</span> recursion requested but not available
+
+<span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
+<span class="p">;</span>foobar.node.consul.        IN  ANY
+
+<span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
+foobar.node.consul. <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
+
+<span class="p">;;</span> AUTHORITY SECTION<span class="o">:</span>
+consul.         <span class="m">0</span>   IN  SOA ns.consul. postmaster.consul. <span class="m">1392836399</span> <span class="m">3600</span> <span class="m">600</span> <span class="m">86400</span> <span class="m">0</span>
+</pre></div>
+
+
+<h2>Service Lookups</h2>
+<p>A service lookup is the alternate type of query. It is used to query for service
+providers. The format of a service lookup is like the following:</p>
+<div class="highlight"><pre><span class="nt">&lt;tag&gt;</span>.<span class="nt">&lt;service&gt;</span>.service.<span class="nt">&lt;datacenter&gt;</span>.<span class="nt">&lt;domain&gt;</span>
+</pre></div>
+
+
+<p>As with node lookups, the <code>datacenter</code> is optional, as is the <code>tag</code>. If no tag is
+provided, then no filtering is done on tag. So, if we want to find any redis service
+providers in our local datacenter, we could lookup "redis.service.consul.", however
+if we care about the PostgreSQL master in a particular datacenter, we could lookup
+"master.postgresql.service.dc2.consul."</p>
+<p>The DNS query system makes use of health check information to prevent routing
+to unhealthy nodes. When a service query is made, any services failing their health
+check, or failing a node system check will be omitted from the results. To allow
+for simple load balancing, the set of nodes returned is also randomized each time.
+These simple mechanisms make it easy to use DNS along with application level retries
+as a simple foundation for an auto-healing service oriented architecture.</p>
+<p>For these lookups, both A and SRV records may be served. The SRV records will also
+provide the port that a service is registered on, enabling services to avoid relying
+on well-known ports. SRV records are only served if the client specifically requests
+SRV records.</p>
+<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> consul.service.consul SRV
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> consul.service.consul ANY
+<span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
+<span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
+<span class="p">;;</span> Got answer<span class="o">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span>HEADER<span class="o">&lt;&lt;-</span> opcode<span class="o">:</span> QUERY<span class="p">,</span> status<span class="o">:</span> NOERROR<span class="p">,</span> id<span class="o">:</span> <span class="m">50483</span>
+<span class="p">;;</span> flags<span class="o">:</span> qr aa rd<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">3</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">1</span>
+<span class="p">;;</span> WARNING<span class="o">:</span> recursion requested but not available
+
+<span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
+<span class="p">;</span>consul.service.consul.     IN  SRV
+
+<span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
+consul.service.consul.  <span class="m">0</span>   IN  SRV <span class="m">1</span> <span class="m">1</span> <span class="m">8300</span> foobar.node.dc1.consul.
+
+<span class="p">;;</span> ADDITIONAL SECTION<span class="o">:</span>
+foobar.node.dc1.consul. <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
+</pre></div>
+
+
+<p>When the DNS query is performed using UDP, Consul will truncate the results
+without setting the truncate bit. This is to prevent a redundant lookup over
+TCP which generate additional load. If the lookup is done over TCP, the results
+are not truncated.</p>
+<h2>Caching</h2>
+<p>By default, all DNS results served by Consul set a 0 TTL value. This disables
+caching of DNS results. However, there are many situations in which caching is
+desirable for performance and scalability. This is discussed more in the guide
+for <a href="/docs/guides/dns-cache.html">DNS Caching</a>.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

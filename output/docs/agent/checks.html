@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Check Definition / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+
+      <ul class="nav">
+	<li class="docs-agent-running">
+	  <a href="/docs/agent/basics.html">Running and Stopping</a>
+        </li>
+
+	<li class="docs-agent-dns">
+	  <a href="/docs/agent/dns.html">DNS Interface</a>
+        </li>
+
+	<li class="docs-agent-http">
+	  <a href="/docs/agent/http.html">HTTP API</a>
+	</li>
+
+	<li class="docs-agent-config">
+	  <a href="/docs/agent/options.html">Configuration</a>
+        </li>
+
+	<li class="docs-agent-services">
+	  <a href="/docs/agent/services.html">Service Definitions</a>
+        </li>
+
+	<li class="docs-agent-checks">
+	  <a href="/docs/agent/checks.html">Check Definitions</a>
+	</li>
+
+	<li class="docs-agent-encryption">
+	  <a href="/docs/agent/encryption.html">Encryption</a>
+        </li>
+
+	<li class="docs-agent-rpc">
+	  <a href="/docs/agent/rpc.html">RPC Protocol</a>
+	</li>
+
+	<li class="docs-agent-telemetry">
+	  <a href="/docs/agent/telemetry.html">Telemetry</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/agent/checks.html" rel="bookmark">
+                        Check Definition
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Checks</h1>
+<p>One of the primary roles of the agent is the management of system and
+application level health checks. A health check is considered to be application
+level if it associated with a service. A check is defined in a configuration file,
+or added at runtime over the HTTP interface.</p>
+<p>There are two different kinds of checks:</p>
+<ul>
+<li>
+<p>Script + Interval - These checks depend on invoking an external application
+ which does the health check and exits with an appropriate exit code, potentially
+ generating some output. A script is paired with an invocation interval (e.g.
+ every 30 seconds). This is similar to the Nagios plugin system.</p>
+</li>
+<li>
+<p>TTL - These checks retain their last known state for a given TTL. The state
+ of the check must be updated periodically over the HTTP interface. If an
+ external system fails to update the status within a given TTL, the check is
+ set to the failed state. This mechanism is used to allow an application to
+ directly report its health. For example, a web app can periodically curl the
+ endpoint, and if the app fails, then the TTL will expire and the health check
+ enters a critical state. This is conceptually similar to a dead man's switch.</p>
+</li>
+</ul>
+<h2>Check Definition</h2>
+<p>A check definition that is a script looks like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;check&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;id&quot;</span><span class="o">:</span> <span class="s">&quot;mem-util&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="o">:</span> <span class="s">&quot;Memory utilization&quot;</span><span class="p">,</span>
+        <span class="s">&quot;script&quot;</span><span class="o">:</span> <span class="s">&quot;/usr/local/bin/check_mem.py&quot;</span><span class="p">,</span>
+        <span class="s">&quot;interval&quot;</span><span class="o">:</span> <span class="s">&quot;10s&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>A TTL based check is very similar:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;check&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s">&quot;id&quot;</span><span class="o">:</span> <span class="s">&quot;web-app&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="o">:</span> <span class="s">&quot;Web App Status&quot;</span><span class="p">,</span>
+        <span class="s">&quot;notes&quot;</span><span class="o">:</span> <span class="s">&quot;Web app does a curl internally every 10 seconds&quot;</span><span class="p">,</span>
+        <span class="s">&quot;ttl&quot;</span><span class="o">:</span> <span class="s">&quot;30s&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Both types of definitions must include a <code>name</code>, and may optionally
+provide an <code>id</code> and <code>notes</code> field. The <code>id</code> is set to the <code>name</code> if not
+provided. It is required that all checks have a unique ID per node, so if names
+might conflict then unique ID's should be provided.</p>
+<p>The <code>notes</code> field is opaque to Consul, but may be used for human
+readable descriptions. The field is set to any output that a script
+generates, and similarly the TTL update hooks can update the <code>notes</code>
+as well.</p>
+<p>To configure a check, either provide it as a <code>-config-file</code> option to the
+agent, or place it inside the <code>-config-dir</code> of the agent. The file must
+end in the ".json" extension to be loaded by Consul. Check definitions can
+also be updated by sending a <code>SIGHUP</code> to the agent. Alternatively, the
+check can be registered dynamically using the <a href="/docs/agent/http.html">HTTP API</a>.</p>
+<h2>Check Scripts</h2>
+<p>A check script is generally free to do anything to determine the status
+of the check. The only limitations placed are the exit codes must convey
+a specific meaning. Specifically:</p>
+<ul>
+<li>Exit code 0 - Check is passing</li>
+<li>Exit code 1 - Check is warning</li>
+<li>Any other code - Check is failing</li>
+</ul>
+<p>This is the only convention that Consul depends on. Any output of the script
+will be captured and stored in the <code>notes</code> field so that it can be viewed
+by human operators.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

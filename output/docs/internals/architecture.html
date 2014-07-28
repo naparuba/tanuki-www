@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>XXXXX Architecture / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+      <ul class="nav">
+	<li class="docs-internals-architecture">
+	  <a href="/docs/internals/architecture.html">Architecture</a>
+        </li>
+
+	<li class="docs-internals-consensus">
+	  <a href="/docs/internals/consensus.html">Consensus Protocol</a>
+        </li>
+
+	<li class="docs-internals-gossip">
+	  <a href="/docs/internals/gossip.html">Gossip Protocol</a>
+        </li>
+
+	<li class="docs-internals-sessions">
+	  <a href="/docs/internals/sessions.html">Sessions</a>
+        </li>
+
+	<li class="docs-internals-security">
+	  <a href="/docs/internals/security.html">Security Model</a>
+        </li>
+
+	<li class="docs-internals-jepsen">
+	  <a href="/docs/internals/jepsen.html">Jepsen Testing</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/internals/architecture.html" rel="bookmark">
+                        XXXXX Architecture
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Consul Architecture</h1>
+<p>Consul is a complex system that has many different moving parts. To help
+users and developers of Consul form a mental model of how it works, this
+page documents the system architecture.</p>
+<div class="alert alert-block alert-warning">
+<strong>Advanced Topic!</strong> This page covers technical details of
+the internals of Consul. You don't need to know these details to effectively
+operate and use Consul. These details are documented here for those who wish
+to learn about them without having to go spelunking through the source code.
+</div>
+
+<h2>Glossary</h2>
+<p>Before describing the architecture, we provide a glossary of terms to help
+clarify what is being discussed:</p>
+<ul>
+<li>
+<p>Agent - An agent is the long running daemon on every member of the Consul cluster.
+It is started by running <code>consul agent</code>. The agent is able to run in either <em>client</em>,
+or <em>server</em> mode. Since all nodes must be running an agent, it is simpler to refer to
+the node as either being a client or server, but there are other instances of the agent. All
+agents can run the DNS or HTTP interfaces, and are responsible for running checks and
+keeping services in sync.</p>
+</li>
+<li>
+<p>Client - A client is an agent that forwards all RPCs to a server. The client is relatively
+stateless. The only background activity a client performs is taking part of LAN gossip pool.
+This has a minimal resource overhead and consumes only a small amount of network bandwidth.</p>
+</li>
+<li>
+<p>Server - An agent that is server mode. When in server mode, there is an expanded set
+of responsibilities including participating in the Raft quorum, maintaining cluster state,
+responding to RPC queries, WAN gossip to other datacenters, and forwarding queries to leaders
+or remote datacenters.</p>
+</li>
+<li>
+<p>Datacenter - A datacenter seems obvious, but there are subtle details such as multiple
+availability zones in EC2. We define a datacenter to be a networking environment that is
+private, low latency, and high bandwidth. This excludes communication that would traverse
+the public internet.</p>
+</li>
+<li>
+<p>Consensus - When used in our documentation we use consensus to mean agreement upon
+the elected leader as well as agreement on the ordering of transactions. Since these
+transactions are applied to a FSM, we implicitly include the consistency of a replicated
+state machine. Consensus is described in more detail on <a href="http://en.wikipedia.org/wiki/Consensus_(computer_science)">Wikipedia</a>,
+as well as our <a href="/docs/internals/consensus.html">implementation here</a>.</p>
+</li>
+<li>
+<p>Gossip - Consul is built on top of <a href="http://www.serfdom.io/">Serf</a>, which provides a full
+<a href="http://en.wikipedia.org/wiki/Gossip_protocol">gossip protocol</a> that is used for multiple purposes.
+Serf provides membership, failure detection, and event broadcast mechanisms. Our use of these
+is described more in the <a href="/docs/internals/gossip.html">gossip documentation</a>. It is enough to know
+gossip involves random node-to-node communication, primarily over UDP.</p>
+</li>
+<li>
+<p>LAN Gossip - This is used to mean that there is a gossip pool, containing nodes that
+are all located on the same local area network or datacenter.</p>
+</li>
+<li>
+<p>WAN Gossip - This is used to mean that there is a gossip pool, containing servers that
+are primary located in different datacenters and must communicate over the internet or
+wide area network.</p>
+</li>
+<li>
+<p>RPC - RPC is short for a Remote Procedure Call. This is a request / response mechanism
+allowing a client to make a request from a server.</p>
+</li>
+</ul>
+<h2>10,000 foot view</h2>
+<p>From a 10,000 foot altitude the architecture of Consul looks like this:</p>
+<p><img alt="Consul Architecture" src="/images/consul-arch.png" /></p>
+<p>Lets break down this image and describe each piece. First of all we can see
+that there are two datacenters, one and two respectively. Consul has first
+class support for multiple datacenters and expects this to be the common case.</p>
+<p>Within each datacenter we have a mixture of clients and servers. It is expected
+that there be between three to five servers. This strikes a balance between
+availability in the case of failure and performance, as consensus gets progressively
+slower as more machines are added. However, there is no limit to the number of clients,
+and they can easily scale into the thousands or tens of thousands.</p>
+<p>All the nodes that are in a datacenter participate in a <a href="/docs/internals/gossip.html">gossip protocol</a>.
+This means there is a gossip pool that contains all the nodes for a given datacenter. This serves
+a few purposes: first, there is no need to configure clients with the addresses of servers,
+discovery is done automatically. Second, the work of detecting node failures
+is not placed on the servers but is distributed. This makes the failure detection much more
+scalable than naive heartbeating schemes. Thirdly, it is used as a messaging layer to notify
+when important events such as leader election take place.</p>
+<p>The servers in each datacenter are all part of a single Raft peer set. This means that
+they work together to elect a leader, which has extra duties. The leader is responsible for
+processing all queries and transactions. Transactions must also be replicated to all peers
+as part of the <a href="/docs/internals/consensus.html">consensus protocol</a>. Because of this requirement,
+when a non-leader server receives an RPC request it forwards it to the cluster leader.</p>
+<p>The server nodes also operate as part of a WAN gossip. This pool is different from the LAN pool,
+as it is optimized for the higher latency of the internet, and is expected to only contain
+other Consul server nodes. The purpose of this pool is to allow datacenters to discover each
+other in a low touch manner. Bringing a new datacenter online is as easy as joining the existing
+WAN gossip. Because the servers are all operating in this pool, it also enables cross-datacenter requests.
+When a server receives a request for a different datacenter, it forwards it to a random server
+in the correct datacenter. That server may then forward to the local leader.</p>
+<p>This results in a very low coupling between datacenters, but because of failure detection,
+connection caching and multiplexing, cross-datacenter requests are relatively fast and reliable.</p>
+<h2>Getting in depth</h2>
+<p>At this point we've covered the high level architecture of Consul, but there are much
+more details to each of the sub-systems. The <a href="/docs/internals/consensus.html">consensus protocol</a> is
+documented in detail, as is the <a href="/docs/internals/gossip.html">gossip protocol</a>. The <a href="/docs/internals/security.html">documentation</a>
+for the security model and protocols used are also available.</p>
+<p>For other details, either consult the code, ask in IRC or reach out to the mailing list.</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>

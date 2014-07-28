@@ -1,0 +1,4173 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Jepsen Testing / Some monitoring guys</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="shortcut icon" href="/theme/favicon.ico" />
+        <link rel="apple-touch-icon" href="/theme/apple-touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/apple-touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/apple-touch-icon-iphone4.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/apple-touch-icon-ipad3.png" />
+
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="/theme/css/colorbox.css">
+
+        <link rel="stylesheet" href="/theme/css/main.css">
+
+        <script src="/theme/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+	      <a class='span4' href='/'> Home</a>
+	      <a class='span1' href='/intro/index.html'>Intro</a>
+	      <a class='span1' href='/docs/index.html'>Docs</a>
+	      <a class='span1' href='/community.html'>Community</a>
+	      <a class='span1' href='/demo.html'>Demo</a>
+	      <a class='span2' href='/download.html'>Download</a>
+	      <a class='span2' href='github'>Github</a>
+	    </div>
+            <div class="row-fluid">
+                <div class="span4" id='content'>
+		  
+
+
+<nav>
+  <ul>
+    <li class="docs-home">
+      <a href="/docs/index.html">Documentation Home</a>
+    </li>
+
+    <li class="docs-upgrading">
+      <a href="/docs/upgrading/upgrading.html">Upgrading and Compatibility</a>
+    </li>
+
+    <li class="docs-internals">
+      <a href="/docs/internals/index.html">Consul Internals</a>
+      <ul class="nav">
+	<li class="docs-internals-architecture">
+	  <a href="/docs/internals/architecture.html">Architecture</a>
+        </li>
+
+	<li class="docs-internals-consensus">
+	  <a href="/docs/internals/consensus.html">Consensus Protocol</a>
+        </li>
+
+	<li class="docs-internals-gossip">
+	  <a href="/docs/internals/gossip.html">Gossip Protocol</a>
+        </li>
+
+	<li class="docs-internals-sessions">
+	  <a href="/docs/internals/sessions.html">Sessions</a>
+        </li>
+
+	<li class="docs-internals-security">
+	  <a href="/docs/internals/security.html">Security Model</a>
+        </li>
+
+	<li class="docs-internals-jepsen">
+	  <a href="/docs/internals/jepsen.html">Jepsen Testing</a>
+	</li>
+      </ul>
+    </li>
+
+    <li class="docs-commands">
+      <a href="/docs/commands/index.html">Consul Commands (CLI)</a>
+    </li>
+
+    <li class="docs-agent">
+      <a href="/docs/agent/basics.html">Consul Agent</a>
+    </li>
+
+    <li class="docs-guides">
+      <a href="/docs/guides/index.html">Guides</a>
+    </li>
+
+  </ul>
+  
+</nav>
+
+                </div> <!-- logo+navigation span -->
+
+
+                <div class="span8">
+                    <header id="site-header">
+                        <h1>
+                            <a href="">Some monitoring guys</a>
+                            <small>
+                                <span class="divider">/</span> 
+                            </small>
+                        </h1>
+                        <!--<p>
+                            
+                        </p>-->
+                    </header>
+
+                    <div class="content">
+    <section>
+        <article>
+            <header>
+                <h2>
+                    <a href="/docs/internals/jepsen.html" rel="bookmark">
+                        Jepsen Testing
+                    </a>
+                </h2>
+            </header>
+	    
+            <h1>Jepsen Testing</h1>
+<p><a href="http://aphyr.com/posts/281-call-me-maybe-carly-rae-jepsen-and-the-perils-of-network-partitions">Jepsen</a>
+is a tool written by Kyle Kingsbury that is designed to test the partition
+tolerance of distributed systems. It creates network partitions while fuzzing
+the system with random operations. The results are analyzed to see if the system
+violates any of the consistency properties it claims to have.</p>
+<p>As part of our Consul testing, we ran it against Jepsen to determine if
+any consistency issues could be uncovered. In our testing, Consul gracefully
+recovered from partitions without introducing any consistency issues.</p>
+<h2>Running the tests</h2>
+<p>At the moment, testing with Jepsen is rather complex, as it requires
+setting up multiple virtual machines, SSH keys, DNS configuration,
+and a working Clojure environment. We hope to contribute our Consul
+testing code upstream and to provide a Vagrant environment for Jepsen
+testing soon.</p>
+<h2>Output</h2>
+<p>Below is the output captured from Jepsen. We ran Jepsen multiple times,
+and it passed each time. This output is only representative of a single
+run.</p>
+<p>```
+$ lein test :only jepsen.system.consul-test</p>
+<p>lein test jepsen.system.consul-test
+INFO  jepsen.os.debian - :n5 setting up debian
+INFO  jepsen.os.debian - :n3 setting up debian
+INFO  jepsen.os.debian - :n4 setting up debian
+INFO  jepsen.os.debian - :n1 setting up debian
+INFO  jepsen.os.debian - :n2 setting up debian
+INFO  jepsen.os.debian - :n4 debian set up
+INFO  jepsen.os.debian - :n5 debian set up
+INFO  jepsen.os.debian - :n3 debian set up
+INFO  jepsen.os.debian - :n1 debian set up
+INFO  jepsen.os.debian - :n2 debian set up
+INFO  jepsen.system.consul - :n1 consul nuked
+INFO  jepsen.system.consul - :n4 consul nuked
+INFO  jepsen.system.consul - :n5 consul nuked
+INFO  jepsen.system.consul - :n3 consul nuked
+INFO  jepsen.system.consul - :n2 consul nuked
+INFO  jepsen.system.consul - Running nodes: {:n1 false, :n2 false, :n3 false, :n4 false, :n5 false}
+INFO  jepsen.system.consul - :n2 consul nuked
+INFO  jepsen.system.consul - :n3 consul nuked
+INFO  jepsen.system.consul - :n4 consul nuked
+INFO  jepsen.system.consul - :n5 consul nuked
+INFO  jepsen.system.consul - :n1 consul nuked
+INFO  jepsen.system.consul - :n1 starting consul
+INFO  jepsen.system.consul - :n2 starting consul
+INFO  jepsen.system.consul - :n4 starting consul
+INFO  jepsen.system.consul - :n5 starting consul
+INFO  jepsen.system.consul - :n3 starting consul
+INFO  jepsen.system.consul - :n3 consul ready
+INFO  jepsen.system.consul - :n2 consul ready
+INFO  jepsen.system.consul - Running nodes: {:n1 true, :n2 true, :n3 true, :n4 true, :n5 true}
+INFO  jepsen.system.consul - :n5 consul ready
+INFO  jepsen.system.consul - :n1 consul ready
+INFO  jepsen.system.consul - :n4 consul ready
+INFO  jepsen.core - Worker 0 starting
+INFO  jepsen.core - Worker 2 starting
+INFO  jepsen.core - Worker 1 starting
+INFO  jepsen.core - Worker 3 starting
+INFO  jepsen.core - Worker 4 starting
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 4]
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 4   :invoke :cas    [4 0]
+INFO  jepsen.util - 2   :ok :read   nil
+INFO  jepsen.util - 4   :fail   :cas    [4 0]
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 3   :fail   :cas    [4 4]
+INFO  jepsen.util - 2   :invoke :cas    [0 3]
+INFO  jepsen.util - 2   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :cas    [4 4]
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 0   :invoke :cas    [3 1]
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 4   :fail   :cas    [4 4]
+INFO  jepsen.util - 0   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [1 0]
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 1   :fail   :cas    [1 0]
+INFO  jepsen.util - 2   :invoke :cas    [0 2]
+INFO  jepsen.util - 2   :fail   :cas    [0 2]
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 1   :ok :read   1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [2 4]
+INFO  jepsen.util - 4   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 2   :invoke :cas    [4 2]
+INFO  jepsen.util - 2   :fail   :cas    [4 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [2 4]
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :cas    [2 4]
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 2   :invoke :cas    [0 3]
+INFO  jepsen.util - 2   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 3   :invoke :cas    [0 2]
+INFO  jepsen.util - 1   :invoke :cas    [0 0]
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 3   :fail   :cas    [0 2]
+INFO  jepsen.util - 1   :fail   :cas    [0 0]
+INFO  jepsen.util - 2   :invoke :cas    [1 3]
+INFO  jepsen.util - 2   :fail   :cas    [1 3]
+INFO  jepsen.util - 4   :invoke :cas    [1 0]
+INFO  jepsen.util - 4   :fail   :cas    [1 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 2]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 3   :fail   :cas    [2 2]
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 0   :invoke :cas    [1 0]
+INFO  jepsen.util - 1   :invoke :cas    [0 1]
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 1   :fail   :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   0
+INFO  jepsen.util - 3   :invoke :cas    [3 3]
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 1   :invoke :cas    [0 0]
+INFO  jepsen.util - 3   :fail   :cas    [3 3]
+INFO  jepsen.util - 1   :fail   :cas    [0 0]
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 2   :invoke :cas    [0 0]
+INFO  jepsen.util - 2   :fail   :cas    [0 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 3   :invoke :cas    [3 0]
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 0   :invoke :cas    [0 0]
+INFO  jepsen.util - 3   :fail   :cas    [3 0]
+INFO  jepsen.util - 0   :fail   :cas    [0 0]
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 4   :invoke :cas    [0 0]
+INFO  jepsen.util - 4   :fail   :cas    [0 0]
+INFO  jepsen.util - 3   :invoke :cas    [3 4]
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 3   :fail   :cas    [3 4]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   0
+INFO  jepsen.util - 2   :invoke :cas    [1 1]
+INFO  jepsen.util - 2   :fail   :cas    [1 1]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 3   :invoke :cas    [1 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 3   :fail   :cas    [1 0]
+INFO  jepsen.util - 1   :invoke :cas    [0 3]
+INFO  jepsen.util - 1   :fail   :cas    [0 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [1 1]
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 1   :fail   :cas    [1 1]
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 0   :ok :read   3
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 3   :ok :read   1
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 4   :invoke :cas    [0 3]
+INFO  jepsen.util - 4   :fail   :cas    [0 3]
+INFO  jepsen.util - 0   :invoke :cas    [2 0]
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 3   :invoke :cas    [0 1]
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 0   :fail   :cas    [2 0]
+INFO  jepsen.util - 3   :fail   :cas    [0 1]
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 2   :invoke :cas    [3 0]
+INFO  jepsen.util - 2   :fail   :cas    [3 0]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 1   :invoke :cas    [1 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n5 #{:n3 :n1}, :n2 #{:n3 :n1}, :n4 #{:n3 :n1}, :n1 #{:n4 :n2 :n5}, :n3 #{:n4 :n2 :n5}}"
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 2   :fail   :write  1
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :fail   :write  2
+INFO  jepsen.util - 2   :invoke :cas    [4 4]
+INFO  jepsen.util - 2   :fail   :cas    [4 4]
+INFO  jepsen.util - 4   :invoke :cas    [3 0]
+INFO  jepsen.util - 4   :fail   :cas    [3 0]
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [1 3]
+INFO  jepsen.util - 4   :fail   :cas    [1 3]
+INFO  jepsen.util - 0   :invoke :cas    [3 0]
+INFO  jepsen.util - 0   :fail   :cas    [3 0]
+INFO  jepsen.util - 2   :invoke :cas    [1 1]
+INFO  jepsen.util - 2   :fail   :cas    [1 1]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 0   :invoke :cas    [1 4]
+INFO  jepsen.util - 0   :fail   :cas    [1 4]
+INFO  jepsen.util - 2   :invoke :cas    [2 2]
+INFO  jepsen.util - 2   :fail   :cas    [2 2]
+INFO  jepsen.util - 4   :invoke :cas    [2 0]
+INFO  jepsen.util - 4   :fail   :cas    [2 0]
+INFO  jepsen.util - 0   :invoke :cas    [0 4]
+INFO  jepsen.util - 0   :fail   :cas    [0 4]
+INFO  jepsen.util - 2   :invoke :cas    [1 3]
+INFO  jepsen.util - 2   :fail   :cas    [1 3]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [2 3]
+INFO  jepsen.util - 0   :fail   :cas    [2 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [4 0]
+INFO  jepsen.util - 4   :fail   :cas    [4 0]
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :write  0
+INFO  jepsen.util - 2   :invoke :cas    [2 2]
+INFO  jepsen.util - 2   :fail   :cas    [2 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :cas    [1 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 1]
+INFO  jepsen.util - 2   :invoke :cas    [4 0]
+INFO  jepsen.util - 2   :fail   :cas    [4 0]
+INFO  jepsen.util - 4   :invoke :cas    [2 4]
+INFO  jepsen.util - 4   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [0 1]
+INFO  jepsen.util - 2   :invoke :cas    [1 0]
+INFO  jepsen.util - 2   :fail   :cas    [1 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :cas    [4 0]
+INFO  jepsen.util - 0   :fail   :cas    [4 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [0 0]
+INFO  jepsen.util - 0   :fail   :cas    [0 0]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 4   :invoke :cas    [0 0]
+INFO  jepsen.util - 4   :fail   :cas    [0 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :fail   :write  2
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 2   :fail   :write  1
+INFO  jepsen.util - 4   :invoke :cas    [0 1]
+INFO  jepsen.util - 4   :fail   :cas    [0 1]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :fail   :write  3
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [2 3]
+INFO  jepsen.util - 0   :fail   :cas    [2 3]
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 2   :invoke :cas    [2 1]
+INFO  jepsen.util - 2   :fail   :cas    [2 1]
+INFO  jepsen.util - 4   :invoke :cas    [0 1]
+INFO  jepsen.util - 4   :fail   :cas    [0 1]
+INFO  jepsen.util - 0   :invoke :cas    [1 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 1]
+INFO  jepsen.util - 1   :fail   :cas    [1 0]
+INFO  jepsen.util - 3   :fail   :write  0
+INFO  jepsen.util - 2   :invoke :cas    [2 1]
+INFO  jepsen.util - 2   :fail   :cas    [2 1]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :fail   :write  0
+INFO  jepsen.util - 0   :invoke :cas    [0 4]
+INFO  jepsen.util - 0   :fail   :cas    [0 4]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :cas    [4 4]
+INFO  jepsen.util - 2   :fail   :cas    [4 4]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :fail   :write  1
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 3   :invoke :cas    [0 0]
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 3   :fail   :cas    [0 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 0   :invoke :cas    [1 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 1]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [0 1]
+INFO  jepsen.util - 1   :fail   :cas    [0 1]
+INFO  jepsen.util - 3   :ok :read   1
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :cas    [0 4]
+INFO  jepsen.util - 2   :fail   :cas    [0 4]
+INFO  jepsen.util - 4   :invoke :cas    [2 4]
+INFO  jepsen.util - 4   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :cas    [3 3]
+INFO  jepsen.util - 0   :fail   :cas    [3 3]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [1 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 1]
+INFO  jepsen.util - 1   :invoke :cas    [2 3]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :cas    [2 3]
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 0   :invoke :cas    [1 3]
+INFO  jepsen.util - 0   :fail   :cas    [1 3]
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 2   :invoke :cas    [0 2]
+INFO  jepsen.util - 2   :fail   :cas    [0 2]
+INFO  jepsen.util - 4   :invoke :cas    [2 4]
+INFO  jepsen.util - 4   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :write  2
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [4 4]
+INFO  jepsen.util - 4   :fail   :cas    [4 4]
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 1   :invoke :cas    [1 4]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :cas    [1 4]
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [3 4]
+INFO  jepsen.util - 0   :fail   :cas    [3 4]
+INFO  jepsen.util - 1   :invoke :cas    [4 4]
+INFO  jepsen.util - 3   :invoke :cas    [0 4]
+INFO  jepsen.util - 1   :fail   :cas    [4 4]
+INFO  jepsen.util - 3   :fail   :cas    [0 4]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 1   :ok :read   4
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :cas    [0 2]
+INFO  jepsen.util - 2   :fail   :cas    [0 2]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 1   :invoke :cas    [3 2]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 3   :invoke :cas    [3 2]
+INFO  jepsen.util - 3   :fail   :cas    [3 2]
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [2 3]
+INFO  jepsen.util - 0   :fail   :cas    [2 3]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [2 2]
+INFO  jepsen.util - 0   :fail   :cas    [2 2]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 0   :invoke :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [0 1]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 3   :invoke :cas    [2 4]
+INFO  jepsen.util - 3   :fail   :cas    [2 4]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 4   :invoke :cas    [1 0]
+INFO  jepsen.util - 4   :fail   :cas    [1 0]
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 1   :invoke :cas    [4 4]
+INFO  jepsen.util - 1   :fail   :cas    [4 4]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   0
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :invoke :cas    [4 2]
+INFO  jepsen.util - 3   :fail   :cas    [4 2]
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n1 #{:n3 :n2}, :n5 #{:n3 :n2}, :n4 #{:n3 :n2}, :n2 #{:n4 :n5 :n1}, :n3 #{:n4 :n5 :n1}}"
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :write  3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :invoke :cas    [4 4]
+INFO  jepsen.util - 2   :fail   :cas    [4 4]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 4]
+INFO  jepsen.util - 3   :fail   :cas    [4 4]
+INFO  jepsen.util - 2   :invoke :cas    [3 1]
+INFO  jepsen.util - 2   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :invoke :cas    [3 2]
+INFO  jepsen.util - 1   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [3 2]
+INFO  jepsen.util - 1   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :invoke :cas    [0 2]
+INFO  jepsen.util - 3   :fail   :cas    [0 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :fail   :write  1
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 2   :invoke :cas    [4 0]
+INFO  jepsen.util - 2   :fail   :cas    [4 0]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :invoke :cas    [0 1]
+INFO  jepsen.util - 2   :fail   :cas    [0 1]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [3 3]
+INFO  jepsen.util - 3   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :cas    [0 2]
+INFO  jepsen.util - 2   :fail   :cas    [0 2]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 1   :fail   :write  2
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :write  0
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :cas    [3 3]
+INFO  jepsen.util - 3   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :write  0
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :cas    [2 3]
+INFO  jepsen.util - 2   :fail   :cas    [2 3]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 1]
+INFO  jepsen.util - 3   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 2]
+INFO  jepsen.util - 3   :fail   :cas    [2 2]
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :fail   :write  3
+INFO  jepsen.util - 1   :invoke :cas    [3 4]
+INFO  jepsen.util - 1   :fail   :cas    [3 4]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :write  0
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :invoke :cas    [3 1]
+INFO  jepsen.util - 3   :fail   :cas    [3 1]
+INFO  jepsen.util - 2   :invoke :cas    [0 0]
+INFO  jepsen.util - 2   :fail   :cas    [0 0]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :cas    [2 1]
+INFO  jepsen.util - 3   :fail   :cas    [2 1]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 0]
+INFO  jepsen.util - 3   :fail   :cas    [2 0]
+INFO  jepsen.util - 2   :invoke :cas    [4 3]
+INFO  jepsen.util - 2   :fail   :cas    [4 3]
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :fail   :write  1
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 1   :invoke :cas    [3 3]
+INFO  jepsen.util - 1   :fail   :cas    [3 3]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 3   :fail   :write  4
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :cas    [4 1]
+INFO  jepsen.util - 3   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :cas    [1 4]
+INFO  jepsen.util - 2   :fail   :cas    [1 4]
+INFO  jepsen.util - 0   :invoke :cas    [4 1]
+INFO  jepsen.util - 0   :fail   :cas    [4 1]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :fail   :write  1
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :write  0
+INFO  jepsen.util - 4   :fail   :write  3
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 1   :fail   :write  2
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :fail   :write  1
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :write  0
+INFO  jepsen.util - 0   :invoke :cas    [2 1]
+INFO  jepsen.util - 0   :fail   :cas    [2 1]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :fail   :write  2
+INFO  jepsen.util - 2   :invoke :cas    [3 2]
+INFO  jepsen.util - 2   :fail   :cas    [3 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :fail   :write  1
+INFO  jepsen.util - 3   :invoke :cas    [1 0]
+INFO  jepsen.util - 3   :fail   :cas    [1 0]
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :ok :write  1
+INFO  jepsen.util - 3   :invoke :cas    [1 1]
+INFO  jepsen.util - 3   :fail   :cas    [1 1]
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 2   :ok :write  1
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 4   :invoke :cas    [1 0]
+INFO  jepsen.util - 4   :fail   :cas    [1 0]
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 2   :ok :write  1
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :ok :write  2
+INFO  jepsen.util - 4   :invoke :cas    [4 3]
+INFO  jepsen.util - 4   :fail   :cas    [4 3]
+INFO  jepsen.util - 1   :invoke :cas    [2 0]
+INFO  jepsen.util - 1   :fail   :cas    [2 0]
+INFO  jepsen.util - 3   :invoke :cas    [1 3]
+INFO  jepsen.util - 3   :fail   :cas    [1 3]
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [4 2]
+INFO  jepsen.util - 4   :fail   :cas    [4 2]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 2   :ok :write  1
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 1   :invoke :cas    [1 1]
+INFO  jepsen.util - 1   :fail   :cas    [1 1]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   0
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :cas    [3 0]
+INFO  jepsen.util - 1   :fail   :cas    [3 0]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :cas    [3 0]
+INFO  jepsen.util - 2   :fail   :cas    [3 0]
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 4   :invoke :cas    [0 2]
+INFO  jepsen.util - 4   :fail   :cas    [0 2]
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 1   :ok :write  2
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   0
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [3 1]
+INFO  jepsen.util - 0   :fail   :cas    [3 1]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :cas    [1 4]
+INFO  jepsen.util - 2   :fail   :cas    [1 4]
+INFO  jepsen.util - 0   :invoke :cas    [1 4]
+INFO  jepsen.util - 0   :fail   :cas    [1 4]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :cas    [4 0]
+INFO  jepsen.util - 2   :fail   :cas    [4 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [3 1]
+INFO  jepsen.util - 4   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :cas    [3 2]
+INFO  jepsen.util - 3   :fail   :cas    [3 2]
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :cas    [1 2]
+INFO  jepsen.util - 0   :fail   :cas    [1 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 1   :invoke :cas    [2 1]
+INFO  jepsen.util - 1   :fail   :cas    [2 1]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n1 #{:n4 :n2}, :n5 #{:n4 :n2}, :n3 #{:n4 :n2}, :n2 #{:n3 :n5 :n1}, :n4 #{:n3 :n5 :n1}}"
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [1 3]
+INFO  jepsen.util - 0   :fail   :cas    [1 3]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 0   :invoke :cas    [2 4]
+INFO  jepsen.util - 0   :fail   :cas    [2 4]
+INFO  jepsen.util - 4   :invoke :cas    [4 2]
+INFO  jepsen.util - 4   :fail   :cas    [4 2]
+INFO  jepsen.util - 2   :invoke :cas    [3 1]
+INFO  jepsen.util - 2   :fail   :cas    [3 1]
+INFO  jepsen.util - 0   :invoke :cas    [2 0]
+INFO  jepsen.util - 0   :fail   :cas    [2 0]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :cas    [2 3]
+INFO  jepsen.util - 0   :fail   :cas    [2 3]
+INFO  jepsen.util - 4   :invoke :cas    [0 0]
+INFO  jepsen.util - 4   :fail   :cas    [0 0]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [1 4]
+INFO  jepsen.util - 4   :fail   :cas    [1 4]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 2   :invoke :cas    [3 0]
+INFO  jepsen.util - 2   :fail   :cas    [3 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 2   :invoke :cas    [1 4]
+INFO  jepsen.util - 2   :fail   :cas    [1 4]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [3 3]
+INFO  jepsen.util - 4   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 2   :invoke :cas    [2 2]
+INFO  jepsen.util - 2   :fail   :cas    [2 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   3
+INFO  jepsen.util - 4   :invoke :cas    [0 2]
+INFO  jepsen.util - 4   :fail   :cas    [0 2]
+INFO  jepsen.util - 2   :invoke :cas    [0 3]
+INFO  jepsen.util - 2   :fail   :cas    [0 3]
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :cas    [4 0]
+INFO  jepsen.util - 4   :fail   :cas    [4 0]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :cas    [0 0]
+INFO  jepsen.util - 0   :fail   :cas    [0 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 0   :invoke :cas    [2 1]
+INFO  jepsen.util - 0   :fail   :cas    [2 1]
+INFO  jepsen.util - 4   :invoke :cas    [3 3]
+INFO  jepsen.util - 4   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :cas    [4 2]
+INFO  jepsen.util - 2   :fail   :cas    [4 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   0
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [4 0]
+INFO  jepsen.util - 2   :fail   :cas    [4 0]
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - 0   :invoke :cas    [2 2]
+INFO  jepsen.util - 0   :fail   :cas    [2 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :cas    [1 3]
+INFO  jepsen.util - 1   :fail   :cas    [1 3]
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :fail   :write  1
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :cas    [0 4]
+INFO  jepsen.util - 1   :fail   :cas    [0 4]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :cas    [3 2]
+INFO  jepsen.util - 2   :fail   :cas    [3 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 0]
+INFO  jepsen.util - 3   :fail   :cas    [4 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [4 4]
+INFO  jepsen.util - 0   :fail   :cas    [4 4]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :fail   :write  1
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [0 0]
+INFO  jepsen.util - 0   :fail   :cas    [0 0]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :fail   :write  3
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :write  3
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 3   :fail   :write  4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [2 4]
+INFO  jepsen.util - 0   :fail   :cas    [2 4]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :write  3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :fail   :write  2
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :cas    [1 3]
+INFO  jepsen.util - 1   :fail   :cas    [1 3]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [0 3]
+INFO  jepsen.util - 0   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :fail   :write  1
+INFO  jepsen.util - 1   :invoke :cas    [4 3]
+INFO  jepsen.util - 1   :fail   :cas    [4 3]
+INFO  jepsen.util - 3   :invoke :cas    [0 3]
+INFO  jepsen.util - 3   :fail   :cas    [0 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :fail   :write  2
+INFO  jepsen.util - 4   :invoke :cas    [3 3]
+INFO  jepsen.util - 4   :fail   :cas    [3 3]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 3   :fail   :write  0
+INFO  jepsen.util - 2   :invoke :cas    [0 0]
+INFO  jepsen.util - 2   :fail   :cas    [0 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [2 1]
+INFO  jepsen.util - 1   :fail   :cas    [2 1]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [0 0]
+INFO  jepsen.util - 4   :fail   :cas    [0 0]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 3   :fail   :write  4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [3 3]
+INFO  jepsen.util - 4   :fail   :cas    [3 3]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :fail   :write  2
+INFO  jepsen.util - 2   :invoke :cas    [4 4]
+INFO  jepsen.util - 2   :fail   :cas    [4 4]
+INFO  jepsen.util - 0   :invoke :cas    [2 0]
+INFO  jepsen.util - 0   :fail   :cas    [2 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 0   :invoke :cas    [0 0]
+INFO  jepsen.util - 0   :fail   :cas    [0 0]
+INFO  jepsen.util - 4   :invoke :cas    [2 3]
+INFO  jepsen.util - 4   :fail   :cas    [2 3]
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   1
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   1
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 1   :invoke :cas    [1 3]
+INFO  jepsen.util - 1   :fail   :cas    [1 3]
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 4   :invoke :cas    [4 4]
+INFO  jepsen.util - 4   :fail   :cas    [4 4]
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :ok :write  3
+INFO  jepsen.util - 3   :invoke :cas    [2 3]
+INFO  jepsen.util - 3   :fail   :cas    [2 3]
+INFO  jepsen.util - 2   :invoke :cas    [1 2]
+INFO  jepsen.util - 2   :fail   :cas    [1 2]
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 1   :invoke :cas    [1 0]
+INFO  jepsen.util - 1   :fail   :cas    [1 0]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   0
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 1   :invoke :cas    [0 3]
+INFO  jepsen.util - 1   :fail   :cas    [0 3]
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [1 2]
+INFO  jepsen.util - 0   :fail   :cas    [1 2]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   0
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 4   :invoke :cas    [0 2]
+INFO  jepsen.util - 4   :fail   :cas    [0 2]
+INFO  jepsen.util - 1   :invoke :cas    [3 1]
+INFO  jepsen.util - 1   :fail   :cas    [3 1]
+INFO  jepsen.util - 3   :invoke :cas    [3 0]
+INFO  jepsen.util - 3   :fail   :cas    [3 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 0   :invoke :cas    [2 2]
+INFO  jepsen.util - 0   :fail   :cas    [2 2]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n1 #{:n3 :n2}, :n5 #{:n3 :n2}, :n4 #{:n3 :n2}, :n2 #{:n4 :n5 :n1}, :n3 #{:n4 :n5 :n1}}"
+INFO  jepsen.util - 0   :invoke :cas    [2 4]
+INFO  jepsen.util - 0   :fail   :cas    [2 4]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 0   :invoke :cas    [3 2]
+INFO  jepsen.util - 0   :fail   :cas    [3 2]
+INFO  jepsen.util - 4   :invoke :cas    [3 2]
+INFO  jepsen.util - 4   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   0
+INFO  jepsen.util - 0   :invoke :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [0 1]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 0   :ok :write  1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 3   :invoke :cas    [1 3]
+INFO  jepsen.util - 3   :fail   :cas    [1 3]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 3   :invoke :cas    [0 4]
+INFO  jepsen.util - 3   :fail   :cas    [0 4]
+INFO  jepsen.util - 0   :invoke :cas    [0 3]
+INFO  jepsen.util - 0   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 0   :invoke :cas    [2 0]
+INFO  jepsen.util - 0   :fail   :cas    [2 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :cas    [0 0]
+INFO  jepsen.util - 3   :fail   :cas    [0 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [0 3]
+INFO  jepsen.util - 4   :fail   :cas    [0 3]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :ok :write  2
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 3   :invoke :cas    [2 0]
+INFO  jepsen.util - 3   :fail   :cas    [2 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [1 1]
+INFO  jepsen.util - 4   :fail   :cas    [1 1]
+INFO  jepsen.util - 3   :invoke :cas    [2 1]
+INFO  jepsen.util - 3   :fail   :cas    [2 1]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [4 2]
+INFO  jepsen.util - 4   :fail   :cas    [4 2]
+INFO  jepsen.util - 3   :invoke :cas    [0 0]
+INFO  jepsen.util - 3   :fail   :cas    [0 0]
+INFO  jepsen.util - 0   :invoke :cas    [0 4]
+INFO  jepsen.util - 0   :fail   :cas    [0 4]
+INFO  jepsen.util - 4   :invoke :cas    [2 3]
+INFO  jepsen.util - 4   :fail   :cas    [2 3]
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 0   :invoke :cas    [3 0]
+INFO  jepsen.util - 0   :fail   :cas    [3 0]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 3   :invoke :cas    [3 2]
+INFO  jepsen.util - 3   :fail   :cas    [3 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 3   :invoke :cas    [0 1]
+INFO  jepsen.util - 3   :fail   :cas    [0 1]
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :cas    [0 2]
+INFO  jepsen.util - 4   :fail   :cas    [0 2]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :fail   :write  3
+INFO  jepsen.util - 0   :invoke :cas    [2 2]
+INFO  jepsen.util - 0   :fail   :cas    [2 2]
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [0 2]
+INFO  jepsen.util - 0   :fail   :cas    [0 2]
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :fail   :write  2
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :fail   :write  4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [0 3]
+INFO  jepsen.util - 0   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [0 1]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :cas    [0 1]
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [2 4]
+INFO  jepsen.util - 2   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :write  0
+INFO  jepsen.util - 4   :invoke :cas    [2 4]
+INFO  jepsen.util - 4   :fail   :cas    [2 4]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [3 3]
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :cas    [2 3]
+INFO  jepsen.util - 2   :fail   :cas    [2 3]
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 0   :fail   :write  1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [2 0]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :cas    [2 0]
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :write  0
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :cas    [1 3]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :cas    [1 3]
+INFO  jepsen.util - 3   :fail   :write  4
+INFO  jepsen.util - 2   :invoke :cas    [2 2]
+INFO  jepsen.util - 2   :fail   :cas    [2 2]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :cas    [4 0]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :cas    [4 0]
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [4 2]
+INFO  jepsen.util - 2   :fail   :cas    [4 2]
+INFO  jepsen.util - 0   :invoke :cas    [2 2]
+INFO  jepsen.util - 0   :fail   :cas    [2 2]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :fail   :write  3
+INFO  jepsen.util - 1   :invoke :cas    [2 4]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :cas    [2 4]
+INFO  jepsen.util - 3   :fail   :write  4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :write  1
+INFO  jepsen.util - 0   :fail   :write  1
+INFO  jepsen.util - 4   :invoke :cas    [2 2]
+INFO  jepsen.util - 4   :fail   :cas    [2 2]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :fail   :write  4
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 3   :invoke :cas    [3 1]
+INFO  jepsen.util - 3   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :cas    [1 2]
+INFO  jepsen.util - 0   :fail   :cas    [1 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 3   :invoke :cas    [2 0]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [2 0]
+INFO  jepsen.util - 1   :ok :read   4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 3   :invoke :cas    [3 2]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 3   :fail   :cas    [3 2]
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 2   :invoke :cas    [3 4]
+INFO  jepsen.util - 2   :fail   :cas    [3 4]
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [1 4]
+INFO  jepsen.util - 0   :fail   :cas    [1 4]
+INFO  jepsen.util - 4   :invoke :cas    [1 4]
+INFO  jepsen.util - 4   :fail   :cas    [1 4]
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 0   :invoke :write  3
+INFO  jepsen.util - 0   :ok :write  3
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  4
+INFO  jepsen.util - 0   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [3 4]
+INFO  jepsen.util - 4   :fail   :cas    [3 4]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   4
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   0
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 1   :ok :read   0
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :invoke :cas    [3 4]
+INFO  jepsen.util - 2   :fail   :cas    [3 4]
+INFO  jepsen.util - 0   :invoke :cas    [1 1]
+INFO  jepsen.util - 0   :fail   :cas    [1 1]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [0 2]
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :fail   :cas    [0 2]
+INFO  jepsen.util - 2   :invoke :cas    [0 4]
+INFO  jepsen.util - 2   :fail   :cas    [0 4]
+INFO  jepsen.util - 0   :invoke :cas    [3 2]
+INFO  jepsen.util - 0   :fail   :cas    [3 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 1   :invoke :cas    [0 4]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :cas    [0 4]
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   0
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :ok :read   0
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 0   :invoke :write  2
+INFO  jepsen.util - 0   :ok :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n5 #{:n2 :n1}, :n4 #{:n2 :n1}, :n3 #{:n2 :n1}, :n1 #{:n3 :n4 :n5}, :n2 #{:n3 :n4 :n5}}"
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 1   :invoke :cas    [1 4]
+INFO  jepsen.util - 3   :invoke :cas    [0 4]
+INFO  jepsen.util - 1   :fail   :cas    [1 4]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [0 4]
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [3 1]
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :fail   :cas    [3 1]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   3
+INFO  jepsen.util - 1   :invoke :cas    [2 1]
+INFO  jepsen.util - 1   :fail   :cas    [2 1]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - 1   :invoke :cas    [4 0]
+INFO  jepsen.util - 1   :fail   :cas    [4 0]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 4]
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 3   :fail   :cas    [2 4]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 4   :invoke :cas    [3 1]
+INFO  jepsen.util - 4   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 1   :invoke :cas    [4 0]
+INFO  jepsen.util - 1   :fail   :cas    [4 0]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 4   :invoke :cas    [2 1]
+INFO  jepsen.util - 4   :fail   :cas    [2 1]
+INFO  jepsen.util - 1   :invoke :cas    [4 1]
+INFO  jepsen.util - 1   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 2]
+INFO  jepsen.util - 3   :fail   :cas    [4 2]
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [4 0]
+INFO  jepsen.util - 3   :invoke :cas    [2 4]
+INFO  jepsen.util - 3   :fail   :cas    [2 4]
+INFO  jepsen.util - 2   :fail   :cas    [4 0]
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [3 0]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :fail   :cas    [3 0]
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [4 2]
+INFO  jepsen.util - 2   :invoke :cas    [3 0]
+INFO  jepsen.util - 3   :fail   :cas    [4 2]
+INFO  jepsen.util - 2   :fail   :cas    [3 0]
+INFO  jepsen.util - 4   :invoke :write  4
+INFO  jepsen.util - 4   :ok :write  4
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :fail   :write  1
+INFO  jepsen.util - 3   :invoke :write  1
+INFO  jepsen.util - 2   :invoke :cas    [2 3]
+INFO  jepsen.util - 2   :fail   :cas    [2 3]
+INFO  jepsen.util - 3   :ok :write  1
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 1   :invoke :write  3
+INFO  jepsen.util - 1   :fail   :write  3
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 4   :invoke :cas    [3 1]
+INFO  jepsen.util - 4   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :cas    [2 4]
+INFO  jepsen.util - 1   :fail   :cas    [2 4]
+INFO  jepsen.util - 3   :invoke :cas    [0 3]
+INFO  jepsen.util - 2   :invoke :write  1
+INFO  jepsen.util - 3   :fail   :cas    [0 3]
+INFO  jepsen.util - 2   :ok :write  1
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :cas    [0 4]
+INFO  jepsen.util - 1   :fail   :cas    [0 4]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :ok :read   3
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 0]
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :fail   :cas    [2 0]
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :fail   :write  4
+INFO  jepsen.util - 3   :invoke :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :ok :read   1
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 1   :invoke :cas    [1 4]
+INFO  jepsen.util - 1   :fail   :cas    [1 4]
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [3 2]
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 2   :fail   :cas    [3 2]
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [1 2]
+INFO  jepsen.util - 4   :fail   :cas    [1 2]
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :fail   :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 1]
+INFO  jepsen.util - 2   :invoke :cas    [2 4]
+INFO  jepsen.util - 3   :fail   :cas    [2 1]
+INFO  jepsen.util - 2   :fail   :cas    [2 4]
+INFO  jepsen.util - 0   :invoke :cas    [1 2]
+INFO  jepsen.util - 0   :fail   :cas    [1 2]
+INFO  jepsen.util - 4   :invoke :cas    [3 1]
+INFO  jepsen.util - 4   :fail   :cas    [3 1]
+INFO  jepsen.util - 1   :invoke :cas    [0 3]
+INFO  jepsen.util - 1   :fail   :cas    [0 3]
+INFO  jepsen.util - 3   :invoke :cas    [1 0]
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :write  0
+INFO  jepsen.util - 3   :fail   :cas    [1 0]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :fail   :write  0
+INFO  jepsen.util - 1   :invoke :cas    [2 3]
+INFO  jepsen.util - 1   :fail   :cas    [2 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 0]
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [2 0]
+INFO  jepsen.util - 0   :invoke :cas    [0 4]
+INFO  jepsen.util - 0   :fail   :cas    [0 4]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [4 2]
+INFO  jepsen.util - 1   :fail   :cas    [4 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :write  0
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :fail   :write  0
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [1 2]
+INFO  jepsen.util - 1   :fail   :cas    [1 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :cas    [2 4]
+INFO  jepsen.util - 0   :fail   :cas    [2 4]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [3 3]
+INFO  jepsen.util - 1   :fail   :cas    [3 3]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :invoke :cas    [2 1]
+INFO  jepsen.util - 2   :fail   :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [2 1]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :cas    [0 4]
+INFO  jepsen.util - 4   :fail   :cas    [0 4]
+INFO  jepsen.util - 1   :invoke :write  1
+INFO  jepsen.util - 1   :fail   :write  1
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :fail   :write  2
+INFO  jepsen.util - 3   :fail   :read   nil
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :fail   :read   nil
+INFO  jepsen.util - 1   :invoke :cas    [4 1]
+INFO  jepsen.util - 1   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :cas    [1 4]
+INFO  jepsen.util - 3   :invoke :cas    [4 2]
+INFO  jepsen.util - 3   :fail   :cas    [4 2]
+INFO  jepsen.util - 2   :fail   :cas    [1 4]
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   1
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   1
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 2   :invoke :cas    [3 2]
+INFO  jepsen.util - 2   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 0   :invoke :cas    [0 3]
+INFO  jepsen.util - 0   :fail   :cas    [0 3]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 2   :invoke :write  0
+INFO  jepsen.util - 3   :invoke :cas    [4 4]
+INFO  jepsen.util - 3   :fail   :cas    [4 4]
+INFO  jepsen.util - 2   :ok :write  0
+INFO  jepsen.util - 0   :invoke :cas    [1 0]
+INFO  jepsen.util - 0   :fail   :cas    [1 0]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   0
+INFO  jepsen.util - 1   :invoke :write  4
+INFO  jepsen.util - 1   :ok :write  4
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :cas    [1 3]
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :fail   :cas    [1 3]
+INFO  jepsen.util - 0   :invoke :cas    [1 2]
+INFO  jepsen.util - 0   :fail   :cas    [1 2]
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 1   :invoke :cas    [3 2]
+INFO  jepsen.util - 1   :fail   :cas    [3 2]
+INFO  jepsen.util - 3   :invoke :write  4
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :write  4
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   4
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 2   :invoke :cas    [4 2]
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :fail   :cas    [4 2]
+INFO  jepsen.util - 0   :invoke :cas    [0 4]
+INFO  jepsen.util - 0   :fail   :cas    [0 4]
+INFO  jepsen.util - 4   :invoke :write  1
+INFO  jepsen.util - 4   :ok :write  1
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 1   :ok :write  2
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 2   :invoke :cas    [3 3]
+INFO  jepsen.util - 2   :fail   :cas    [3 3]
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   0
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   0
+INFO  jepsen.util - 1   :invoke :write  2
+INFO  jepsen.util - 1   :ok :write  2
+INFO  jepsen.util - 2   :invoke :write  3
+INFO  jepsen.util - 3   :invoke :cas    [3 0]
+INFO  jepsen.util - 3   :fail   :cas    [3 0]
+INFO  jepsen.util - 2   :ok :write  3
+INFO  jepsen.util - 0   :invoke :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [0 1]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   2
+INFO  jepsen.util - 3   :invoke :write  0
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :ok :write  0
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 0   :invoke :write  0
+INFO  jepsen.util - 0   :ok :write  0
+INFO  jepsen.util - 4   :invoke :write  3
+INFO  jepsen.util - 4   :ok :write  3
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.util - 3   :invoke :cas    [2 2]
+INFO  jepsen.util - 3   :fail   :cas    [2 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 2   :ok :read   3
+INFO  jepsen.util - 0   :invoke :cas    [4 2]
+INFO  jepsen.util - 0   :fail   :cas    [4 2]
+INFO  jepsen.util - 4   :invoke :cas    [3 0]
+INFO  jepsen.util - 4   :fail   :cas    [3 0]
+INFO  jepsen.util - 1   :invoke :cas    [4 2]
+INFO  jepsen.util - 1   :fail   :cas    [4 2]
+INFO  jepsen.util - 3   :invoke :write  2
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :write  2
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - 0   :ok :read   2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 3   :invoke :cas    [4 1]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [4 1]
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 0   :invoke :cas    [4 3]
+INFO  jepsen.util - 0   :fail   :cas    [4 3]
+INFO  jepsen.util - 4   :invoke :write  0
+INFO  jepsen.util - 4   :ok :write  0
+INFO  jepsen.util - :nemesis    :info   :start  nil
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 1   :ok :write  0
+INFO  jepsen.util - 3   :invoke :cas    [1 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [1 2]
+INFO  jepsen.util - 2   :ok :read   0
+INFO  jepsen.util - 0   :invoke :cas    [0 1]
+INFO  jepsen.util - 0   :fail   :cas    [0 1]
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 1   :invoke :write  0
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :write  2
+INFO  jepsen.util - 3   :ok :read   2
+INFO  jepsen.util - 2   :ok :write  2
+INFO  jepsen.util - 0   :invoke :read   nil
+INFO  jepsen.util - :nemesis    :info   :start  "Cut off {:n5 #{:n2 :n1}, :n4 #{:n2 :n1}, :n3 #{:n2 :n1}, :n1 #{:n3 :n4 :n5}, :n2 #{:n3 :n4 :n5}}"
+INFO  jepsen.util - 4   :invoke :write  2
+INFO  jepsen.util - 4   :ok :write  2
+INFO  jepsen.util - 3   :invoke :cas    [3 2]
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :fail   :cas    [3 2]
+INFO  jepsen.util - 2   :ok :read   2
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   2
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :read   nil
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :ok :read   4
+INFO  jepsen.util - 4   :invoke :read   nil
+INFO  jepsen.util - 4   :ok :read   4
+INFO  jepsen.util - 3   :invoke :read   nil
+INFO  jepsen.util - 2   :invoke :write  4
+INFO  jepsen.util - 3   :ok :read   4
+INFO  jepsen.util - 2   :ok :write  4
+INFO  jepsen.util - 4   :invoke :cas    [0 4]
+INFO  jepsen.util - 4   :fail   :cas    [0 4]
+INFO  jepsen.util - 3   :invoke :write  3
+INFO  jepsen.util - 2   :invoke :cas    [0 1]
+INFO  jepsen.util - 3   :ok :write  3
+INFO  jepsen.util - 2   :fail   :cas    [0 1]
+INFO  jepsen.util - 4   :invoke :cas    [3 3]
+INFO  jepsen.util - 4   :fail   :cas    [3 3]
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.util - 0   :fail   :read   nil
+INFO  jepsen.util - 1   :fail   :write  0
+INFO  jepsen.util - :nemesis    :info   :stop   nil
+INFO  jepsen.util - :nemesis    :info   :stop   "fully connected"
+INFO  jepsen.core - nemesis done
+INFO  jepsen.core - Worker 3 done
+INFO  jepsen.util - 1   :invoke :read   nil
+INFO  jepsen.core - Worker 2 done
+INFO  jepsen.core - Worker 4 done
+INFO  jepsen.core - Worker 0 done
+INFO  jepsen.util - 1   :ok :read   3
+INFO  jepsen.core - Worker 1 done
+INFO  jepsen.core - Run complete, writing
+INFO  jepsen.core - Analyzing
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 9 :degenerate 6
+:world-size 30 :degenerate 16
+:world-size 61 :degenerate 28
+:world-size 14 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 6 :degenerate 5
+:world-size 9 :degenerate 7
+:world-size 24 :degenerate 17
+:world-size 9 :degenerate 9
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 10 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 3 :degenerate 3
+:world-size 8 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 8 :degenerate 7
+:world-size 4 :degenerate 4
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 3 :degenerate 3
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 11 :degenerate 7
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 11 :degenerate 8
+:world-size 3 :degenerate 3
+:world-size 11 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 14 :degenerate 11
+:world-size 5 :degenerate 5
+:world-size 14 :degenerate 11
+:world-size 5 :degenerate 5
+:world-size 12 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 17 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 17 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 12 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 14 :degenerate 11
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 17 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 9 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 12 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 12 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 9 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 6 :degenerate 5
+:world-size 5 :degenerate 5
+:world-size 11 :degenerate 9
+:world-size 5 :degenerate 5
+:world-size 9 :degenerate 8
+:world-size 5 :degenerate 5
+:world-size 14 :degenerate 11
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 9 :degenerate 9
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 8 :degenerate 8
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 8 :degenerate 8
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 18 :degenerate 13
+:world-size 6 :degenerate 6
+:world-size 9 :degenerate 9
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 15 :degenerate 13
+:world-size 6 :degenerate 6
+:world-size 9 :degenerate 9
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 6 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 9 :degenerate 6
+:world-size 4 :degenerate 4
+:world-size 9 :degenerate 6
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 6 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 18 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 17 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 10 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 11 :degenerate 8
+:world-size 6 :degenerate 6
+:world-size 7 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 17 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 25 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 25 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 12 :degenerate 8
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 7 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 7 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 4 :degenerate 4
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 26 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 28 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 28 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 26 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 6 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 6 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 23 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 9 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 26 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 26 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 9 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 18 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 11
+:world-size 6 :degenerate 6
+:world-size 14 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 16 :degenerate 11
+:world-size 8 :degenerate 8
+:world-size 14 :degenerate 11
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 30 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 21 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 21 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 14 :degenerate 11
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 16 :degenerate 11
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 15 :degenerate 11
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 10 :degenerate 8
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 14
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 20 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 14
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 21 :degenerate 14
+:world-size 8 :degenerate 8
+:world-size 30 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 20 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 28 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 30 :degenerate 16
+:world-size 8 :degenerate 8
+:world-size 3 :degenerate 3
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 7 :degenerate 6
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 10 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 21 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 6
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 6 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 16 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 16 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 6
+:world-size 4 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 8 :degenerate 6
+:world-size 17 :degenerate 10
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 12 :degenerate 8
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 7 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 4
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 3 :degenerate 3
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 4 :degenerate 4
+:world-size 13 :degenerate 10
+:world-size 5 :degenerate 5
+:world-size 3 :degenerate 3
+:world-size 9 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 10 :degenerate 6
+:world-size 19 :degenerate 12
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 30 :degenerate 12
+:world-size 91 :degenerate 28
+:world-size 16 :degenerate 16
+:world-size 10 :degenerate 10
+:world-size 32 :degenerate 16
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 12
+:world-size 68 :degenerate 24
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 24 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 12
+:world-size 85 :degenerate 24
+:world-size 12 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 20 :degenerate 8
+:world-size 6 :degenerate 6
+:world-size 26 :degenerate 12
+:world-size 47 :degenerate 18
+:world-size 10 :degenerate 10
+:world-size 6 :degenerate 6
+:world-size 23 :degenerate 12
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 6 :degenerate 6
+:world-size 3 :degenerate 3
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 1 :degenerate 1
+:world-size 2 :degenerate 2
+:world-size 1 :degenerate 1
+INFO  jepsen.core - Analysis complete
+INFO  jepsen.system.consul - :n3 consul nuked
+INFO  jepsen.system.consul - :n2 consul nuked
+INFO  jepsen.system.consul - :n4 consul nuked
+INFO  jepsen.system.consul - :n1 consul nuked
+INFO  jepsen.system.consul - :n5 consul nuked
+1964 element history linearizable. :D</p>
+<p>Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+```</p>
+        </article>
+    </section>
+                    </div>
+
+                    <footer id="site-footer">
+                        <p>
+                            <a href="" target="_blank">
+                                
+                            </a> Shinken framework team /
+                            <a href="/">Archives</a>
+                            / Powered by
+                            <a href="https://github.com/getpelican/pelican" target="_blank">
+                                Pelican
+                            </a>
+                        </p>
+                    </footer>
+                </div> <!-- header+content+footer span -->
+
+            </div> <!-- row -->
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/theme/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+        <script>$('body').popover || document.write('<script src="/theme/js/vendor/bootstrap.min.js"><\/script>')</script>
+
+        <script src="/theme/js/vendor/jquery.colorbox-min.js"></script>
+
+        <script src="/theme/js/main.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-48477803-1'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
