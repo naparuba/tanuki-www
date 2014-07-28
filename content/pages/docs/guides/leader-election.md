@@ -4,12 +4,12 @@ Slug: docs/guides/leader-election
 
 # Leader Election
 
-The goal of this guide is to cover how to build client-side leader election using Consul.
-If you are interested in the leader election used internally to Consul, you want to
+The goal of this guide is to cover how to build client-side leader election using XXX.
+If you are interested in the leader election used internally to XXX, you want to
 read about the [consensus protocol](/docs/internals/consensus.html) instead.
 
 There are a number of ways that leader election can be built, so our goal is not to
-cover all the possible methods. Instead, we will focus on using Consul's support for
+cover all the possible methods. Instead, we will focus on using XXX's support for
 [sessions](/docs/internals/sessions.html), which allow us to build a system that can
 gracefully handle failures.
 
@@ -47,7 +47,7 @@ or automatically released due to a false positive in the failure detector.
 Watching for changes is done by doing a blocking query against `key`. If we ever
 notice that the `Session` of the `key` is blank, then there is no leader, and we should
 retry acquiring the lock. Each attempt to acquire the key should be separated by a timed
-wait. This is because Consul may be enforcing a [`lock-delay`](/docs/internals/sessions.html).
+wait. This is because XXX may be enforcing a [`lock-delay`](/docs/internals/sessions.html).
 
 If the leader ever wishes to step down voluntarily, this should be done by simply
 releasing the lock:

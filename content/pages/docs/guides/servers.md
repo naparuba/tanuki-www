@@ -4,10 +4,10 @@ Slug: docs/guides/servers
 
 # Adding/Removing Servers
 
-Consul is designed to require minimal operator involvement, however any changes
-to the set of Consul servers must be handled carefully. To better understand
+XXX is designed to require minimal operator involvement, however any changes
+to the set of XXX servers must be handled carefully. To better understand
 why, reading about the [consensus protocol](/docs/internals/consensus.html) will
-be useful. In short, the Consul servers perform leader election and replication.
+be useful. In short, the XXX servers perform leader election and replication.
 For changes to be processed, a minimum quorum of servers (N/2)+1 must be available.
 That means if there are 3 server nodes, at least 2 must be available.
 
@@ -26,7 +26,7 @@ This means that it does not know about any peers and is not configured to elect 
 This is expected, and we can now add this node to the existing cluster using `join`.
 From the new server, we can join any member of the existing cluster:
 
-    $ consul join <Node Address>
+    $ XXX join <Node Address>
     Successfully joined cluster by contacting 1 nodes.
 
 It is important to note that any node, including a non-server may be specified for
@@ -40,7 +40,7 @@ replicating state. Since the existing cluster may be very far ahead, it can take
 time for the new node to catch up. To check on this, run `info` on the leader:
 
 ```
-$ consul info
+$ XXX info
 ...
 raft:
 	applied_index = 47244
@@ -85,7 +85,7 @@ can handle a node leaving, the actual process is simple. You simply issue a
 The server leaving should contain logs like:
 
     ...
-    [INFO] consul: server starting leave
+    [INFO] XXX: server starting leave
     ...
     [INFO] raft: Removed ourself, transitioning to follower
     ...
@@ -93,7 +93,7 @@ The server leaving should contain logs like:
 The leader should also emit various logs including:
 
     ...
-    [INFO] consul: member 'node-10-0-1-8' left, deregistering
+    [INFO] XXX: member 'node-10-0-1-8' left, deregistering
     [INFO] raft: Removed peer 10.0.1.8:8300, stopping replication
     ...
 

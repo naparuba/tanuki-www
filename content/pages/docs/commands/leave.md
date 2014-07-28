@@ -2,9 +2,9 @@ Title: Commands: Leave
 Slug: docs/commands/leave
 
 
-# Consul Leave
+# XXX Leave
 
-Command: `consul leave`
+Command: `XXX leave`
 
 The leave command triggers a graceful leave and shutdown of the agent.
 
@@ -18,11 +18,11 @@ non-graceful leave can affect cluster availability.
 
 ## Usage
 
-Usage: `consul leave`
+Usage: `XXX leave`
 
 The command-line flags are all optional. The list of available flags are:
 
 * `-rpc-addr` - Address to the RPC server of the agent you want to contact
   to send this command. If this isn't specified, the command will contact
-  "127.0.0.1:8400" which is the default RPC address of a Consul agent.
+  "127.0.0.1:8400" which is the default RPC address of a XXX agent.
 

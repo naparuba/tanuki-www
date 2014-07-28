@@ -2,16 +2,16 @@ Title: XXXXX Architecture
 Slug: docs/internals/architecture
 
 
-# Consul Architecture
+# XXX Architecture
 
-Consul is a complex system that has many different moving parts. To help
-users and developers of Consul form a mental model of how it works, this
+XXX is a complex system that has many different moving parts. To help
+users and developers of XXX form a mental model of how it works, this
 page documents the system architecture.
 
 <div class="alert alert-block alert-warning">
 <strong>Advanced Topic!</strong> This page covers technical details of
-the internals of Consul. You don't need to know these details to effectively
-operate and use Consul. These details are documented here for those who wish
+the internals of XXX. You don't need to know these details to effectively
+operate and use XXX. These details are documented here for those who wish
 to learn about them without having to go spelunking through the source code.
 </div>
 
@@ -20,8 +20,8 @@ to learn about them without having to go spelunking through the source code.
 Before describing the architecture, we provide a glossary of terms to help
 clarify what is being discussed:
 
-* Agent - An agent is the long running daemon on every member of the Consul cluster.
-It is started by running `consul agent`. The agent is able to run in either *client*,
+* Agent - An agent is the long running daemon on every member of the XXX cluster.
+It is started by running `XXX agent`. The agent is able to run in either *client*,
 or *server* mode. Since all nodes must be running an agent, it is simpler to refer to
 the node as either being a client or server, but there are other instances of the agent. All
 agents can run the DNS or HTTP interfaces, and are responsible for running checks and
@@ -47,7 +47,7 @@ transactions are applied to a FSM, we implicitly include the consistency of a re
 state machine. Consensus is described in more detail on [Wikipedia](http://en.wikipedia.org/wiki/Consensus_(computer_science)),
 as well as our [implementation here](/docs/internals/consensus.html).
 
-* Gossip - Consul is built on top of [Serf](http://www.serfdom.io/), which provides a full
+* Gossip - XXX is built on top of [Serf](http://www.serfdom.io/), which provides a full
 [gossip protocol](http://en.wikipedia.org/wiki/Gossip_protocol) that is used for multiple purposes.
 Serf provides membership, failure detection, and event broadcast mechanisms. Our use of these
 is described more in the [gossip documentation](/docs/internals/gossip.html). It is enough to know
@@ -65,12 +65,12 @@ allowing a client to make a request from a server.
 
 ## 10,000 foot view
 
-From a 10,000 foot altitude the architecture of Consul looks like this:
+From a 10,000 foot altitude the architecture of XXX looks like this:
 
-![Consul Architecture](/images/consul-arch.png)
+![XXX Architecture](/images/XXX-arch.png)
 
 Lets break down this image and describe each piece. First of all we can see
-that there are two datacenters, one and two respectively. Consul has first
+that there are two datacenters, one and two respectively. XXX has first
 class support for multiple datacenters and expects this to be the common case.
 
 Within each datacenter we have a mixture of clients and servers. It is expected
@@ -95,7 +95,7 @@ when a non-leader server receives an RPC request it forwards it to the cluster l
 
 The server nodes also operate as part of a WAN gossip. This pool is different from the LAN pool,
 as it is optimized for the higher latency of the internet, and is expected to only contain
-other Consul server nodes. The purpose of this pool is to allow datacenters to discover each
+other XXX server nodes. The purpose of this pool is to allow datacenters to discover each
 other in a low touch manner. Bringing a new datacenter online is as easy as joining the existing
 WAN gossip. Because the servers are all operating in this pool, it also enables cross-datacenter requests.
 When a server receives a request for a different datacenter, it forwards it to a random server
@@ -106,10 +106,10 @@ connection caching and multiplexing, cross-datacenter requests are relatively fa
 
 ## Getting in depth
 
-At this point we've covered the high level architecture of Consul, but there are much
+At this point we've covered the high level architecture of XXX, but there are much
 more details to each of the sub-systems. The [consensus protocol](/docs/internals/consensus.html) is
 documented in detail, as is the [gossip protocol](/docs/internals/gossip.html). The [documentation](/docs/internals/security.html)
 for the security model and protocols used are also available.
 
-For other details, either consult the code, ask in IRC or reach out to the mailing list.
+For other details, either XXXt the code, ask in IRC or reach out to the mailing list.
 

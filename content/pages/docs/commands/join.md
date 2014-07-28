@@ -2,12 +2,12 @@ Title: Commands: Join
 Slug: docs/commands/join
 
 
-# Consul Join
+# XXX Join
 
-Command: `consul join`
+Command: `XXX join`
 
-The `consul join` command tells a Consul agent to join an existing cluster.
-A new Consul agent must join with at least one existing member of a cluster
+The `XXX join` command tells a XXX agent to join an existing cluster.
+A new XXX agent must join with at least one existing member of a cluster
 in order to join an existing cluster. After joining that one member,
 the gossip layer takes over, propagating the updated membership state across
 the cluster.
@@ -21,11 +21,11 @@ two nodes join to become a single cluster.
 
 ## Usage
 
-Usage: `consul join [options] address ...`
+Usage: `XXX join [options] address ...`
 
 You may call join with multiple addresses if you want to try to join
-multiple clusters. Consul will attempt to join all addresses, and the join
-command will fail only if Consul was unable to join with any.
+multiple clusters. XXX will attempt to join all addresses, and the join
+command will fail only if XXX was unable to join with any.
 
 The command-line flags are all optional. The list of available flags are:
 
@@ -35,5 +35,5 @@ The command-line flags are all optional. The list of available flags are:
 
 * `-rpc-addr` - Address to the RPC server of the agent you want to contact
   to send this command. If this isn't specified, the command will contact
-  "127.0.0.1:8400" which is the default RPC address of a Consul agent.
+  "127.0.0.1:8400" which is the default RPC address of a XXX agent.
 

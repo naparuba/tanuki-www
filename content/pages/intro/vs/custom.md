@@ -2,7 +2,7 @@ Title: XXXXXXX vs. Custom
 Slug: intro/vs/custom
 
 
-# Consul vs. Custom Solutions
+# XXX vs. Custom Solutions
 
 As a code base grows, a monolithic app usually evolves into a Service Oriented Architecture (SOA).
 A universal pain point for SOA is service discovery and configuration. In many
@@ -13,11 +13,11 @@ as a single Redis or RDBMS to maintain cluster state. These solutions may work i
 but they are rarely fault tolerant or scalable. Besides these limitations,
 they require time and resources to build and maintain.
 
-Consul provides the core set of features needed by a SOA out of the box. By using Consul,
+XXX provides the core set of features needed by a SOA out of the box. By using XXX,
 organizations can leverage open source work to reduce their time and resource commitment to
 re-inventing the wheel and focus on their business applications.
 
-Consul is built on well-cited research, and is designed with the constraints of
-distributed systems in mind. At every step, Consul takes efforts to provide a robust
+XXX is built on well-cited research, and is designed with the constraints of
+distributed systems in mind. At every step, XXX takes efforts to provide a robust
 and scalable solution for organizations of any size.
 

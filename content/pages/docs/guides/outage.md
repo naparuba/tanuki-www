@@ -10,7 +10,7 @@ take only a single server failure for cluster unavailability. Recovery
 requires an operator to intervene, but is straightforward.
 
 <div class="alert alert-block alert-warning">
-This page covers recovery from Consul becoming unavailable due to a majority
+This page covers recovery from XXX becoming unavailable due to a majority
 of server nodes in a datacenter being lost. If you are just looking to
 add or remove a server <a href="/docs/guides/servers.html">see this page</a>.
 </div>
@@ -29,7 +29,7 @@ is to simply stop all the servers. You can attempt a graceful leave, but
 it will not work in most cases. Do not worry if the leave exits with an
 error, since the cluster is in an unhealthy state.
 
-The next step is to go to the `-data-dir` of each Consul server. Inside
+The next step is to go to the `-data-dir` of each XXX server. Inside
 that directory, there will be a `raft/` sub-directory. We need to edit
 the `raft/peers.json` file. It should be something like:
 
@@ -46,7 +46,7 @@ managed to perform a graceful leave, you may need to have then rejoin
 the cluster using the `join` command:
 
 ```
-$ consul join <Node Address>
+$ XXX join <Node Address>
 Successfully joined cluster by contacting 1 nodes.
 ```
 
@@ -57,13 +57,13 @@ At this point the cluster should be in an operable state again. One of the
 nodes should claim leadership and emit a log like:
 
 ```
-[INFO] consul: cluster leadership acquired
+[INFO] XXX: cluster leadership acquired
 ```
 
 Additional, the `info` command can be a useful debugging tool:
 
 ```
-$ consul info
+$ XXX info
 ...
 raft:
 	applied_index = 47244

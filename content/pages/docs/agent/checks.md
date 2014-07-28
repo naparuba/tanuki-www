@@ -53,14 +53,14 @@ provide an `id` and `notes` field. The `id` is set to the `name` if not
 provided. It is required that all checks have a unique ID per node, so if names
 might conflict then unique ID's should be provided.
 
-The `notes` field is opaque to Consul, but may be used for human
+The `notes` field is opaque to XXX, but may be used for human
 readable descriptions. The field is set to any output that a script
 generates, and similarly the TTL update hooks can update the `notes`
 as well.
 
 To configure a check, either provide it as a `-config-file` option to the
 agent, or place it inside the `-config-dir` of the agent. The file must
-end in the ".json" extension to be loaded by Consul. Check definitions can
+end in the ".json" extension to be loaded by XXX. Check definitions can
 also be updated by sending a `SIGHUP` to the agent. Alternatively, the
 check can be registered dynamically using the [HTTP API](/docs/agent/http.html).
 
@@ -74,6 +74,6 @@ a specific meaning. Specifically:
  * Exit code 1 - Check is warning
  * Any other code - Check is failing
 
-This is the only convention that Consul depends on. Any output of the script
+This is the only convention that XXX depends on. Any output of the script
 will be captured and stored in the `notes` field so that it can be viewed
 by human operators.

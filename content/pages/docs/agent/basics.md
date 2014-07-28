@@ -2,11 +2,11 @@ Title: Agent
 Slug: docs/agent/basics
 
 
-# Consul Agent
+# XXX Agent
 
-The Consul agent is the core process of Consul. The agent maintains membership
+The XXX agent is the core process of XXX. The agent maintains membership
 information, registers services, runs checks, responds to queries
-and more. The agent must run on every node that is part of a Consul cluster.
+and more. The agent must run on every node that is part of a XXX cluster.
 
 Any Agent may run in one of two modes: client or server. A server
 node takes on the additional responsibility of being part of the [consensus quorum](#).
@@ -18,16 +18,16 @@ as they maintain very little state and interface with the server nodes for most 
 
 ## Running an Agent
 
-The agent is started with the `consul agent` command. This command blocks,
+The agent is started with the `XXX agent` command. This command blocks,
 running forever or until told to quit. The agent command takes a variety
 of configuration options but the defaults are usually good enough. When
-running `consul agent`, you should see output similar to that below:
+running `XXX agent`, you should see output similar to that below:
 
 ```
-$ consul agent -data-dir=/tmp/consul
-==> Starting Consul agent...
-==> Starting Consul agent RPC...
-==> Consul agent running!
+$ XXX agent -data-dir=/tmp/XXX
+==> Starting XXX agent...
+==> Starting XXX agent RPC...
+==> XXX agent running!
        Node name: 'Armons-MacBook-Air'
       Datacenter: 'dc1'
           Server: false (bootstrap: false)
@@ -40,14 +40,14 @@ $ consul agent -data-dir=/tmp/consul
 ...
 ```
 
-There are several important components that `consul agent` outputs:
+There are several important components that `XXX agent` outputs:
 
 * **Node name**: This is a unique name for the agent. By default this
   is the hostname of the machine, but you may customize it to whatever
   you'd like using the `-node` flag.
 
 * **Datacenter**: This is the datacenter the agent is configured to run
- in. Consul has first-class support for multiple datacenters, but to work efficiently
+ in. XXX has first-class support for multiple datacenters, but to work efficiently
  each node must be configured to correctly report its datacenter. The `-dc` flag
  can be used to set the datacenter. For single-DC configurations, the agent
  will default to "dc1".
@@ -60,15 +60,15 @@ There are several important components that `consul agent` outputs:
 
 * **Client Addr**: This is the address used for client interfaces to the agent.
   This includes the ports for the HTTP, DNS, and RPC interfaces. The RPC
-  address is used for other `consul` commands. Other Consul commands such
-  as `consul members` connect to a running agent and use RPC to query and
+  address is used for other `XXX` commands. Other XXX commands such
+  as `XXX members` connect to a running agent and use RPC to query and
   control the agent. By default, this binds only to localhost. If you
   change this address or port, you'll have to specify an `-rpc-addr` whenever
-  you run commands such as `consul members` so they know how to talk to the
-  agent. This is also the address other applications can use over [RPC to control Consul](/docs/agent/rpc.html).
+  you run commands such as `XXX members` so they know how to talk to the
+  agent. This is also the address other applications can use over [RPC to control XXX](/docs/agent/rpc.html).
 
 * **Cluster Addr**: This is the address and ports used for communication between
-  Consul agents in a cluster. Every Consul agent in a cluster does not have to
+  XXX agents in a cluster. Every XXX agent in a cluster does not have to
   use the same port, but this address **MUST** be reachable by all other nodes.
 
 ## Stopping an Agent

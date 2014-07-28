@@ -5,7 +5,7 @@ Slug: intro/getting-started/checks
 
 # Health Checks
 
-We've now seen how simple it is to run Consul, add nodes and services, and
+We've now seen how simple it is to run XXX, add nodes and services, and
 query those nodes and services. In this section we will continue by adding
 health checks to both nodes and services, a critical component of service
 discovery that prevents using services that are unhealthy.
@@ -23,16 +23,16 @@ Similarly to a service, a check can be registered either by providing a
 We will use the check definition, because just like services, definitions
 are the most common way to setup checks.
 
-Create two definition files in the Consul configuration directory of
+Create two definition files in the XXX configuration directory of
 the second node.
 The first file will add a host-level check, and the second will modify the web
 service definition to add a service-level check.
 
 ```
-$ echo '{"check": {"name": "ping", "script": "ping -c1 google.com >/dev/null", "interval": "30s"}}' >/etc/consul.d/ping.json
+$ echo '{"check": {"name": "ping", "script": "ping -c1 google.com >/dev/null", "interval": "30s"}}' >/etc/XXX.d/ping.json
 
 $ echo '{"service": {"name": "web", "tags": ["rails"], "port": 80,
-  "check": {"script": "curl localhost:80 >/dev/null 2>&1", "interval": "10s"}}}' >/etc/consul.d/web.json
+  "check": {"script": "curl localhost:80 >/dev/null 2>&1", "interval": "10s"}}}' >/etc/XXX.d/web.json
 ```
 
 The first definition adds a host-level check named "ping". This check runs
@@ -46,7 +46,7 @@ Restart the second agent, or send a `SIGHUP` to it. We should now see the
 following log lines:
 
 ```
-==> Starting Consul agent...
+==> Starting XXX agent...
 ...
     [INFO] agent: Synced service 'web'
     [INFO] agent: Synced check 'service:web'
@@ -73,21 +73,21 @@ $ curl http://localhost:8500/v1/health/state/critical
 We can see that there is only a single check in the `critical` state, which is
 our `web` service check.
 
-Additionally, we can attempt to query the web service using DNS. Consul
+Additionally, we can attempt to query the web service using DNS. XXX
 will not return any results, since the service is unhealthy:
 
 ```
- dig @127.0.0.1 -p 8600 web.service.consul
+ dig @127.0.0.1 -p 8600 web.service.XXX
 ...
 
 ;; QUESTION SECTION:
-;web.service.consul.		IN	A
+;web.service.XXX.		IN	A
 ```
 
 This section should have shown that checks can be easily added. Check definitions
 can be updated by changing configuration files and sending a `SIGHUP` to the agent.
 Alternatively the HTTP API can be used to add, remove and modify checks dynamically.
 The API allows for a "dead man's switch" or [TTL based check](/docs/agent/checks.html).
-TTL checks can be used to integrate an application more tightly with Consul, enabling
+TTL checks can be used to integrate an application more tightly with XXX, enabling
 business logic to be evaluated as part of passing a check.
 

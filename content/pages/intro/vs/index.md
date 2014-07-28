@@ -1,13 +1,13 @@
 Title: XXXXXXX vs. Other Software
 Slug: intro/vs/index
 
-# Consul vs. Other Software
+# XXX vs. Other Software
 
-The problems Consul solves are varied, but each individual feature has been
+The problems XXX solves are varied, but each individual feature has been
 solved by many different systems. Although there is no single system that provides
-all the features of Consul, there are other options available to solve some of these problems.
-In this section, we compare Consul to some other options. In most cases, Consul is not
+all the features of XXX, there are other options available to solve some of these problems.
+In this section, we compare XXX to some other options. In most cases, XXX is not
 mutually exclusive with any other system.
 
-Use the navigation to the left to read the comparison of Consul to specific
+Use the navigation to the left to read the comparison of XXX to specific
 systems.

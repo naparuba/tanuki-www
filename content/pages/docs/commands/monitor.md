@@ -2,12 +2,12 @@ Title: Commands: Monitor
 Slug: docs/commands/monitor
 
 
-# Consul Monitor
+# XXX Monitor
 
-Command: `consul monitor`
+Command: `XXX monitor`
 
 The monitor command is used to connect and follow the logs of a running
-Consul agent. Monitor will show the recent logs and then continue to follow
+XXX agent. Monitor will show the recent logs and then continue to follow
 the logs, not exiting until interrupted or until the remote agent quits.
 
 The power of the monitor command is that it allows you to log the agent
@@ -16,7 +16,7 @@ logs and watch the debug logs if necessary.
 
 ## Usage
 
-Usage: `consul monitor [options]`
+Usage: `XXX monitor [options]`
 
 The command-line flags are all optional. The list of available flags are:
 
@@ -27,5 +27,5 @@ The command-line flags are all optional. The list of available flags are:
 
 * `-rpc-addr` - Address to the RPC server of the agent you want to contact
   to send this command. If this isn't specified, the command will contact
-  "127.0.0.1:8400" which is the default RPC address of a Consul agent.
+  "127.0.0.1:8400" which is the default RPC address of a XXX agent.
 

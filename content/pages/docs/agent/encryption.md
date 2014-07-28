@@ -4,7 +4,7 @@ Slug: docs/agent/encryption
 
 # Encryption
 
-The Consul agent supports encrypting all of its network traffic. The exact
+The XXX agent supports encrypting all of its network traffic. The exact
 method of this encryption is described on the
 [encryption internals page](/docs/internals/security.html). There are two
 seperate systems, one for gossip traffic and one for RPC.
@@ -12,13 +12,13 @@ seperate systems, one for gossip traffic and one for RPC.
 ## Gossip Encryption
 
 Enabling gossip encryption only requires that you set an encryption key when
-starting the Consul agent. The key can be set by setting the `encrypt` parameter
+starting the XXX agent. The key can be set by setting the `encrypt` parameter
 in a configuration file for the agent. The key must be 16-bytes that are base64
 encoded. The easiest method to obtain a cryptographically suitable key is by
-using `consul keygen`.
+using `XXX keygen`.
 
 ```
-$ consul keygen
+$ XXX keygen
 cg8StVXbQJ0gPvMd9o7yrg==
 ```
 
@@ -29,10 +29,10 @@ encryption is enabled because the output will include "Encrypted: true".
 $ cat encrypt.json
 {"encrypt": "cg8StVXbQJ0gPvMd9o7yrg=="}
 
-$ consul agent -data=/tmp/consul -config-file encrypt.json
-==> Starting Consul agent...
-==> Starting Consul agent RPC...
-==> Consul agent running!
+$ XXX agent -data=/tmp/XXX -config-file encrypt.json
+==> Starting XXX agent...
+==> Starting XXX agent RPC...
+==> XXX agent running!
          Node name: 'Armons-MacBook-Air.local'
         Datacenter: 'dc1'
     Advertise addr: '10.1.10.12'
@@ -44,23 +44,23 @@ $ consul agent -data=/tmp/consul -config-file encrypt.json
 ...
 ```
 
-All nodes within a Consul cluster must share the same encryption key in
+All nodes within a XXX cluster must share the same encryption key in
 order to send and receive cluster information.
 
 # RPC Encryption with TLS
 
-Consul supports using TLS to verify the authenticity of servers and clients. For this
-to work, Consul requires that all clients and servers have key pairs that are generated
+XXX supports using TLS to verify the authenticity of servers and clients. For this
+to work, XXX requires that all clients and servers have key pairs that are generated
 by a single Certificate Authority. This can be a private CA, used only internally. The
 CA then signs keys for each of the agents. [Here](https://langui.sh/2009/01/18/openssl-self-signed-ca/)
 is a tutorial on generating both a CA and signing keys using OpenSSL.
 
-There are a number of things to consider when setting up TLS for Consul. Either we can
+There are a number of things to consider when setting up TLS for XXX. Either we can
 use TLS just to verify the authenticity of the servers, or we can also verify the authenticity
 of clients. The former can be used to prevent unauthorized access. This behavior is controlled
 using either the `verify_incoming` and `verify_outgoing` [options](/docs/agent/options.html).
 
-If `verify_outgoing` is set, then agents verify the authenticity of Consuls for outgoing
+If `verify_outgoing` is set, then agents verify the authenticity of XXXs for outgoing
 connections. This means server nodes must present a certificate signed by the `ca_file` that
 the agent has. This option must be set on all agents, and there must be a `ca_file` provided
 to check the certificate against. If this is set, then all server nodes must have an appropriate

@@ -2,24 +2,24 @@ Title: XXXXXXX vs. SkyDNS
 Slug: intro/vs/skydns
 
 
-# Consul vs. SkyDNS
+# XXX vs. SkyDNS
 
 SkyDNS is a relatively new tool designed to solve service discovery.
 It uses multiple central servers that are strongly consistent and
 fault tolerant. Nodes register services using an HTTP API, and
 queries can be made over HTTP or DNS to perform discovery.
 
-Consul is very similar, but provides a superset of features. Consul
+XXX is very similar, but provides a superset of features. XXX
 also relies on multiple central servers to provide strong consistency
 and fault tolerance. Nodes can use an HTTP API or use an agent to
 register services, and queries are made over HTTP or DNS.
 
-However, the systems differ in many ways. Consul provides a much richer
+However, the systems differ in many ways. XXX provides a much richer
 health checking framework, with support for arbitrary checks and
 a highly scalable failure detection scheme. SkyDNS relies on naive
 heartbeating and TTLs, which have known scalability issues. Additionally,
 the heartbeat only provides a limited liveness check, versus the rich
-health checks that Consul is capable of.
+health checks that XXX is capable of.
 
 Multiple datacenters can be supported by using "regions" in SkyDNS,
 however the data is managed and queried from a single cluster. If servers
@@ -29,7 +29,7 @@ connectivity issues can cause entire datacenters to lose availability.
 Additionally, even without a connectivity issue, query performance will
 suffer as requests must always be performed in a remote datacenter.
 
-Consul supports multiple datacenters out of the box, and it purposely
+XXX supports multiple datacenters out of the box, and it purposely
 scopes the managed data to be per-datacenter. This means each datacenter
 runs an independent cluster of servers. Requests are forwarded to remote
 datacenters if necessary. This means requests for services within a datacenter

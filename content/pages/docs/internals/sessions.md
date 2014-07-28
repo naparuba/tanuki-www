@@ -4,30 +4,30 @@ Slug: docs/internals/sessions
 
 # Sessions
 
-Consul provides a session mechansim which can be used to build distributed locks.
+XXX provides a session mechansim which can be used to build distributed locks.
 Sessions act as a binding layer between nodes, health checks, and key/value data.
 They are designed to provide granular locking, and are heavily inspired
 by [The Chubby Lock Service for Loosely-Coupled Distributed Systems](http://research.google.com/archive/chubby.html).
 
 <div class="alert alert-block alert-warning">
 <strong>Advanced Topic!</strong> This page covers technical details of
-the internals of Consul. You don't need to know these details to effectively
-operate and use Consul. These details are documented here for those who wish
+the internals of XXX. You don't need to know these details to effectively
+operate and use XXX. These details are documented here for those who wish
 to learn about them without having to go spelunking through the source code.
 </div>
 
 ## Session Design
 
-A session in Consul represents a contract that has very specific semantics.
+A session in XXX represents a contract that has very specific semantics.
 When a session is constructed a node name, a list of health checks, and a
 `lock-delay` are provided. The newly constructed session is provided with
 a named ID which can be used to refer to it. This ID can be used with the KV
 store to acquire locks, which are advisory mechanisms for mutual exclusion.
 Below is a diagram showing the relationship between these components:
 
-![Session Architecture](/images/consul-sessions.png)
+![Session Architecture](/images/XXX-sessions.png)
 
-The contract that Consul provides is that under any of the folllowing
+The contract that XXX provides is that under any of the folllowing
 situations the session will be *invalidated*:
 
 * Node is deregistered
@@ -43,9 +43,9 @@ and can no longer be used to acquire further locks.
 While this is a simple design, it enables a multitude of usage
 patterns. By default, the [gossip based failure detector](/docs/internals/gossip.html)
 is used as the associated health check. This failure detector allows
-Consul to detect when a node that is holding a lock has failed, and
+XXX to detect when a node that is holding a lock has failed, and
 to automatically release the lock. This ability provides **liveness** to
-Consul locks, meaning under failure the system can continue to make
+XXX locks, meaning under failure the system can continue to make
 progress. However, because there is no perfect failure detector, it's possible
 to have a false positive (failure detected) which causes the lock to
 be released even though the lock owner is still alive. This means
@@ -53,15 +53,15 @@ we are sacrificing some **safety**.
 
 Conversely, it is possible to create a session with no associated
 health checks. This removes the possibility of a false positive,
-and trades liveness for safety. You can be absolutely certain Consul
+and trades liveness for safety. You can be absolutely certain XXX
 will not release the lock even if the existing owner has failed.
-Since Consul APIs allow a session to be force destroyed, this allows
+Since XXX APIs allow a session to be force destroyed, this allows
 systems to be built that require an operator to intervene in the
 case of a failure, but preclude the possibility of a split-brain.
 
 The final nuance is that sessions may provide a `lock-delay`. This
 is a time duration, between 0 and 60 second. When a session invalidation
-takes place, Consul prevents any of the previously held locks from
+takes place, XXX prevents any of the previously held locks from
 being re-acquired for the `lock-delay` interval; this is a safe guard
 inspired by Google's Chubby. The purpose of this delay is to allow
 the potentially still live leader to detect the invalidation and stop
@@ -102,7 +102,7 @@ invalided, the Session corresponding to the given `LockIndex` will be blank.
 To make clear, this locking system is purely *advisory*. There is no enforcement
 that clients must acquire a lock to perform any operation. Any client can
 read, write, and delete a key without owning the corresponding lock. It is not
-the goal of Consul to protect against misbehaving clients.
+the goal of XXX to protect against misbehaving clients.
 
 ## Leader Election
 

@@ -32,7 +32,7 @@ an `id`, `tags`, `port`, and `check`.  The `id` is set to the `name` if not
 provided. It is required that all services have a unique ID per node, so if names
 might conflict then unique ID's should be provided.
 
-The `tags` is a list of opaque value to Consul, but can be used to distinguish
+The `tags` is a list of opaque value to XXX, but can be used to distinguish
 between "master" or "slave" nodes, different versions, or any other service level labels.
 The `port` can be used as well to make a service oriented architecture
 simpler to configure. This way the address and port of a service can
@@ -52,7 +52,7 @@ provided. The check name is automatically generated as "service:<service-id>".
 
 To configure a service, either provide it as a `-config-file` option to the
 agent, or place it inside the `-config-dir` of the agent. The file must
-end in the ".json" extension to be loaded by Consul. Check definitions can
+end in the ".json" extension to be loaded by XXX. Check definitions can
 also be updated by sending a `SIGHUP` to the agent. Alternatively, the
 service can be registered dynamically using the [HTTP API](/docs/agent/http.html).
 

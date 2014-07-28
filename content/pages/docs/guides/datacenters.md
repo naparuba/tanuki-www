@@ -4,22 +4,22 @@ Slug: docs/guides/datacenters
 
 # Multi-Datacenter Deploys
 
-One of the key features of Consul is its support for multiple datacenters.
-The [architecture](/docs/internals/architecture.html) of Consul is designed to
+One of the key features of XXX is its support for multiple datacenters.
+The [architecture](/docs/internals/architecture.html) of XXX is designed to
 promote a low-coupling of datacenters, so that connectivity issues or
-failure of any datacenter does not impact the availability of Consul in other
+failure of any datacenter does not impact the availability of XXX in other
 regions. This means each datacenter runs independently, with a dedicated
 group of servers and a private LAN [gossip pool](/docs/internals/gossip.html).
 
 To get started, we initially just [bootstrap](/docs/guides/bootstrapping.html) each
 datacenter individually. We should have at least two datacenters now, which
-we can refer to as `dc1` and `dc2`, although the names are opaque to Consul.
+we can refer to as `dc1` and `dc2`, although the names are opaque to XXX.
 
 The next step is to ensure that all the server nodes join the WAN gossip pool.
 To query the known WAN nodes, we use the `members` command:
 
 ```
-$ consul members -wan
+$ XXX members -wan
 ...
 ```
 
@@ -30,7 +30,7 @@ to a datacenter-local server, which then forwards the request to a server in the
 The next step is to simply join all the servers in the WAN pool:
 
 ```
-$ consul join -wan <server 1> <server 2> ...
+$ XXX join -wan <server 1> <server 2> ...
 ...
 ```
 
@@ -63,6 +63,6 @@ work. Clearly, all server nodes must be able to talk to each other. Otherwise,
 the gossip protocol as well as RPC forwarding will not work. If service discovery
 is to be used across datacenters, then the network must be able to route traffic
 between IP addresses across regions as well. Usually, this means that all datacenters
-must be connected using a VPN or other tunneling mechanism. Consul does not handle
+must be connected using a VPN or other tunneling mechanism. XXX does not handle
 VPN, address rewriting, or NAT traversal for you.
 

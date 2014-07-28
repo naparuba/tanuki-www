@@ -4,8 +4,8 @@ Slug: docs/guides/manual-bootstrap
 
 # Manually Bootstrapping a Datacenter
 
-When deploying Consul to a datacenter for the first time, there is an initial bootstrapping that
-must be done. As of Consul 0.4, an [automatic bootstrapping](/docs/guides/bootstrapping.html) is
+When deploying XXX to a datacenter for the first time, there is an initial bootstrapping that
+must be done. As of XXX 0.4, an [automatic bootstrapping](/docs/guides/bootstrapping.html) is
 available and is the recommended approach. However, older versions only support a manual bootstrap
 that is documented here.
 
@@ -20,7 +20,7 @@ assert leadership of the cluster without agreement from any other server. This i
 at this point, there are no other servers running in the datacenter! Lets call this first server `Node A`.
 When starting `Node A` something like the following will be logged:
 
-    2014/02/22 19:23:32 [INFO] consul: cluster leadership acquired
+    2014/02/22 19:23:32 [INFO] XXX: cluster leadership acquired
 
 Once `Node A` is running, we can start the next set of servers. There is a [deployment table](/docs/internals/consensus.html#toc_3)
 that covers various options, but it is recommended to have 3 or 5 total servers per data center.
@@ -35,12 +35,12 @@ This indicates that the node is not in bootstrap mode, and it will not elect its
 We can now join these machines together. Since a join operation is symmetric it does not matter
 which node initiates it. From `Node B` and `Node C` you can do the following:
 
-    $ consul join <Node A Address>
+    $ XXX join <Node A Address>
     Successfully joined cluster by contacting 1 nodes.
 
 Alternatively, from `Node A` you can do the following:
 
-    $ consul join <Node B Address> <Node C Address>
+    $ XXX join <Node B Address> <Node C Address>
     Successfully joined cluster by contacting 2 nodes.
 
 Once the join is successful, `Node A` should output something like:
@@ -49,9 +49,9 @@ Once the join is successful, `Node A` should output something like:
     ....
     [INFO] raft: Added peer 127.0.0.3:8300, starting replication
 
-As a sanity check, the `consul info` command is a useful tool. It can be used to
+As a sanity check, the `XXX info` command is a useful tool. It can be used to
 verify `raft.num_peers` is now 2, and you can view the latest log index under `raft.last_log_index`.
-When running `consul info` on the followers, you should see `raft.last_log_index`
+When running `XXX info` on the followers, you should see `raft.last_log_index`
 converge to the same value as the leader begins replication. That value represents the last
 log entry that has been stored on disk.
 

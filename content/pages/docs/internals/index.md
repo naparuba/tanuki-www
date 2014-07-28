@@ -2,13 +2,13 @@ Title: Internals
 Slug: docs/internals/index
 
 
-# Consul Internals
+# XXX Internals
 
-This section goes over some of the internals of Consul, such as the architecture,
+This section goes over some of the internals of XXX, such as the architecture,
 consensus and gossip protocol, security model, etc.
 
 <div class="alert alert-block alert-info">
-Note that knowing about the internals of Consul is not necessary to
+Note that knowing about the internals of XXX is not necessary to
 successfully use it, but we document it here to be completely transparent
-about how Consul works.
+about how XXX works.
 </div>

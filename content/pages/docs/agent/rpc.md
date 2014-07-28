@@ -4,11 +4,11 @@ Slug: docs/agent/rpc
 
 # RPC Protocol
 
-The Consul agent provides a complete RPC mechanism that can
+The XXX agent provides a complete RPC mechanism that can
 be used to control the agent programmatically. This RPC
 mechanism is the same one used by the CLI, but can be
 used by other applications to easily leverage the power
-of Consul without directly embedding. It is important to note
+of XXX without directly embedding. It is important to note
 that the RPC protocol does not support all the same operations
 as the [HTTP API](/docs/agent/http.html).
 
@@ -44,12 +44,12 @@ Possible commands include:
 
 * handshake - Used to initialize the connection, set the version
 * force-leave - Removes a failed node from the cluster
-* join - Requests Consul join another node
+* join - Requests XXX join another node
 * members-lan - Returns the list of lan members
 * members-wan - Returns the list of wan members
 * monitor - Starts streaming logs over the connection
 * stop - Stops streaming logs
-* leave - Consul agent performs a graceful leave and shutdown
+* leave - XXX agent performs a graceful leave and shutdown
 * stats - Provides various debugging statistics
 * reload - Triggers a configuration reload
 
@@ -206,7 +206,7 @@ There is no request body, the response body looks like:
             "check_monitors": 0,
             ...
         },
-        "consul: {
+        "XXX: {
             "server": "true",
             ...
         },

@@ -4,16 +4,16 @@ Slug: docs/guides/dns-cache
 
 # DNS Caching
 
-One of the main interfaces to Consul is DNS. Using DNS is a simple way
-integrate Consul into an existing infrastructure without any high-touch
+One of the main interfaces to XXX is DNS. Using DNS is a simple way
+integrate XXX into an existing infrastructure without any high-touch
 integration.
 
-By default, Consul serves all DNS results with a 0 TTL value. This prevents
+By default, XXX serves all DNS results with a 0 TTL value. This prevents
 any caching. The advantage of this is that each DNS lookup is always re-evaluated
 and the most timely information is served. However this adds a latency hit
 for each lookup and can potentially exhaust the query throughput of a cluster.
 
-For this reason, Consul provides a number of tuning parameters that can
+For this reason, XXX provides a number of tuning parameters that can
 be used to customize how DNS queries are handled.
 
 ## Stale Reads
@@ -21,10 +21,10 @@ be used to customize how DNS queries are handled.
 Stale reads can be used to reduce latency and increase the throughput
 of DNS queries. By default, all reads are serviced by a [single leader node](/docs/internals/consensus.html).
 These reads are strongly consistent but are limited by the throughput
-of a single node. Doing a stale read allows any Consul server to
+of a single node. Doing a stale read allows any XXX server to
 service a query, but non-leader nodes may return data that is potentially
 out-of-date. By allowing data to be slightly stale, we get horizontal
-read scalability. Now any Consul server can service the request, so we
+read scalability. Now any XXX server can service the request, so we
 increase throughput by the number of servers in a cluster.
 
 The [settings](/docs/agent/options.html) used to control stale reads
@@ -34,17 +34,17 @@ be.
 
 By default, `allow_stale` is disabled meaning no stale results may be served.
 The default for `max_stale` is 5 seconds. This means that if `allow_stale` is
-enabled, we will use data from any Consul server that is within 5 seconds
+enabled, we will use data from any XXX server that is within 5 seconds
 of the leader.
 
 ## TTL Values
 
 TTL values can be set to allow DNS results to be cached downstream
-of Consul which can be used to reduce the number of lookups and to amortize
+of XXX which can be used to reduce the number of lookups and to amortize
 the latency of doing a DNS lookup. By default, all TTLs are zero,
 preventing any caching.
 
-To enable caching of node lookups (e.g. "foo.node.consul"), we can set
+To enable caching of node lookups (e.g. "foo.node.XXX"), we can set
 the `dns_config.node_ttl` value. This can be set to "10s" for example,
 and all node lookups will serve results with a 10 second TTL.
 
@@ -66,7 +66,7 @@ is the wildcard service. For example, if we specify:
     }
 ```
 
-This sets all lookups to "web.service.consul" to use a 30 second TTL,
-while lookups to "db.service.consul" or "api.service.consul" will use the
+This sets all lookups to "web.service.XXX" to use a 30 second TTL,
+while lookups to "db.service.XXX" or "api.service.XXX" will use the
 5 second TTL from the wildcard.
 

@@ -4,15 +4,15 @@ Slug: docs/internals/consensus
 
 # Consensus Protocol
 
-Consul uses a [consensus protocol](http://en.wikipedia.org/wiki/Consensus_(computer_science))
+XXX uses a [consensus protocol](http://en.wikipedia.org/wiki/Consensus_(computer_science))
 to provide [Consistency](http://en.wikipedia.org/wiki/CAP_theorem) as defined by CAP.
 This page documents the details of this internal protocol. The consensus protocol is based on
 ["Raft: In search of an Understandable Consensus Algorithm"](https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf).
 
 <div class="alert alert-block alert-warning">
 <strong>Advanced Topic!</strong> This page covers technical details of
-the internals of Consul. You don't need to know these details to effectively
-operate and use Consul. These details are documented here for those who wish
+the internals of XXX. You don't need to know these details to effectively
+operate and use XXX. These details are documented here for those who wish
 to learn about them without having to go spelunking through the source code.
 </div>
 
@@ -33,7 +33,7 @@ are applied, the FSM is allowed to transition between states. Application of the
 same sequence of logs must result in the same state, meaning behavior must be deterministic.
 
 * Peer set - The peer set is the set of all members participating in log replication.
-For Consul's purposes, all server nodes are in the peer set of the local datacenter.
+For XXX's purposes, all server nodes are in the peer set of the local datacenter.
 
 * Quorum - A quorum is a majority of members from a peer set, or (n/2)+1.
 For example, if there are 5 members in the peer set, we would need 3 nodes
@@ -65,7 +65,7 @@ request that a leader append a new log entry, which is an opaque binary blob to
 Raft. The leader then writes the entry to durable storage and attempts to replicate
 to a quorum of followers. Once the log entry is considered *committed*, it can be
 *applied* to a finite state machine. The finite state machine is application specific,
-and in Consul's case, we use [LMDB](http://symas.com/mdb/) to maintain cluster state.
+and in XXX's case, we use [LMDB](http://symas.com/mdb/) to maintain cluster state.
 
 An obvious question relates to the unbounded nature of a replicated log. Raft provides
 a mechanism by which the current state is snapshotted, and the log is compacted. Because
@@ -73,7 +73,7 @@ of the FSM abstraction, restoring the state of the FSM must result in the same s
 as a replay of old logs. This allows Raft to capture the FSM state at a point in time,
 and then remove all the logs that were used to reach that state. This is performed automatically
 without user intervention, and prevents unbounded disk usage as well as minimizing
-time spent replaying logs. One of the advantages of using LMDB is that it allows Consul
+time spent replaying logs. One of the advantages of using LMDB is that it allows XXX
 to continue accepting new transactions even while old state is being snapshotted,
 preventing any availability issues.
 
@@ -90,25 +90,25 @@ and to restart the remaining node in bootstrap mode.
 
 A Raft cluster of 3 nodes can tolerate a single node failure, while a cluster
 of 5 can tolerate 2 node failures. The recommended configuration is to either
-run 3 or 5 Consul servers per datacenter. This maximizes availability without
+run 3 or 5 XXX servers per datacenter. This maximizes availability without
 greatly sacrificing performance. See below for a deployment table.
 
 In terms of performance, Raft is comparable to Paxos. Assuming stable leadership,
 committing a log entry requires a single round trip to half of the cluster.
-Thus performance is bound by disk I/O and network latency. Although Consul is
+Thus performance is bound by disk I/O and network latency. Although XXX is
 not designed to be a high-throughput write system, it should handle on the order
 of hundreds to thousands of transactions per second depending on network and
 hardware configuration.
 
-## Raft in Consul
+## Raft in XXX
 
-Only Consul server nodes participate in Raft, and are part of the peer set. All
+Only XXX server nodes participate in Raft, and are part of the peer set. All
 client nodes forward requests to servers. Part of the reason for this design is
 that as more members are added to the peer set, the size of the quorum also increases.
 This introduces performance problems as you may be waiting for hundreds of machines
 to agree on an entry instead of a handful.
 
-When getting started, a single Consul server is put into "bootstrap" mode. This mode
+When getting started, a single XXX server is put into "bootstrap" mode. This mode
 allows it to self-elect as a leader. Once a leader is elected, other servers can be
 added to the peer set in a way that preserves consistency and safety. Eventually,
 bootstrap mode can be disabled, once the first few servers are added. See [this
@@ -132,7 +132,7 @@ transactions and higher availability without sacrificing consistency.
 ## Consistency Modes
 
 Although all writes to the replicated log go through Raft, reads are more
-flexible. To support various tradeoffs that developers may want, Consul
+flexible. To support various tradeoffs that developers may want, XXX
 supports 3 different consistency modes for reads.
 
 The three read modes are:

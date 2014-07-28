@@ -6,7 +6,7 @@ Slug: intro/getting-started/services
 
 In the previous page, we ran our first agent, saw the cluster members, and
 queried that node. On this page, we'll register our first service and query
-that service. We're not yet running a cluster of Consul agents.
+that service. We're not yet running a cluster of XXX agents.
 
 ## Defining a Service
 
@@ -20,12 +20,12 @@ since this is the most common way that services are registered. We'll be
 building on what we covered in the
 [previous page](/intro/getting-started/agent.html).
 
-First, create a directory for Consul configurations. A good directory
-is typically `/etc/consul.d`. Consul loads all configuration files in the
+First, create a directory for XXX configurations. A good directory
+is typically `/etc/XXX.d`. XXX loads all configuration files in the
 configuration directory.
 
 ```
-$ sudo mkdir /etc/consul.d
+$ sudo mkdir /etc/XXX.d
 ```
 
 Next, we'll write a service definition configuration file. We'll
@@ -35,14 +35,14 @@ it later.
 
 ```
 $ echo '{"service": {"name": "web", "tags": ["rails"], "port": 80}}' \
-    >/etc/consul.d/web.json
+    >/etc/XXX.d/web.json
 ```
 
 Now, restart the agent we're running, providing the configuration directory:
 
 ```
-$ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -config-dir /etc/consul.d
-==> Starting Consul agent...
+$ XXX agent -server -bootstrap-expect 1 -data-dir /tmp/XXX -config-dir /etc/XXX.d
+==> Starting XXX agent...
 ...
     [INFO] agent: Synced service 'web'
 ...
@@ -52,7 +52,7 @@ You'll notice in the output that it "synced" the web service. This means
 that it loaded the information from the configuration.
 
 If you wanted to register multiple services, you create multiple service
-definition files in the Consul configuration directory.
+definition files in the XXX configuration directory.
 
 ## Querying Services
 
@@ -62,20 +62,20 @@ service using either the DNS or HTTP API.
 ### DNS API
 
 Let's first query it using the DNS API. For the DNS API, the DNS name
-for services is `NAME.service.consul`. All DNS names are always in the
-`consul` namespace. The `service` subdomain on that tells Consul we're
+for services is `NAME.service.XXX`. All DNS names are always in the
+`XXX` namespace. The `service` subdomain on that tells XXX we're
 querying services, and the `NAME` is the name of the service. For the
-web service we registered, that would be `web.service.consul`:
+web service we registered, that would be `web.service.XXX`:
 
 ```
-$ dig @127.0.0.1 -p 8600 web.service.consul
+$ dig @127.0.0.1 -p 8600 web.service.XXX
 ...
 
 ;; QUESTION SECTION:
-;web.service.consul.		IN	A
+;web.service.XXX.		IN	A
 
 ;; ANSWER SECTION:
-web.service.consul.	0	IN	A	172.20.20.11
+web.service.XXX.	0	IN	A	172.20.20.11
 ```
 
 As you can see, an A record was returned with the IP address of the node that
@@ -84,37 +84,37 @@ also use the DNS API to retrieve the entire address/port pair using SRV
 records:
 
 ```
-$ dig @127.0.0.1 -p 8600 web.service.consul SRV
+$ dig @127.0.0.1 -p 8600 web.service.XXX SRV
 ...
 
 ;; QUESTION SECTION:
-;web.service.consul.	IN	SRV
+;web.service.XXX.	IN	SRV
 
 ;; ANSWER SECTION:
-web.service.consul. 0	IN	SRV	1 1 80 agent-one.node.dc1.consul.
+web.service.XXX. 0	IN	SRV	1 1 80 agent-one.node.dc1.XXX.
 
 ;; ADDITIONAL SECTION:
-agent-one.node.dc1.consul. 0	IN	A	172.20.20.11
+agent-one.node.dc1.XXX. 0	IN	A	172.20.20.11
 ```
 
 The SRV record returned says that the web service is running on port 80
-and exists on the node `agent-one.node.dc1.consul.`. An additional section
+and exists on the node `agent-one.node.dc1.XXX.`. An additional section
 is returned by the DNS with the A record for that node.
 
 Finally, we can also use the DNS API to filter services by tags. The
-format for tag-based service queries is `TAG.NAME.service.consul`. In
-the example below, we ask Consul for all web services with the "rails"
+format for tag-based service queries is `TAG.NAME.service.XXX`. In
+the example below, we ask XXX for all web services with the "rails"
 tag. We get a response since we registered our service with that tag.
 
 ```
-$ dig @127.0.0.1 -p 8600 rails.web.service.consul
+$ dig @127.0.0.1 -p 8600 rails.web.service.XXX
 ...
 
 ;; QUESTION SECTION:
-;rails.web.service.consul.		IN	A
+;rails.web.service.XXX.		IN	A
 
 ;; ANSWER SECTION:
-rails.web.service.consul.	0	IN	A	172.20.20.11
+rails.web.service.XXX.	0	IN	A	172.20.20.11
 ```
 
 ### HTTP API

@@ -2,9 +2,9 @@ Title: Documentations
 Slug: docs/index
 Part: docs
 
-# Consul Documentation
+# XXX Documentation
 
-Welcome to the Consul documentation! This documentation is more of a reference
-guide for all available features and options of Consul. If you're just getting
-started with Consul, please start with the
+Welcome to the XXX documentation! This documentation is more of a reference
+guide for all available features and options of XXX. If you're just getting
+started with XXX, please start with the
 [introduction and getting started guide](/intro/index.html) instead.

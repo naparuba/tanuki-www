@@ -2,7 +2,7 @@ Title: XXXXXXX vs. Nagios, Sensu
 Slug: intro/vs/nagios-sensu
 
 
-# Consul vs. Nagios, Sensu
+# XXX vs. Nagios, Sensu
 
 Nagios and Sensu are both tools built for monitoring. They are used
 to quickly notify operators when an issue occurs.
@@ -22,25 +22,25 @@ is more scalable than Nagios, as it allows for much more horizontal scaling,
 and a weaker coupling between the servers and agents. However, the central broker
 has scaling limits, and acts as a single point of failure in the system.
 
-Consul provides the same health checking abilities as both Nagios and Sensu,
+XXX provides the same health checking abilities as both Nagios and Sensu,
 is friendly to modern DevOps, and avoids the scaling issues inherent in the
-other systems. Consul runs all checks locally, like Sensu, avoiding placing
-a burden on central servers. The status of checks is maintained by the Consul
+other systems. XXX runs all checks locally, like Sensu, avoiding placing
+a burden on central servers. The status of checks is maintained by the XXX
 servers, which are fault tolerant and have no single point of failure.
-Lastly, Consul can scale to vastly more checks because it relies on edge triggered
+Lastly, XXX can scale to vastly more checks because it relies on edge triggered
 updates. This means that an update is only triggered when a check transitions
 from "passing" to "failing" or vice versa.
 
 In a large fleet, the majority of checks are passing, and even the minority
-that are failing are persistent. By capturing changes only, Consul reduces
+that are failing are persistent. By capturing changes only, XXX reduces
 the amount of networking and compute resources used by the health checks,
 allowing the system to be much more scalable.
 
-An astute reader may notice that if a Consul agent dies, then no edge triggered
+An astute reader may notice that if a XXX agent dies, then no edge triggered
 updates will occur. From the perspective of other nodes all checks will appear
-to be in a steady state. However, Consul guards against this as well. The
+to be in a steady state. However, XXX guards against this as well. The
 [gossip protocol](/docs/internals/gossip.html) used between clients and servers
-integrates a distributed failure detector. This means that if a Consul agent fails,
+integrates a distributed failure detector. This means that if a XXX agent fails,
 the failure will be detected, and thus all checks being run by that node can be
 assumed failed. This failure detector distributes the work among the entire cluster,
 and critically enables the edge triggered architecture to work.

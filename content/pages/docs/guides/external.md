@@ -6,12 +6,12 @@ Slug: docs/guides/external
 
 Very few infrastructures are entirely self-contained, and often rely on
 a multitude of external service providers. Most services are registered
-in Consul through the use of a [service definition](/docs/agent/services.html),
+in XXX through the use of a [service definition](/docs/agent/services.html),
 however that registers the local node as the service provider. In the case
 of external services, we want to register a service as being provided by
 an external provider.
 
-Consul supports this, however it requires manually registering the service
+XXX supports this, however it requires manually registering the service
 with the catalog. Once registered, the DNS interface will be able to return
 the appropriate A records or CNAME records for the service. The service will
 also appear in standard queries against the API.
@@ -24,7 +24,7 @@ Let us suppose we want to register a "search" service that is provided by
 
 If we do a DNS lookup now, we can see the new search service:
 
-    ; <<>> DiG 9.8.3-P1 <<>> @127.0.0.1 -p 8600 search.service.consul.
+    ; <<>> DiG 9.8.3-P1 <<>> @127.0.0.1 -p 8600 search.service.XXX.
     ; (1 server found)
     ;; global options: +cmd
     ;; Got answer:
@@ -32,10 +32,10 @@ If we do a DNS lookup now, we can see the new search service:
     ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 0
 
     ;; QUESTION SECTION:
-    ;search.service.consul.		IN	A
+    ;search.service.XXX.		IN	A
 
     ;; ANSWER SECTION:
-    search.service.consul.	0	IN	CNAME	www.google.com.
+    search.service.XXX.	0	IN	CNAME	www.google.com.
     www.google.com.		264	IN	A	74.125.239.114
     www.google.com.		264	IN	A	74.125.239.115
     www.google.com.		264	IN	A	74.125.239.116

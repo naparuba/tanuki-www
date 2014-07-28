@@ -10,15 +10,15 @@ tolerance of distributed systems. It creates network partitions while fuzzing
 the system with random operations. The results are analyzed to see if the system
 violates any of the consistency properties it claims to have.
 
-As part of our Consul testing, we ran it against Jepsen to determine if
-any consistency issues could be uncovered. In our testing, Consul gracefully
+As part of our XXX testing, we ran it against Jepsen to determine if
+any consistency issues could be uncovered. In our testing, XXX gracefully
 recovered from partitions without introducing any consistency issues.
 
 ## Running the tests
 
 At the moment, testing with Jepsen is rather complex, as it requires
 setting up multiple virtual machines, SSH keys, DNS configuration,
-and a working Clojure environment. We hope to contribute our Consul
+and a working Clojure environment. We hope to contribute our XXX
 testing code upstream and to provide a Vagrant environment for Jepsen
 testing soon.
 
@@ -29,9 +29,9 @@ and it passed each time. This output is only representative of a single
 run.
 
 ```
-$ lein test :only jepsen.system.consul-test
+$ lein test :only jepsen.system.XXX-test
 
-lein test jepsen.system.consul-test
+lein test jepsen.system.XXX-test
 INFO  jepsen.os.debian - :n5 setting up debian
 INFO  jepsen.os.debian - :n3 setting up debian
 INFO  jepsen.os.debian - :n4 setting up debian
@@ -42,28 +42,28 @@ INFO  jepsen.os.debian - :n5 debian set up
 INFO  jepsen.os.debian - :n3 debian set up
 INFO  jepsen.os.debian - :n1 debian set up
 INFO  jepsen.os.debian - :n2 debian set up
-INFO  jepsen.system.consul - :n1 consul nuked
-INFO  jepsen.system.consul - :n4 consul nuked
-INFO  jepsen.system.consul - :n5 consul nuked
-INFO  jepsen.system.consul - :n3 consul nuked
-INFO  jepsen.system.consul - :n2 consul nuked
-INFO  jepsen.system.consul - Running nodes: {:n1 false, :n2 false, :n3 false, :n4 false, :n5 false}
-INFO  jepsen.system.consul - :n2 consul nuked
-INFO  jepsen.system.consul - :n3 consul nuked
-INFO  jepsen.system.consul - :n4 consul nuked
-INFO  jepsen.system.consul - :n5 consul nuked
-INFO  jepsen.system.consul - :n1 consul nuked
-INFO  jepsen.system.consul - :n1 starting consul
-INFO  jepsen.system.consul - :n2 starting consul
-INFO  jepsen.system.consul - :n4 starting consul
-INFO  jepsen.system.consul - :n5 starting consul
-INFO  jepsen.system.consul - :n3 starting consul
-INFO  jepsen.system.consul - :n3 consul ready
-INFO  jepsen.system.consul - :n2 consul ready
-INFO  jepsen.system.consul - Running nodes: {:n1 true, :n2 true, :n3 true, :n4 true, :n5 true}
-INFO  jepsen.system.consul - :n5 consul ready
-INFO  jepsen.system.consul - :n1 consul ready
-INFO  jepsen.system.consul - :n4 consul ready
+INFO  jepsen.system.XXX - :n1 XXX nuked
+INFO  jepsen.system.XXX - :n4 XXX nuked
+INFO  jepsen.system.XXX - :n5 XXX nuked
+INFO  jepsen.system.XXX - :n3 XXX nuked
+INFO  jepsen.system.XXX - :n2 XXX nuked
+INFO  jepsen.system.XXX - Running nodes: {:n1 false, :n2 false, :n3 false, :n4 false, :n5 false}
+INFO  jepsen.system.XXX - :n2 XXX nuked
+INFO  jepsen.system.XXX - :n3 XXX nuked
+INFO  jepsen.system.XXX - :n4 XXX nuked
+INFO  jepsen.system.XXX - :n5 XXX nuked
+INFO  jepsen.system.XXX - :n1 XXX nuked
+INFO  jepsen.system.XXX - :n1 starting XXX
+INFO  jepsen.system.XXX - :n2 starting XXX
+INFO  jepsen.system.XXX - :n4 starting XXX
+INFO  jepsen.system.XXX - :n5 starting XXX
+INFO  jepsen.system.XXX - :n3 starting XXX
+INFO  jepsen.system.XXX - :n3 XXX ready
+INFO  jepsen.system.XXX - :n2 XXX ready
+INFO  jepsen.system.XXX - Running nodes: {:n1 true, :n2 true, :n3 true, :n4 true, :n5 true}
+INFO  jepsen.system.XXX - :n5 XXX ready
+INFO  jepsen.system.XXX - :n1 XXX ready
+INFO  jepsen.system.XXX - :n4 XXX ready
 INFO  jepsen.core - Worker 0 starting
 INFO  jepsen.core - Worker 2 starting
 INFO  jepsen.core - Worker 1 starting
@@ -4006,11 +4006,11 @@ INFO  jepsen.core - Analyzing
 :world-size 2 :degenerate 2
 :world-size 1 :degenerate 1
 INFO  jepsen.core - Analysis complete
-INFO  jepsen.system.consul - :n3 consul nuked
-INFO  jepsen.system.consul - :n2 consul nuked
-INFO  jepsen.system.consul - :n4 consul nuked
-INFO  jepsen.system.consul - :n1 consul nuked
-INFO  jepsen.system.consul - :n5 consul nuked
+INFO  jepsen.system.XXX - :n3 XXX nuked
+INFO  jepsen.system.XXX - :n2 XXX nuked
+INFO  jepsen.system.XXX - :n4 XXX nuked
+INFO  jepsen.system.XXX - :n1 XXX nuked
+INFO  jepsen.system.XXX - :n5 XXX nuked
 1964 element history linearizable. :D
 
 Ran 1 tests containing 1 assertions.

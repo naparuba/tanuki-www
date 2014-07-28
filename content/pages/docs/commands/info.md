@@ -2,9 +2,9 @@ Title: Commands: Info
 Slug: docs/commands/info
 
 
-# Consul Info
+# XXX Info
 
-Command: `consul info`
+Command: `XXX info`
 
 The info command provides various debugging information that can be
 useful to operators. Depending on if the agent is a client or server,
@@ -13,7 +13,7 @@ information about different sub-systems will be returned.
 There are currently the top-level keys for:
 
 * agent: Provides information about the agent
-* consul: Information about the consul library (client or server)
+* XXX: Information about the XXX library (client or server)
 * raft: Provides info about the Raft [consensus library](/docs/internals/consensus.html)
 * serf_lan: Provides info about the LAN [gossip pool](/docs/internals/gossip.html)
 * serf_wan: Provides info about the WAN [gossip pool](/docs/internals/gossip.html)
@@ -25,7 +25,7 @@ Here is an example output:
         check_ttls = 0
         checks = 0
         services = 0
-    consul:
+    XXX:
         bootstrap = true
         known_datacenters = 1
         leader = true
@@ -64,11 +64,11 @@ Here is an example output:
 
 ## Usage
 
-Usage: `consul info`
+Usage: `XXX info`
 
 The command-line flags are all optional. The list of available flags are:
 
 * `-rpc-addr` - Address to the RPC server of the agent you want to contact
   to send this command. If this isn't specified, the command will contact
-  "127.0.0.1:8400" which is the default RPC address of a Consul agent.
+  "127.0.0.1:8400" which is the default RPC address of a XXX agent.
 
