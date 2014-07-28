@@ -32,7 +32,7 @@ matching tags.
 
 The systems also differ in how they manage health checking.
 Nerve's performs local health checks in a manner similar to XXX agents.
-However, XXX maintains separate catalog and health systems, which allow
+However, XXX maintains the health state into the _KV_ servers, which allow
 operators to see which nodes are in each service pool, as well as providing
 insight into failing checks. Nerve simply deregisters nodes on failed checks,
 providing limited operator insight. Synapse also configures HAProxy to perform
@@ -42,10 +42,7 @@ expensive.
 
 XXX generally provides a much richer health checking system. XXX supports
 Nagios style plugins, enabling a vast catalog of checks to be used. It also
-allows for service and host-level checks. There is also a "dead man's switch"
-check that allows applications to easily integrate custom health checks. All of this
-is also integrated into a Health and Catalog system with APIs enabling operator
-to gain insight into the broader system.
+allows for service and host-level checks.
 
 In addition to the service discovery and health checking, XXX also provides
 an integrated key/value store for configuration and multi-datacenter support.

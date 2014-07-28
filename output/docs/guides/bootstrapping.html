@@ -136,13 +136,13 @@
             </header>
 	    
             <h1>Bootstrapping a Datacenter</h1>
-<p>Before a Consul cluster can begin to service requests, it is necessary for a server node to
+<p>Before a XXX cluster can begin to service requests, it is necessary for a server node to
 be elected leader. For this reason, the first nodes that are started are generally the server nodes.
 Remember that an agent can run in both client and server mode. Server nodes are responsible for running
 the <a href="/docs/internals/consensus.html">consensus protocol</a>, and storing the cluster state.
 The client nodes are mostly stateless and rely on the server nodes, so they can be started easily.</p>
 <p>The recommended way to bootstrap is to use the <code>-bootstrap-expect</code> <a href="/docs/agent/options.html">configuration
-option</a>. This options informs Consul of the expected number of
+option</a>. This options informs XXX of the expected number of
 server nodes, and automatically bootstraps when that many servers are available. To prevent
 inconsistencies and split-brain situations, all servers should specify the same value for <code>-bootstrap-expect</code>
 or specify no value at all. Any server that does not specify a value will not attempt to
@@ -159,23 +159,23 @@ the <code>-bootstrap-expect 3</code> flag. Once the nodes are started, you shoul
 <p>This indicates that the nodes are expecting 2 peers, but none are known yet. The servers will not elect
 themselves leader to prevent a split-brain. We can now join these machines together. Since a join operation
 is symmetric it does not matter which node initiates it. From any node you can do the following:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">A</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">B</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">C</span> <span class="n">Address</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">XXX</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">A</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">B</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">C</span> <span class="n">Address</span><span class="o">&gt;</span>
 <span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">3</span> <span class="n">nodes</span><span class="p">.</span>
 </pre></div>
 
 
 <p>Once the join is successful, one of the nodes will output something like:</p>
-<div class="highlight"><pre><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">foo</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
-<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">bar</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
-<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">Attempting</span> <span class="n">bootstrap</span> <span class="n">with</span> <span class="n">nodes</span><span class="o">:</span> <span class="p">[</span><span class="mf">127.0.0.3</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">]</span>
+<div class="highlight"><pre><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">foo</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">adding</span> <span class="n">server</span> <span class="n">bar</span> <span class="p">(</span><span class="n">Addr</span><span class="o">:</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">)</span> <span class="p">(</span><span class="n">DC</span><span class="o">:</span> <span class="n">dc1</span><span class="p">)</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">Attempting</span> <span class="n">bootstrap</span> <span class="n">with</span> <span class="n">nodes</span><span class="o">:</span> <span class="p">[</span><span class="mf">127.0.0.3</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.2</span><span class="o">:</span><span class="mi">8300</span> <span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8300</span><span class="p">]</span>
 <span class="p">...</span>
-<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">cluster</span> <span class="n">leadership</span> <span class="n">acquired</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">cluster</span> <span class="n">leadership</span> <span class="n">acquired</span>
 </pre></div>
 
 
-<p>As a sanity check, the <code>consul info</code> command is a useful tool. It can be used to
+<p>As a sanity check, the <code>XXX info</code> command is a useful tool. It can be used to
 verify <code>raft.num_peers</code> is now 2, and you can view the latest log index under <code>raft.last_log_index</code>.
-When running <code>consul info</code> on the followers, you should see <code>raft.last_log_index</code>
+When running <code>XXX info</code> on the followers, you should see <code>raft.last_log_index</code>
 converge to the same value as the leader begins replication. That value represents the last
 log entry that has been stored on disk.</p>
 <p>Now that the servers are all started and replicating to each other, all the remaining
@@ -186,7 +186,7 @@ themselves.</p>
 <p>It should be noted that it is not strictly necessary to start the server nodes
 before the clients, however most operations will fail until the servers are available.</p>
 <h2>Manual Bootstrapping</h2>
-<p>In versions of Consul previous to 0.4, bootstrapping was a more manual process.
+<p>In versions of XXX previous to 0.4, bootstrapping was a more manual process.
 For a guide on using the <code>-bootstrap</code> flag directly, see the <a href="/docs/guides/manual-bootstrap.html">manual bootstrapping guide</a>.</p>
 <p>This is not recommended, as it is more error prone than automatic bootstrapping.</p>
         </article>

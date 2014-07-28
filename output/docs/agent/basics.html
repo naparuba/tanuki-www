@@ -140,10 +140,10 @@
                 </h2>
             </header>
 	    
-            <h1>Consul Agent</h1>
-<p>The Consul agent is the core process of Consul. The agent maintains membership
+            <h1>XXX Agent</h1>
+<p>The XXX agent is the core process of XXX. The agent maintains membership
 information, registers services, runs checks, responds to queries
-and more. The agent must run on every node that is part of a Consul cluster.</p>
+and more. The agent must run on every node that is part of a XXX cluster.</p>
 <p>Any Agent may run in one of two modes: client or server. A server
 node takes on the additional responsibility of being part of the <a href="#">consensus quorum</a>.
 These nodes take part in Raft, and provide strong consistency and availability in
@@ -152,15 +152,15 @@ should be run on dedicated instances, as they are more resource intensive than a
 node. Client nodes make up the majority of the cluster, and they are very lightweight
 as they maintain very little state and interface with the server nodes for most operations.</p>
 <h2>Running an Agent</h2>
-<p>The agent is started with the <code>consul agent</code> command. This command blocks,
+<p>The agent is started with the <code>XXX agent</code> command. This command blocks,
 running forever or until told to quit. The agent command takes a variety
 of configuration options but the defaults are usually good enough. When
-running <code>consul agent</code>, you should see output similar to that below:</p>
+running <code>XXX agent</code>, you should see output similar to that below:</p>
 <p>```
-$ consul agent -data-dir=/tmp/consul
-==&gt; Starting Consul agent...
-==&gt; Starting Consul agent RPC...
-==&gt; Consul agent running!
+$ XXX agent -data-dir=/tmp/XXX
+==&gt; Starting XXX agent...
+==&gt; Starting XXX agent RPC...
+==&gt; XXX agent running!
        Node name: 'Armons-MacBook-Air'
       Datacenter: 'dc1'
           Server: false (bootstrap: false)
@@ -173,7 +173,7 @@ $ consul agent -data-dir=/tmp/consul
 
 <p>...
 ```</p>
-<p>There are several important components that <code>consul agent</code> outputs:</p>
+<p>There are several important components that <code>XXX agent</code> outputs:</p>
 <ul>
 <li>
 <p><strong>Node name</strong>: This is a unique name for the agent. By default this
@@ -182,7 +182,7 @@ $ consul agent -data-dir=/tmp/consul
 </li>
 <li>
 <p><strong>Datacenter</strong>: This is the datacenter the agent is configured to run
- in. Consul has first-class support for multiple datacenters, but to work efficiently
+ in. XXX has first-class support for multiple datacenters, but to work efficiently
  each node must be configured to correctly report its datacenter. The <code>-dc</code> flag
  can be used to set the datacenter. For single-DC configurations, the agent
  will default to "dc1".</p>
@@ -197,16 +197,16 @@ $ consul agent -data-dir=/tmp/consul
 <li>
 <p><strong>Client Addr</strong>: This is the address used for client interfaces to the agent.
   This includes the ports for the HTTP, DNS, and RPC interfaces. The RPC
-  address is used for other <code>consul</code> commands. Other Consul commands such
-  as <code>consul members</code> connect to a running agent and use RPC to query and
+  address is used for other <code>XXX</code> commands. Other XXX commands such
+  as <code>XXX members</code> connect to a running agent and use RPC to query and
   control the agent. By default, this binds only to localhost. If you
   change this address or port, you'll have to specify an <code>-rpc-addr</code> whenever
-  you run commands such as <code>consul members</code> so they know how to talk to the
-  agent. This is also the address other applications can use over <a href="/docs/agent/rpc.html">RPC to control Consul</a>.</p>
+  you run commands such as <code>XXX members</code> so they know how to talk to the
+  agent. This is also the address other applications can use over <a href="/docs/agent/rpc.html">RPC to control XXX</a>.</p>
 </li>
 <li>
 <p><strong>Cluster Addr</strong>: This is the address and ports used for communication between
-  Consul agents in a cluster. Every Consul agent in a cluster does not have to
+  XXX agents in a cluster. Every XXX agent in a cluster does not have to
   use the same port, but this address <strong>MUST</strong> be reachable by all other nodes.</p>
 </li>
 </ul>

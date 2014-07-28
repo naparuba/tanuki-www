@@ -145,13 +145,13 @@
 the command-line or via configuration files. All of the configuration
 options are completely optional and their defaults will be specified
 with their descriptions.</p>
-<p>When loading configuration, Consul loads the configuration from files
+<p>When loading configuration, XXX loads the configuration from files
 and directories in the order specified. Configuration specified later
 will be merged into configuration specified earlier. In most cases,
 "merge" means that the later version will override the earlier. But in
 some cases, such as event handlers, merging just appends the handlers.
 The exact merging behavior will be specified.</p>
-<p>Consul also supports reloading of configuration when it receives the
+<p>XXX also supports reloading of configuration when it receives the
 SIGHUP signal. Not all changes are respected, but those that are
 are documented below. The <a href="/docs/commands/reload.html">reload command</a>
 can also be used to trigger a configuration reload.</p>
@@ -176,22 +176,22 @@ can also be used to trigger a configuration reload.</p>
 <li>
 <p><code>-bootstrap-expect</code> - This flag provides the number of expected servers in the datacenter.
   Either this value should not be provided, or the value must agree with other servers in
-  the cluster. When provided, Consul waits until the specified number of servers are
+  the cluster. When provided, XXX waits until the specified number of servers are
   available, and then bootstraps the cluster. This allows an initial leader to be elected
   automatically. This cannot be used in conjunction with the <code>-bootstrap</code> flag.</p>
 </li>
 <li>
 <p><code>-bind</code> - The address that should be bound to for internal cluster communications.
   This is an IP address that should be reachable by all other nodes in the cluster.
-  By default this is "0.0.0.0", meaning Consul will use the first available private
-  IP address. Consul uses both TCP and UDP and use the same port for both, so if you
+  By default this is "0.0.0.0", meaning XXX will use the first available private
+  IP address. XXX uses both TCP and UDP and use the same port for both, so if you
   have any firewalls be sure to allow both protocols.</p>
 </li>
 <li>
-<p><code>-client</code> - The address that Consul will bind to client interfaces. This
+<p><code>-client</code> - The address that XXX will bind to client interfaces. This
   includes the HTTP, DNS, and RPC servers. By default this is "127.0.0.1"
-  allowing only loopback connections. The RPC address is used by other Consul
-  commands, such as <code>consul members</code>, in order to query a running Consul agent.</p>
+  allowing only loopback connections. The RPC address is used by other XXX
+  commands, such as <code>XXX members</code>, in order to query a running XXX agent.</p>
 </li>
 <li>
 <p><code>-config-file</code> - A configuration file to load. For more information on
@@ -202,7 +202,7 @@ can also be used to trigger a configuration reload.</p>
   overriding the earlier values.</p>
 </li>
 <li>
-<p><code>-config-dir</code> - A directory of configuration files to load. Consul will
+<p><code>-config-dir</code> - A directory of configuration files to load. XXX will
   load all files in this directory ending in ".json" as configuration files
   in alphabetical order. For more information on the format of the configuration
   files, see the "Configuration Files" section below.</p>
@@ -215,21 +215,21 @@ can also be used to trigger a configuration reload.</p>
 </li>
 <li>
 <p><code>-dc</code> - This flag controls the datacenter the agent is running in. If not provided
-  it defaults to "dc1". Consul has first class support for multiple data centers but
+  it defaults to "dc1". XXX has first class support for multiple data centers but
   it relies on proper configuration. Nodes in the same datacenter should be on a single
   LAN.</p>
 </li>
 <li>
 <p><code>-join</code> - Address of another agent to join upon starting up. This can be
-  specified multiple times to specify multiple agents to join. If Consul is
+  specified multiple times to specify multiple agents to join. If XXX is
   unable to join with any of the specified addresses, agent startup will
   fail. By default, the agent won't join any nodes when it starts up.</p>
 </li>
 <li>
-<p><code>-log-level</code> - The level of logging to show after the Consul agent has
+<p><code>-log-level</code> - The level of logging to show after the XXX agent has
   started. This defaults to "info". The available log levels are "trace",
   "debug", "info", "warn", "err". This is the log level that will be shown
-  for the agent output, but note you can always connect via <code>consul monitor</code>
+  for the agent output, but note you can always connect via <code>XXX monitor</code>
   to an agent at any log level. The log level can be changed during a
   config reload.</p>
 </li>
@@ -238,19 +238,19 @@ can also be used to trigger a configuration reload.</p>
   the cluster. By default this is the hostname of the machine.</p>
 </li>
 <li>
-<p><code>-protocol</code> - The Consul protocol version to use. This defaults to the latest
+<p><code>-protocol</code> - The XXX protocol version to use. This defaults to the latest
   version. This should be set only when <a href="/docs/upgrading.html">upgrading</a>.
-  You can view the protocol versions supported by Consul by running <code>consul -v</code>.</p>
+  You can view the protocol versions supported by XXX by running <code>XXX -v</code>.</p>
 </li>
 <li>
-<p><code>-rejoin</code> - When provided Consul will ignore a previous leave and attempt to
-  rejoin the cluster when starting. By default, Consul treats leave as a permanent
+<p><code>-rejoin</code> - When provided XXX will ignore a previous leave and attempt to
+  rejoin the cluster when starting. By default, XXX treats leave as a permanent
   intent, and does not attempt to join the cluster again when starting. This flag
   allows the previous state to be used to rejoin the cluster.</p>
 </li>
 <li>
 <p><code>-server</code> - This flag is used to control if an agent is in server or client mode. When provided,
-  an agent will act as a Consul server. Each Consul cluster must have at least one server, and ideally
+  an agent will act as a XXX server. Each XXX cluster must have at least one server, and ideally
   no more than 5 <em>per</em> datacenter. All servers participate in the Raft consensus algorithm, to ensure that
   transactions occur in a consistent, linearizable manner. Transactions modify cluster state, which
   is maintained on all server nodes to ensure availability in the case of node failure. Server nodes also
@@ -263,7 +263,7 @@ can also be used to trigger a configuration reload.</p>
 </li>
 <li>
 <p><code>-ui-dir</code> - This flag provides a the directory containing the Web UI resources
-  for Consul. This must be provided to enable the Web UI. Directory must be readable.</p>
+  for XXX. This must be provided to enable the Web UI. Directory must be readable.</p>
 </li>
 <li>
 <p><code>-pid-file</code> - This flag provides the file path for the agent to store it's PID. This is useful for
@@ -272,7 +272,7 @@ can also be used to trigger a configuration reload.</p>
 </ul>
 <h2>Configuration Files</h2>
 <p>In addition to the command-line options, configuration can be put into
-files. This may be easier in certain situations, for example when Consul is
+files. This may be easier in certain situations, for example when XXX is
 being configured using a configuration management system.</p>
 <p>The configuration files are JSON formatted, making them easily readable
 and editable by both humans and computers. The configuration is formatted
@@ -287,7 +287,7 @@ definitions support being updated during a reload.</p>
 <pre class="prettyprint lang-json">
 {
   "datacenter": "east-aws",
-  "data_dir": "/opt/consul",
+  "data_dir": "/opt/XXX",
   "log_level": "INFO",
   "node_name": "foobar",
   "server": true
@@ -358,9 +358,9 @@ definitions support being updated during a reload.</p>
   output is syncronized immediately. To disable this behavior, set the value to "0s".</p>
 </li>
 <li>
-<p><code>domain</code> - By default, Consul responds to DNS queries in the "consul." domain.
+<p><code>domain</code> - By default, XXX responds to DNS queries in the "XXX." domain.
   This flag can be used to change that domain. All queries in this domain are assumed
-  to be handled by Consul, and will not be recursively resolved.</p>
+  to be handled by XXX, and will not be recursively resolved.</p>
 </li>
 <li>
 <p><code>dns_config</code> - This object allows a number of sub-keys to be set which can tune
@@ -379,16 +379,16 @@ definitions support being updated during a reload.</p>
   with a 0 TTL value. Setting this enables DNS caching.</p>
 </li>
 <li>
-<p><code>allow_stale</code> - Enables a stale query for DNS information. This allows any Consul
+<p><code>allow_stale</code> - Enables a stale query for DNS information. This allows any XXX
   server to service the request, instead of only the leader. The advantage of this is
-  you get linear read scalability with Consul servers. By default, this is false, meaning
+  you get linear read scalability with XXX servers. By default, this is false, meaning
   all requests are serviced by the leader. This provides stronger consistency but
   with less throughput and higher latency.</p>
 </li>
 <li>
 <p><code>max_stale</code> - When <code>allow_stale</code> is specified, this is used to limit how
   stale of a result will be used. By default, this is set to "5s", which means
-  if a Consul server is more than 5 seconds behind the leader, the query will be
+  if a XXX server is more than 5 seconds behind the leader, the query will be
   re-evaluated on the leader to get more up-to-date results.</p>
 </li>
 <li>
@@ -396,9 +396,9 @@ definitions support being updated during a reload.</p>
   only used to set the runtime profiling HTTP endpoints.</p>
 </li>
 <li>
-<p><code>encrypt</code> - Specifies the secret key to use for encryption of Consul
+<p><code>encrypt</code> - Specifies the secret key to use for encryption of XXX
   network traffic. This key must be 16-bytes that are base64 encoded. The
-  easiest way to create an encryption key is to use <code>consul keygen</code>. All
+  easiest way to create an encryption key is to use <code>XXX keygen</code>. All
   nodes within a cluster must share the same encryption key to communicate.</p>
 </li>
 <li>
@@ -425,13 +425,13 @@ definitions support being updated during a reload.</p>
 </li>
 <li>
 <p><code>recursor</code> - This flag provides an address of an upstream DNS server that is used to
-  recursively resolve queries if they are not inside the service domain for consul. For example,
-  a node can use Consul directly as a DNS server, and if the record is outside of the "consul." domain,
+  recursively resolve queries if they are not inside the service domain for XXX. For example,
+  a node can use XXX directly as a DNS server, and if the record is outside of the "XXX." domain,
   the query will be resolved upstream using this server.</p>
 </li>
 <li>
 <p><code>skip_leave_on_interrupt</code> - This is the similar to<code>leave_on_terminate</code> but
-  only affects interrupt handling. By default, an interrupt causes Consul to
+  only affects interrupt handling. By default, an interrupt causes XXX to
   gracefully leave, but setting this to true disables that. Defaults to false.
   Interrupts are usually from a Control-C from a shell.</p>
 </li>
@@ -446,7 +446,7 @@ definitions support being updated during a reload.</p>
 </li>
 <li>
 <p><code>statsite_addr</code> - This provides the address of a statsite instance. If provided
-  Consul will stream various telemetry information to that instance for aggregation.
+  XXX will stream various telemetry information to that instance for aggregation.
   This can be used to capture various runtime information.</p>
 </li>
 <li>
@@ -454,16 +454,16 @@ definitions support being updated during a reload.</p>
   facility messages are sent to. By default, <code>LOCAL0</code> will be used.</p>
 </li>
 <li>
-<p><code>verify_incoming</code> - If set to True, Consul requires that all incoming
+<p><code>verify_incoming</code> - If set to True, XXX requires that all incoming
   connections make use of TLS, and that the client provides a certificate signed
   by the Certificate Authority from the <code>ca_file</code>. By default, this is false, and
-  Consul will not enforce the use of TLS or verify a client's authenticity. This
-  only applies to Consul servers, since a client never has an incoming connection.</p>
+  XXX will not enforce the use of TLS or verify a client's authenticity. This
+  only applies to XXX servers, since a client never has an incoming connection.</p>
 </li>
 <li>
-<p><code>verify_outgoing</code> - If set to True, Consul requires that all outgoing connections
+<p><code>verify_outgoing</code> - If set to True, XXX requires that all outgoing connections
   make use of TLS, and that the server provide a certificate that is signed by
-  the Certificate Authority from the <code>ca_file</code>. By default, this is false, and Consul
+  the Certificate Authority from the <code>ca_file</code>. By default, this is false, and XXX
   will not make use of TLS for outgoing connections. This applies to clients and servers,
   as both will make outgoing connections.</p>
 </li>

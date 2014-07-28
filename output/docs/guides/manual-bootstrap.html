@@ -136,8 +136,8 @@
             </header>
 	    
             <h1>Manually Bootstrapping a Datacenter</h1>
-<p>When deploying Consul to a datacenter for the first time, there is an initial bootstrapping that
-must be done. As of Consul 0.4, an <a href="/docs/guides/bootstrapping.html">automatic bootstrapping</a> is
+<p>When deploying XXX to a datacenter for the first time, there is an initial bootstrapping that
+must be done. As of XXX 0.4, an <a href="/docs/guides/bootstrapping.html">automatic bootstrapping</a> is
 available and is the recommended approach. However, older versions only support a manual bootstrap
 that is documented here.</p>
 <p>Generally, the first nodes that are started are the server nodes. Remember that an
@@ -149,7 +149,7 @@ the <code>-bootstrap</code> <a href="/docs/agent/options.html">configuration opt
 assert leadership of the cluster without agreement from any other server. This is necessary because
 at this point, there are no other servers running in the datacenter! Lets call this first server <code>Node A</code>.
 When starting <code>Node A</code> something like the following will be logged:</p>
-<div class="highlight"><pre><span class="mi">2014</span><span class="o">/</span><span class="mo">02</span><span class="o">/</span><span class="mi">22</span> <span class="mi">19</span><span class="o">:</span><span class="mi">23</span><span class="o">:</span><span class="mi">32</span> <span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">cluster</span> <span class="n">leadership</span> <span class="n">acquired</span>
+<div class="highlight"><pre><span class="mi">2014</span><span class="o">/</span><span class="mo">02</span><span class="o">/</span><span class="mi">22</span> <span class="mi">19</span><span class="o">:</span><span class="mi">23</span><span class="o">:</span><span class="mi">32</span> <span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">cluster</span> <span class="n">leadership</span> <span class="n">acquired</span>
 </pre></div>
 
 
@@ -166,13 +166,13 @@ message to the effect of:</p>
 <p>This indicates that the node is not in bootstrap mode, and it will not elect itself as leader.
 We can now join these machines together. Since a join operation is symmetric it does not matter
 which node initiates it. From <code>Node B</code> and <code>Node C</code> you can do the following:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">A</span> <span class="n">Address</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">XXX</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">A</span> <span class="n">Address</span><span class="o">&gt;</span>
 <span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">1</span> <span class="n">nodes</span><span class="p">.</span>
 </pre></div>
 
 
 <p>Alternatively, from <code>Node A</code> you can do the following:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">B</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">C</span> <span class="n">Address</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">XXX</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">B</span> <span class="n">Address</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">C</span> <span class="n">Address</span><span class="o">&gt;</span>
 <span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">2</span> <span class="n">nodes</span><span class="p">.</span>
 </pre></div>
 
@@ -184,9 +184,9 @@ which node initiates it. From <code>Node B</code> and <code>Node C</code> you ca
 </pre></div>
 
 
-<p>As a sanity check, the <code>consul info</code> command is a useful tool. It can be used to
+<p>As a sanity check, the <code>XXX info</code> command is a useful tool. It can be used to
 verify <code>raft.num_peers</code> is now 2, and you can view the latest log index under <code>raft.last_log_index</code>.
-When running <code>consul info</code> on the followers, you should see <code>raft.last_log_index</code>
+When running <code>XXX info</code> on the followers, you should see <code>raft.last_log_index</code>
 converge to the same value as the leader begins replication. That value represents the last
 log entry that has been stored on disk.</p>
 <p>This indicates that <code>Node B</code> and <code>Node C</code> have been added as peers. At this point,

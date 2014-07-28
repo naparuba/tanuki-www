@@ -139,27 +139,27 @@
                 </h2>
             </header>
 	    
-            <h1>Consul Force Leave</h1>
-<p>Command: <code>consul force-leave</code></p>
-<p>The <code>force-leave</code> command forces a member of a Consul cluster to enter the
+            <h1>XXX Force Leave</h1>
+<p>Command: <code>XXX force-leave</code></p>
+<p>The <code>force-leave</code> command forces a member of a XXX cluster to enter the
 "left" state. Note that if the member is still actually alive, it will
 eventually rejoin the cluster. The true purpose of this method is to force
 remove "failed" nodes.</p>
-<p>Consul periodically tries to reconnect to "failed" nodes in case it is a
+<p>XXX periodically tries to reconnect to "failed" nodes in case it is a
 network partition. After some configured amount of time (by default 72 hours),
-Consul will reap "failed" nodes and stop trying to reconnect. The <code>force-leave</code>
+XXX will reap "failed" nodes and stop trying to reconnect. The <code>force-leave</code>
 command can be used to transition the "failed" nodes to "left" nodes more
 quickly.</p>
 <p>This can be particularly useful for a node that was running as a server,
 as it will be removed from the Raft quorum.</p>
 <h2>Usage</h2>
-<p>Usage: <code>consul force-leave [options] node</code></p>
+<p>Usage: <code>XXX force-leave [options] node</code></p>
 <p>The following command-line options are available for this command.
 Every option is optional:</p>
 <ul>
 <li><code>-rpc-addr</code> - Address to the RPC server of the agent you want to contact
   to send this command. If this isn't specified, the command will contact
-  "127.0.0.1:8400" which is the default RPC address of a Consul agent.</li>
+  "127.0.0.1:8400" which is the default RPC address of a XXX agent.</li>
 </ul>
         </article>
     </section>

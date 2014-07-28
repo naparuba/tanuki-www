@@ -141,7 +141,7 @@
             </header>
 	    
             <h1>HTTP API</h1>
-<p>The main interface to Consul is a RESTful HTTP API. The API can be
+<p>The main interface to XXX is a RESTful HTTP API. The API can be
 used for CRUD for nodes, services, checks, and configuration. The endpoints are
 versioned to enable changes without breaking backwards compatibility.</p>
 <p>All endpoints fall into one of several categories:</p>
@@ -151,7 +151,7 @@ versioned to enable changes without breaking backwards compatibility.</p>
 <li>catalog - Manages nodes and services</li>
 <li>health - Manages health checks</li>
 <li>session - Session manipulation</li>
-<li>status - Consul system status</li>
+<li>status - XXX system status</li>
 <li>internal - Internal APIs. Purposely undocumented, subject to change.</li>
 </ul>
 <p>Each of the categories and their respective endpoints are documented below.</p>
@@ -160,14 +160,14 @@ versioned to enable changes without breaking backwards compatibility.</p>
 is used to wait for a change to potentially take place using long polling.</p>
 <p>Queries that support this will mention it specifically, however the use of this
 feature is the same for all. If supported, the query will set an HTTP header
-"X-Consul-Index". This is an opaque handle that the client will use.</p>
+"X-XXX-Index". This is an opaque handle that the client will use.</p>
 <p>To cause a query to block, the query parameters "?wait=\&lt;interval>&amp;index=\&lt;idx>" are added
 to a request. The "?wait=" query parameter limits how long the query will potentially
 block for. It not set, it will default to 10 minutes. It can be specified in the form of
 "10s" or "5m", which is 10 seconds or 5 minutes respectively. The "?index=" parameter is an
-opaque handle, which is used by Consul to detect changes. The  "X-Consul-Index" header for a
+opaque handle, which is used by XXX to detect changes. The  "X-XXX-Index" header for a
 query provides this value, and can be used to wait for changes since the query was run.</p>
-<p>When provided, Consul blocks sending a response until there is an update that
+<p>When provided, XXX blocks sending a response until there is an update that
 could have cause the output to change, and thus advancing the index. A critical
 note is that when the query returns there is <strong>no guarantee</strong> of a change. It is
 possible that the timeout was reached, or that there was an idempotent write that
@@ -203,9 +203,9 @@ medium that best matches their needs.</p>
 </ul>
 <p>To switch these modes, either the "?stale" or "?consistent" query parameters
 are provided. It is an error to provide both.</p>
-<p>To support bounding how stale data is, there is an "X-Consul-LastContact"
+<p>To support bounding how stale data is, there is an "X-XXX-LastContact"
 which is the last time a server was contacted by the leader node in
-milliseconds. The "X-Consul-KnownLeader" also indicates if there is a known
+milliseconds. The "X-XXX-KnownLeader" also indicates if there is a known
 leader. These can be used to gauge if a stale read should be used.</p>
 <h2>KV</h2>
 <p>The KV endpoint is used to expose a simple key/value store. This can be used
@@ -223,7 +223,7 @@ By default the datacenter of the agent is queried, however the dc can
 be provided using the "?dc=" query parameter. If a client wants to write
 to all Datacenters, one request per datacenter must be made.</p>
 <h3>GET Method</h3>
-<p>When using the <code>GET</code> method, Consul will return the specified key,
+<p>When using the <code>GET</code> method, XXX will return the specified key,
 or if the "?recurse" query parameter is provided, it will return
 all keys with the given prefix.</p>
 <p>Each object will look like:</p>
@@ -243,9 +243,9 @@ all keys with the given prefix.</p>
 
 <p>The <code>CreateIndex</code> is the internal index value that represents
 when the entry was created. The <code>ModifyIndex</code> is the last index
-that modified this key. This index corresponds to the <code>X-Consul-Index</code>
+that modified this key. This index corresponds to the <code>X-XXX-Index</code>
 header value that is returned. A blocking query can be used to wait for
-a value to change. If "?recurse" is used, the <code>X-Consul-Index</code> corresponds
+a value to change. If "?recurse" is used, the <code>X-XXX-Index</code> corresponds
 to the latest <code>ModifyIndex</code> and so a blocking query waits until any of the
 listed keys are updated.  The <code>LockIndex</code> is the last index of a successful
 lock acquisition. If the lock is held, the <code>Session</code> key provides the
@@ -274,7 +274,7 @@ encoding.</p>
 <p>If no entries are found, a 404 code is returned.</p>
 <p>This endpoint supports blocking queries and all consistency modes.</p>
 <h3>PUT method</h3>
-<p>When using the <code>PUT</code> method, Consul expects the request body to be the
+<p>When using the <code>PUT</code> method, XXX expects the request body to be the
 value corresponding to the key. There are a number of parameters that can
 be used with a PUT request:</p>
 <ul>
@@ -286,14 +286,14 @@ be used with a PUT request:</p>
 <li>
 <p>?cas=\&lt;index> : This flag is used to turn the <code>PUT</code> into a Check-And-Set
   operation. This is very useful as it allows clients to build more complex
-  syncronization primitives on top. If the index is 0, then Consul will only
+  syncronization primitives on top. If the index is 0, then XXX will only
   put the key if it does not already exist. If the index is non-zero, then
   the key is only set if the index matches the <code>ModifyIndex</code> of that key.</p>
 </li>
 <li>
 <p>?acquire=\&lt;session> : This flag is used to turn the <code>PUT</code> into a lock acquisition
   operation. This is useful as it allows leader election to be built on top
-  of Consul. If the lock is not held and the session is valid, this increments
+  of XXX. If the lock is not held and the session is valid, this increments
   the <code>LockIndex</code> and sets the <code>Session</code> value of the key in addition to updating
   the key contents. A key does not need to exist to be acquired.</p>
 </li>
@@ -312,7 +312,7 @@ keys sharing a prefix. If the "?recurse" query parameter is provided,
 then all keys with the prefix are deleted, otherwise only the specified
 key.</p>
 <h2>Agent</h2>
-<p>The Agent endpoints are used to interact with a local Consul agent. Usually,
+<p>The Agent endpoints are used to interact with a local XXX agent. Usually,
 services and checks are registered with an agent, which then takes on the
 burden of registering with the Catalog and performing anti-entropy to recover from
 outages. There are also various control APIs that can be used instead of the
@@ -392,7 +392,7 @@ the list of WAN members instead of the LAN members which is default.</p>
             <span class="s2">&quot;bootstrap&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
             <span class="s2">&quot;dc&quot;</span><span class="p">:</span> <span class="s2">&quot;dc1&quot;</span><span class="p">,</span>
             <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;8300&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;consul&quot;</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;XXX&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s2">&quot;ProtocolMin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -414,9 +414,9 @@ the list of WAN members instead of the LAN members which is default.</p>
         <span class="s">&quot;Bootstrap&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
         <span class="s">&quot;Server&quot;</span><span class="o">:</span> <span class="nb">true</span><span class="p">,</span>
         <span class="s">&quot;Datacenter&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
-        <span class="s">&quot;DataDir&quot;</span><span class="o">:</span> <span class="s">&quot;/tmp/consul&quot;</span><span class="p">,</span>
+        <span class="s">&quot;DataDir&quot;</span><span class="o">:</span> <span class="s">&quot;/tmp/XXX&quot;</span><span class="p">,</span>
         <span class="s">&quot;DNSRecursor&quot;</span><span class="o">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
-        <span class="s">&quot;Domain&quot;</span><span class="o">:</span> <span class="s">&quot;consul.&quot;</span><span class="p">,</span>
+        <span class="s">&quot;Domain&quot;</span><span class="o">:</span> <span class="s">&quot;XXX.&quot;</span><span class="p">,</span>
         <span class="s">&quot;LogLevel&quot;</span><span class="o">:</span> <span class="s">&quot;INFO&quot;</span><span class="p">,</span>
         <span class="s">&quot;NodeName&quot;</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span><span class="p">,</span>
         <span class="s">&quot;ClientAddr&quot;</span><span class="o">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
@@ -454,7 +454,7 @@ the list of WAN members instead of the LAN members which is default.</p>
             <span class="s">&quot;bootstrap&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
             <span class="s">&quot;dc&quot;</span><span class="o">:</span> <span class="s">&quot;dc1&quot;</span><span class="p">,</span>
             <span class="s">&quot;port&quot;</span><span class="o">:</span> <span class="s">&quot;8300&quot;</span><span class="p">,</span>
-            <span class="s">&quot;role&quot;</span><span class="o">:</span> <span class="s">&quot;consul&quot;</span><span class="p">,</span>
+            <span class="s">&quot;role&quot;</span><span class="o">:</span> <span class="s">&quot;XXX&quot;</span><span class="p">,</span>
             <span class="s">&quot;vsn&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
             <span class="s">&quot;vsn_max&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
             <span class="s">&quot;vsn_min&quot;</span><span class="o">:</span> <span class="s">&quot;1&quot;</span>
@@ -478,7 +478,7 @@ query parameter causes the agent to attempt to join using the WAN pool.</p>
 <p>The endpoint returns 200 on successful join.</p>
 <h3>/v1/agent/force-leave/\&lt;node></h3>
 <p>This endpoint is hit with a GET and is used to instructs the agent to force a node into the left state.
-If a node fails unexpectedly, then it will be in a "failed" state. Once in this state, Consul will
+If a node fails unexpectedly, then it will be in a "failed" state. Once in this state, XXX will
 attempt to reconnect, and additionally the services and checks belonging to that node will not be
 cleaned up. Forcing a node into the left state allows its old entries to be removed.</p>
 <p>The endpoint always returns 200.</p>
@@ -504,8 +504,8 @@ body must look like:</p>
 or <code>TTL</code>. Only one of <code>Script</code> and <code>Interval</code> or <code>TTL</code> should be provided.
 If an <code>ID</code> is not provided, it is set to <code>Name</code>. You cannot have duplicate
 <code>ID</code> entries per agent, so it may be necessary to provide an ID. The <code>Notes</code>
-field is not used by Consul, and is meant to be human readable.</p>
-<p>If a <code>Script</code> is provided, the check type is a script, and Consul will
+field is not used by XXX, and is meant to be human readable.</p>
+<p>If a <code>Script</code> is provided, the check type is a script, and XXX will
 evaluate the script every <code>Interval</code> to update the status. If a <code>TTL</code> type
 is used, then the TTL update APIs must be used to periodically update
 the state of the check.</p>
@@ -673,7 +673,7 @@ service along with its associated health check (if any) is removed.</p>
 <p>If the API call succeeds a 200 status code is returned.</p>
 <h3>/v1/catalog/datacenters</h3>
 <p>This endpoint is hit with a GET and is used to return all the
-datacenters that are known by the Consul server.</p>
+datacenters that are known by the XXX server.</p>
 <p>It returns a JSON body like this:</p>
 <div class="highlight"><pre><span class="p">[</span><span class="s">&quot;dc1&quot;</span><span class="p">,</span> <span class="s">&quot;dc2&quot;</span><span class="p">]</span>
 </pre></div>
@@ -681,7 +681,7 @@ datacenters that are known by the Consul server.</p>
 
 <p>This endpoint does not require a cluster leader, and as such
 will succeed even during an availability outage. It can thus be
-a simple check to see if any Consul servers are routable.</p>
+a simple check to see if any XXX servers are routable.</p>
 <h3>/v1/catalog/nodes</h3>
 <p>This endpoint is hit with a GET and returns the nodes known
 about in a given DC. By default the datacenter of the agent is queried,
@@ -707,7 +707,7 @@ about in a given DC. By default the datacenter of the agent is queried,
 however the dc can be provided using the "?dc=" query parameter.</p>
 <p>It returns a JSON body like this:</p>
 <div class="highlight"><pre><span class="p">{</span>
-    <span class="s2">&quot;consul&quot;</span><span class="o">:</span> <span class="cp">[]</span><span class="o">,</span>
+    <span class="s2">&quot;XXX&quot;</span><span class="o">:</span> <span class="cp">[]</span><span class="o">,</span>
     <span class="s2">&quot;redis&quot;</span><span class="o">:</span> <span class="cp">[]</span><span class="o">,</span>
     <span class="s2">&quot;postgresql&quot;</span><span class="o">:</span> <span class="cp">[</span>
         <span class="s2">&quot;master&quot;</span><span class="p">,</span>
@@ -754,9 +754,9 @@ The node being queried must be provided after the slash.</p>
         <span class="s2">&quot;Address&quot;</span><span class="o">:</span> <span class="s2">&quot;10.1.10.12&quot;</span>
     <span class="p">}</span><span class="o">,</span>
     <span class="s2">&quot;Services&quot;</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s2">&quot;consul&quot;</span><span class="o">:</span> <span class="err">{</span>
-            <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;consul&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="s2">&quot;consul&quot;</span><span class="o">,</span>
+        <span class="s2">&quot;XXX&quot;</span><span class="o">:</span> <span class="err">{</span>
+            <span class="s2">&quot;ID&quot;</span><span class="o">:</span> <span class="s2">&quot;XXX&quot;</span><span class="o">,</span>
+            <span class="s2">&quot;Service&quot;</span><span class="o">:</span> <span class="s2">&quot;XXX&quot;</span><span class="o">,</span>
             <span class="s2">&quot;Tags&quot;</span><span class="o">:</span> <span class="n">null</span><span class="o">,</span>
             <span class="s2">&quot;Port&quot;</span><span class="o">:</span> <span class="m">8300</span>
         <span class="p">}</span><span class="o">,</span>
@@ -820,7 +820,7 @@ The node being queried must be provided after the slash.</p>
 <p>In this case, we can see there is a system level check (no associated
 <code>ServiceID</code>, as well as a service check for Redis). The "serfHealth" check
 is special, in that all nodes automatically have this check. When a node
-joins the Consul cluster, it is part of a distributed failure detection
+joins the XXX cluster, it is part of a distributed failure detection
 provided by Serf. If a node fails, it is detected and the status is automatically
 changed to "critical".</p>
 <p>This endpoint supports blocking queries and all consistency modes.</p>
@@ -861,7 +861,7 @@ as well as any system level health checks. This allows a client to avoid
 sending traffic to nodes failing health tests, or who are reporting warnings.</p>
 <p>Providing the "?passing" query parameter will filter results to only nodes
 with all checks in the passing state. This can be used to avoid some filtering
-logic on the client side. (Added in Consul 0.2)</p>
+logic on the client side. (Added in XXX 0.2)</p>
 <p>Users can also built in support for dynamic load balancing and other features
 by incorporating the use of health checks.</p>
 <p>It returns a JSON body like this:</p>
@@ -1059,7 +1059,7 @@ however the dc can be provided using the "?dc=" query parameter.</p>
 <p>This endpoint supports blocking queries and all consistency modes.</p>
 <h2>Status</h2>
 <p>The Status endpoints are used to get information about the status
-of the Consul cluster. This are generally very low level, and not really
+of the XXX cluster. This are generally very low level, and not really
 useful for clients.</p>
 <p>The following endpoints are supported:</p>
 <ul>

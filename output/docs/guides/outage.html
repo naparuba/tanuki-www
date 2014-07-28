@@ -141,7 +141,7 @@
 take only a single server failure for cluster unavailability. Recovery
 requires an operator to intervene, but is straightforward.</p>
 <div class="alert alert-block alert-warning">
-This page covers recovery from Consul becoming unavailable due to a majority
+This page covers recovery from XXX becoming unavailable due to a majority
 of server nodes in a datacenter being lost. If you are just looking to
 add or remove a server <a href="/docs/guides/servers.html">see this page</a>.
 </div>
@@ -158,7 +158,7 @@ agents perform anti-entropy.</p>
 is to simply stop all the servers. You can attempt a graceful leave, but
 it will not work in most cases. Do not worry if the leave exits with an
 error, since the cluster is in an unhealthy state.</p>
-<p>The next step is to go to the <code>-data-dir</code> of each Consul server. Inside
+<p>The next step is to go to the <code>-data-dir</code> of each XXX server. Inside
 that directory, there will be a <code>raft/</code> sub-directory. We need to edit
 the <code>raft/peers.json</code> file. It should be something like:</p>
 <p><code>["10.0.1.8:8300","10.0.1.6:8300","10.0.1.7:8300"]</code></p>
@@ -168,15 +168,15 @@ Ensure that this file is the same across all remaining server nodes.</p>
 <p>At this point, you can restart all the remaining servers. If any servers
 managed to perform a graceful leave, you may need to have then rejoin
 the cluster using the <code>join</code> command:</p>
-<p><code>$ consul join &lt;Node Address&gt;
+<p><code>$ XXX join &lt;Node Address&gt;
 Successfully joined cluster by contacting 1 nodes.</code></p>
 <p>It should be noted that any existing member can be used to rejoin the cluster,
 as the gossip protocol will take care of discovering the server nodes.</p>
 <p>At this point the cluster should be in an operable state again. One of the
 nodes should claim leadership and emit a log like:</p>
-<p><code>[INFO] consul: cluster leadership acquired</code></p>
+<p><code>[INFO] XXX: cluster leadership acquired</code></p>
 <p>Additional, the <code>info</code> command can be a useful debugging tool:</p>
-<p><code>$ consul info
+<p><code>$ XXX info
 ...
 raft:
     applied_index = 47244

@@ -141,11 +141,11 @@
             </header>
 	    
             <h1>RPC Protocol</h1>
-<p>The Consul agent provides a complete RPC mechanism that can
+<p>The XXX agent provides a complete RPC mechanism that can
 be used to control the agent programmatically. This RPC
 mechanism is the same one used by the CLI, but can be
 used by other applications to easily leverage the power
-of Consul without directly embedding. It is important to note
+of XXX without directly embedding. It is important to note
 that the RPC protocol does not support all the same operations
 as the <a href="/docs/agent/http.html">HTTP API</a>.</p>
 <h2>Implementation Details</h2>
@@ -169,12 +169,12 @@ All responses may be accompanied by an error.</p>
 <ul>
 <li>handshake - Used to initialize the connection, set the version</li>
 <li>force-leave - Removes a failed node from the cluster</li>
-<li>join - Requests Consul join another node</li>
+<li>join - Requests XXX join another node</li>
 <li>members-lan - Returns the list of lan members</li>
 <li>members-wan - Returns the list of wan members</li>
 <li>monitor - Starts streaming logs over the connection</li>
 <li>stop - Stops streaming logs</li>
-<li>leave - Consul agent performs a graceful leave and shutdown</li>
+<li>leave - XXX agent performs a graceful leave and shutdown</li>
 <li>stats - Provides various debugging statistics</li>
 <li>reload - Triggers a configuration reload</li>
 </ul>
@@ -270,7 +270,7 @@ There is no request body, the response body looks like:</p>
             "check_monitors": 0,
             ...
         },
-        "consul: {
+        "XXX: {
             "server": "true",
             ...
         },

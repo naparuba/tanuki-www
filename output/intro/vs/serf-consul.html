@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>XXXXXXX vs. Nagios, Sensu, Shinken / Some monitoring guys</title>
+        <title>XXXXXXX vs. Serf vs Consul / Some monitoring guys</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -62,9 +62,9 @@
 	  <a href="/intro/vs/chef-puppet.html">Chef, Puppet, etc.</a>
                     </li>
 
-	<li class="vs-other-nagios-sensu">
-	  <a href="/intro/vs/nagios-sensu.html">Nagios, Sensu</a>
-                    </li>
+	<li class="vs-other-nagios-sensu-shinken">
+	  <a href="/intro/vs/nagios-sensu-shinken.html">Nagios, Sensu, Shinken</a>
+        </li>
 
 	<li class="vs-other-skydns">
 	  <a href="/intro/vs/skydns.html">SkyDNS</a>
@@ -74,9 +74,9 @@
 	  <a href="/intro/vs/smartstack.html">SmartStack</a>
                     </li>
 
-	<li class="vs-other-serf">
-	  <a href="/intro/vs/serf.html">Serf</a>
-                    </li>
+	<li class="vs-other-serf-consul">
+	  <a href="/intro/vs/serf-consul.html">Serf, Consul</a>
+        </li>
 
 	<li class="vs-other-custom">
 	  <a href="/intro/vs/custom.html">Custom Solutions</a>
@@ -115,40 +115,36 @@
         <article>
             <header>
                 <h2>
-                    <a href="/intro/vs/nagios-sensu.html" rel="bookmark">
-                        XXXXXXX vs. Nagios, Sensu, Shinken
+                    <a href="/intro/vs/serf-consul.html" rel="bookmark">
+                        XXXXXXX vs. Serf vs Consul
                     </a>
                 </h2>
             </header>
 	    
-            <h1>XXX vs. Nagios, Sensu, Shinken</h1>
-<p>Nagios, Sensu and Shinken are all built for monitoring. They are used
-to quickly notify operators when an issue occurs.</p>
-<p>Nagios uses a central server to perform checks on remote hosts. Its monolitic design makes it difficult to scale,
-as large fleets quickly reach the limit of vertical scaling, and Nagios
-does not easily scale horizontally. Nagios is also notoriously
-difficult to use with modern DevOps and configuration management tools,
-as local configurations must be updated when remote servers are added
-or removed.</p>
-<p>Sensu has a much more modern design, relying on local agents to run
-checks and pushing results to an AMQP broker. A number of servers
-ingest and handle the result of the health checks from the broker. This model
-is more scalable than Nagios, as it allows for much more horizontal scaling,
-and a weaker coupling between the servers and agents. However, the central broker
-has scaling limits, and acts as a single point of failure in the system.</p>
-<p>Shinken is an advanved monitoring framework that came from the same author than XXX. Shinken is a totally rewriten from scratch Nagios in Python design to scale. Shinken is able to manage a very, very large numbers of hosts. It also manage to find the root problem by looking at nodes and services dependencies. It's main flaw is to ask for a configuration reload when a new node is added to the network. That's why XXX was designed, to fix this Shinken flaw, and also manage its metrics and scale without limits for this.</p>
-<p>XXX provides less monitoring abilities than as both Nagios or Shinken, but it is more friendly to modern DevOps that run elastic architectures.</p>
-<p>Contrary to Nagios or Shinken, XXX runs all checks locally, like Sensu, avoiding placing a burden on central monitoring servers. The status of checks is maintained by all the XXX nodes, which are fault tolerant and have no single point of failure.</p>
-<p>Lastly, XXX can scale to vastly more checks because it relies on edge triggered
-updates. This means that an update is only triggered when a check transitions
-from "passing" to "failing" or vice versa.</p>
-<p>In a large fleet, the majority of checks are passing, and even the minority
-that are failing are persistent. By capturing changes only, XXX reduces
-the amount of networking and compute resources used by the health checks,
-allowing the system to be much more scalable.</p>
-<p>An astute reader may notice that if a XXX agent dies, from the perspective of other nodes all checks will appear
-to be in a steady state. However, XXX guards against this as well. The <a href="/docs/internals/gossip.html">gossip protocol</a> used between nodes integrates a distributed failure detector. This means that if a XXX agent fails, the failure will be detected, and thus all checks being run by that node can be assumed failed.</p>
-<p>Beside all, XXX is not taking the place for you standard monitoring tool. Its main role is service discovery and query routing to the healthy nodes, not to find you root problems or manage escalations notifications. If you need this, just plug XXX to Shinken and you will have both elastic and advanced monitoring features.</p>
+            <h1>XXX vs. Serf vs. Consul</h1>
+<p><a href="http://www.serfdom.io">Serf</a> is a great node discovery and orchestration tool. It provides a number of features, including group
+membership, failure detection, event broadcasts and a query mechanism. However,
+Serf does not provide any high-level features such as service discovery, health
+checking or key/value storage. To clarify, the discovery feature of Serf is at a node
+level, while XXX provides a service and node level abstraction.</p>
+<p><a href="http://consul/.io">Consul</a> is a strong tool for discovering and configuring services in your infrastructure. It is based on Serf and add KeyValue, health checking and service discovery.</p>
+<p>XXX is a system providing all of the feature from Serf. In fact, the internal
+<a href="/docs/internals/gossip.html">gossip protocol</a> used within XXX, is the same as the Serf library.</p>
+<p>The health checking provided by Serf is very low level, and only indicates if the
+agent is alive. XXX is providing a richer health checking system,
+that handles liveness, in addition to arbitrary host and service-level checks.
+Health checks can be easily distributed to all the nodes so it's easy for the operators to manage them.</p>
+<p>The membership provided by Serf is at a node level, while XXX focuses
+on the service level abstraction, with a single node to multiple service model.
+This can be simulated in Serf using tags, but it is much more limited, and does
+not provide useful query interfaces. </p>
+<p>In addition to the service level abstraction and improved health checking,
+XXX provides a key/value store and support for multiple datacenters.
+Serf can run across the WAN but with degraded performance. XXX makes use
+of <a href="/docs/internals/architecture.html">multiple gossip pools</a>, so that
+you can keep good performance even with a WAN for linking together multiple datacenters.</p>
+<p>XXX is very similar to Serf as it's very flexible and general purpose tool. As Serf, XXX is a AP system that sacrifice consistency over availability, contrary to Consul that is a tool build over Serf that is a CP architecture, favoring consistency over availability.</p>
+<p>This means that both Serf and XXX can continue to function under almost all circumstances, but data can be temporary differents between the network partitions. Such case can't happend in a Consul cluster.</p>
         </article>
     </section>
                     </div>

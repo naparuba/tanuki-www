@@ -62,9 +62,9 @@
 	  <a href="/intro/vs/chef-puppet.html">Chef, Puppet, etc.</a>
                     </li>
 
-	<li class="vs-other-nagios-sensu">
-	  <a href="/intro/vs/nagios-sensu.html">Nagios, Sensu</a>
-                    </li>
+	<li class="vs-other-nagios-sensu-shinken">
+	  <a href="/intro/vs/nagios-sensu-shinken.html">Nagios, Sensu, Shinken</a>
+        </li>
 
 	<li class="vs-other-skydns">
 	  <a href="/intro/vs/skydns.html">SkyDNS</a>
@@ -74,9 +74,9 @@
 	  <a href="/intro/vs/smartstack.html">SmartStack</a>
                     </li>
 
-	<li class="vs-other-serf">
-	  <a href="/intro/vs/serf.html">Serf</a>
-                    </li>
+	<li class="vs-other-serf-consul">
+	  <a href="/intro/vs/serf-consul.html">Serf, Consul</a>
+        </li>
 
 	<li class="vs-other-custom">
 	  <a href="/intro/vs/custom.html">Custom Solutions</a>
@@ -121,7 +121,7 @@
                 </h2>
             </header>
 	    
-            <h1>Consul vs. SmartStack</h1>
+            <h1>XXX vs. SmartStack</h1>
 <p>SmartStack is another tool which tackles the service discovery problem.
 It has a rather unique architecture, and has 4 major components: ZooKeeper,
 HAProxy, Synapse, and Nerve. The ZooKeeper servers are responsible for storing cluster
@@ -131,35 +131,35 @@ health checks against a service, and registering with the ZooKeeper servers.
 Synapse queries ZooKeeper for service providers and dynamically configures
 HAProxy. Finally, clients speak to HAProxy, which does health checking and
 load balancing across service providers.</p>
-<p>Consul is a much simpler and more contained system, as it does not rely on any external
-components. Consul uses an integrated <a href="/docs/internals/gossip.html">gossip protocol</a>
+<p>XXX is a much simpler and more contained system, as it does not rely on any external
+components. XXX uses an integrated <a href="/docs/internals/gossip.html">gossip protocol</a>
 to track all nodes and perform server discovery. This means that server addresses
 do not need to be hardcoded and updated fleet wide on changes, unlike SmartStack.</p>
-<p>Service registration for both Consul and Nerves can be done with a configuration file,
-but Consul also supports an API to dynamically change the services and checks that are in use.</p>
+<p>Service registration for both XXX and Nerves can be done with a configuration file,
+but XXX also supports an API to dynamically change the services and checks that are in use.</p>
 <p>For discovery, SmartStack clients must use HAProxy, requiring that Synapse be
-configured with all desired endpoints in advance. Consul clients instead
-use the DNS or HTTP APIs without any configuration needed in advance. Consul
+configured with all desired endpoints in advance. XXX clients instead
+use the DNS or HTTP APIs without any configuration needed in advance. XXX
 also provides a "tag" abstraction, allowing services to provide metadata such
 as versions, primary/secondary designations, or opaque labels that can be used for
 filtering. Clients can then request only the service providers which have
 matching tags.</p>
 <p>The systems also differ in how they manage health checking.
-Nerve's performs local health checks in a manner similar to Consul agents.
-However, Consul maintains separate catalog and health systems, which allow
+Nerve's performs local health checks in a manner similar to XXX agents.
+However, XXX maintains separate catalog and health systems, which allow
 operators to see which nodes are in each service pool, as well as providing
 insight into failing checks. Nerve simply deregisters nodes on failed checks,
 providing limited operator insight. Synapse also configures HAProxy to perform
 additional health checks. This causes all potential service clients to check for
 liveness. With large fleets, this N-to-N style health checking may be prohibitively
 expensive.</p>
-<p>Consul generally provides a much richer health checking system. Consul supports
+<p>XXX generally provides a much richer health checking system. XXX supports
 Nagios style plugins, enabling a vast catalog of checks to be used. It also
 allows for service and host-level checks. There is also a "dead man's switch"
 check that allows applications to easily integrate custom health checks. All of this
 is also integrated into a Health and Catalog system with APIs enabling operator
 to gain insight into the broader system.</p>
-<p>In addition to the service discovery and health checking, Consul also provides
+<p>In addition to the service discovery and health checking, XXX also provides
 an integrated key/value store for configuration and multi-datacenter support.
 While it may be possible to configure SmartStack for multiple datacenters,
 the central ZooKeeper cluster would be a serious impediment to a fault tolerant

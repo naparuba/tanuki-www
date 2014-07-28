@@ -20,8 +20,3 @@ As a next step, the following resources are available:
 * [Guides](/docs/guides/index.html) - This section provides various getting
   started guides with XXX, including how to bootstrap a new datacenter.
 
-* [Examples](https://github.com/hashicorp/XXX/tree/master/demo) -
-  The work-in-progress examples folder within the GitHub
-  repository for XXX contains functional examples of various use cases
-  of XXX to help you get started with exactly what you need.
-

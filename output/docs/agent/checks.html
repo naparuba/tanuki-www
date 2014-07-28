@@ -192,13 +192,13 @@ or added at runtime over the HTTP interface.</p>
 provide an <code>id</code> and <code>notes</code> field. The <code>id</code> is set to the <code>name</code> if not
 provided. It is required that all checks have a unique ID per node, so if names
 might conflict then unique ID's should be provided.</p>
-<p>The <code>notes</code> field is opaque to Consul, but may be used for human
+<p>The <code>notes</code> field is opaque to XXX, but may be used for human
 readable descriptions. The field is set to any output that a script
 generates, and similarly the TTL update hooks can update the <code>notes</code>
 as well.</p>
 <p>To configure a check, either provide it as a <code>-config-file</code> option to the
 agent, or place it inside the <code>-config-dir</code> of the agent. The file must
-end in the ".json" extension to be loaded by Consul. Check definitions can
+end in the ".json" extension to be loaded by XXX. Check definitions can
 also be updated by sending a <code>SIGHUP</code> to the agent. Alternatively, the
 check can be registered dynamically using the <a href="/docs/agent/http.html">HTTP API</a>.</p>
 <h2>Check Scripts</h2>
@@ -210,7 +210,7 @@ a specific meaning. Specifically:</p>
 <li>Exit code 1 - Check is warning</li>
 <li>Any other code - Check is failing</li>
 </ul>
-<p>This is the only convention that Consul depends on. Any output of the script
+<p>This is the only convention that XXX depends on. Any output of the script
 will be captured and stored in the <code>notes</code> field so that it can be viewed
 by human operators.</p>
         </article>

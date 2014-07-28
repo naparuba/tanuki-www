@@ -127,14 +127,14 @@
                 </h2>
             </header>
 	    
-            <h1>Consul Architecture</h1>
-<p>Consul is a complex system that has many different moving parts. To help
-users and developers of Consul form a mental model of how it works, this
+            <h1>XXX Architecture</h1>
+<p>XXX is a complex system that has many different moving parts. To help
+users and developers of XXX form a mental model of how it works, this
 page documents the system architecture.</p>
 <div class="alert alert-block alert-warning">
 <strong>Advanced Topic!</strong> This page covers technical details of
-the internals of Consul. You don't need to know these details to effectively
-operate and use Consul. These details are documented here for those who wish
+the internals of XXX. You don't need to know these details to effectively
+operate and use XXX. These details are documented here for those who wish
 to learn about them without having to go spelunking through the source code.
 </div>
 
@@ -143,8 +143,8 @@ to learn about them without having to go spelunking through the source code.
 clarify what is being discussed:</p>
 <ul>
 <li>
-<p>Agent - An agent is the long running daemon on every member of the Consul cluster.
-It is started by running <code>consul agent</code>. The agent is able to run in either <em>client</em>,
+<p>Agent - An agent is the long running daemon on every member of the XXX cluster.
+It is started by running <code>XXX agent</code>. The agent is able to run in either <em>client</em>,
 or <em>server</em> mode. Since all nodes must be running an agent, it is simpler to refer to
 the node as either being a client or server, but there are other instances of the agent. All
 agents can run the DNS or HTTP interfaces, and are responsible for running checks and
@@ -175,7 +175,7 @@ state machine. Consensus is described in more detail on <a href="http://en.wikip
 as well as our <a href="/docs/internals/consensus.html">implementation here</a>.</p>
 </li>
 <li>
-<p>Gossip - Consul is built on top of <a href="http://www.serfdom.io/">Serf</a>, which provides a full
+<p>Gossip - XXX is built on top of <a href="http://www.serfdom.io/">Serf</a>, which provides a full
 <a href="http://en.wikipedia.org/wiki/Gossip_protocol">gossip protocol</a> that is used for multiple purposes.
 Serf provides membership, failure detection, and event broadcast mechanisms. Our use of these
 is described more in the <a href="/docs/internals/gossip.html">gossip documentation</a>. It is enough to know
@@ -196,10 +196,10 @@ allowing a client to make a request from a server.</p>
 </li>
 </ul>
 <h2>10,000 foot view</h2>
-<p>From a 10,000 foot altitude the architecture of Consul looks like this:</p>
-<p><img alt="Consul Architecture" src="/images/consul-arch.png" /></p>
+<p>From a 10,000 foot altitude the architecture of XXX looks like this:</p>
+<p><img alt="XXX Architecture" src="/images/XXX-arch.png" /></p>
 <p>Lets break down this image and describe each piece. First of all we can see
-that there are two datacenters, one and two respectively. Consul has first
+that there are two datacenters, one and two respectively. XXX has first
 class support for multiple datacenters and expects this to be the common case.</p>
 <p>Within each datacenter we have a mixture of clients and servers. It is expected
 that there be between three to five servers. This strikes a balance between
@@ -220,7 +220,7 @@ as part of the <a href="/docs/internals/consensus.html">consensus protocol</a>. 
 when a non-leader server receives an RPC request it forwards it to the cluster leader.</p>
 <p>The server nodes also operate as part of a WAN gossip. This pool is different from the LAN pool,
 as it is optimized for the higher latency of the internet, and is expected to only contain
-other Consul server nodes. The purpose of this pool is to allow datacenters to discover each
+other XXX server nodes. The purpose of this pool is to allow datacenters to discover each
 other in a low touch manner. Bringing a new datacenter online is as easy as joining the existing
 WAN gossip. Because the servers are all operating in this pool, it also enables cross-datacenter requests.
 When a server receives a request for a different datacenter, it forwards it to a random server
@@ -228,11 +228,11 @@ in the correct datacenter. That server may then forward to the local leader.</p>
 <p>This results in a very low coupling between datacenters, but because of failure detection,
 connection caching and multiplexing, cross-datacenter requests are relatively fast and reliable.</p>
 <h2>Getting in depth</h2>
-<p>At this point we've covered the high level architecture of Consul, but there are much
+<p>At this point we've covered the high level architecture of XXX, but there are much
 more details to each of the sub-systems. The <a href="/docs/internals/consensus.html">consensus protocol</a> is
 documented in detail, as is the <a href="/docs/internals/gossip.html">gossip protocol</a>. The <a href="/docs/internals/security.html">documentation</a>
 for the security model and protocols used are also available.</p>
-<p>For other details, either consult the code, ask in IRC or reach out to the mailing list.</p>
+<p>For other details, either XXXt the code, ask in IRC or reach out to the mailing list.</p>
         </article>
     </section>
                     </div>

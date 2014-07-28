@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>XXXXXXX vs. Serf / Some monitoring guys</title>
+        <title>XXXXXXX vs. Serf vs Consul / Some monitoring guys</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -62,9 +62,9 @@
 	  <a href="/intro/vs/chef-puppet.html">Chef, Puppet, etc.</a>
                     </li>
 
-	<li class="vs-other-nagios-sensu">
-	  <a href="/intro/vs/nagios-sensu.html">Nagios, Sensu</a>
-                    </li>
+	<li class="vs-other-nagios-sensu-shinken">
+	  <a href="/intro/vs/nagios-sensu-shinken.html">Nagios, Sensu, Shinken</a>
+        </li>
 
 	<li class="vs-other-skydns">
 	  <a href="/intro/vs/skydns.html">SkyDNS</a>
@@ -116,44 +116,35 @@
             <header>
                 <h2>
                     <a href="/intro/vs/serf.html" rel="bookmark">
-                        XXXXXXX vs. Serf
+                        XXXXXXX vs. Serf vs Consul
                     </a>
                 </h2>
             </header>
 	    
-            <h1>Consul vs. Serf</h1>
-<p><a href="http://www.serfdom.io">Serf</a> is a node discovery and orchestration tool and is the only
-tool discussed so far that is built on an eventually consistent gossip model,
-with no centralized servers. It provides a number of features, including group
+            <h1>XXX vs. Serf vs. Consul</h1>
+<p><a href="http://www.serfdom.io">Serf</a> is a great node discovery and orchestration tool. It provides a number of features, including group
 membership, failure detection, event broadcasts and a query mechanism. However,
 Serf does not provide any high-level features such as service discovery, health
 checking or key/value storage. To clarify, the discovery feature of Serf is at a node
-level, while Consul provides a service and node level abstraction.</p>
-<p>Consul is a complete system providing all of those features. In fact, the internal
-<a href="/docs/internals/gossip.html">gossip protocol</a> used within Consul, is powered by
-the Serf library. Consul leverages the membership and failure detection features,
-and builds upon them.</p>
+level, while XXX provides a service and node level abstraction.</p>
+<p><a href="http://consul/.io">Consul</a> is a strong tool for discovering and configuring services in your infrastructure. It is based on Serf and add KeyValue, health checking and service discovery.</p>
+<p>XXX is a system providing all of the feature from Serf. In fact, the internal
+<a href="/docs/internals/gossip.html">gossip protocol</a> used within XXX, is the same as the Serf library.</p>
 <p>The health checking provided by Serf is very low level, and only indicates if the
-agent is alive. Consul extends this to provide a rich health checking system,
+agent is alive. XXX is providing a richer health checking system,
 that handles liveness, in addition to arbitrary host and service-level checks.
-Health checks are integrated with a central catalog that operators can easily
-query to gain insight into the cluster.</p>
-<p>The membership provided by Serf is at a node level, while Consul focuses
+Health checks can be easily distributed to all the nodes so it's easy for the operators to manage them.</p>
+<p>The membership provided by Serf is at a node level, while XXX focuses
 on the service level abstraction, with a single node to multiple service model.
 This can be simulated in Serf using tags, but it is much more limited, and does
-not provide useful query interfaces. Consul also makes use of a strongly consistent
-Catalog, while Serf is only eventually consistent.</p>
+not provide useful query interfaces. </p>
 <p>In addition to the service level abstraction and improved health checking,
-Consul provides a key/value store and support for multiple datacenters.
-Serf can run across the WAN but with degraded performance. Consul makes use
+XXX provides a key/value store and support for multiple datacenters.
+Serf can run across the WAN but with degraded performance. XXX makes use
 of <a href="/docs/internals/architecture.html">multiple gossip pools</a>, so that
-the performance of Serf over a LAN can be retained while still using it over
-a WAN for linking together multiple datacenters.</p>
-<p>Consul is opinionated in its usage, while Serf is a more flexible and
-general purpose tool. Consul uses a CP architecture, favoring consistency over
-availability. Serf is a AP system, and sacrifices consistency for availability.
-This means Consul cannot operate if the central servers cannot form a quorum,
-while Serf will continue to function under almost all circumstances.</p>
+you can keep good performance even with a WAN for linking together multiple datacenters.</p>
+<p>XXX is very similar to Serf as it's very flexible and general purpose tool. As Serf, XXX is a AP system that sacrifice consistency over availability, contrary to Consul that is a tool build over Serf that is a CP architecture, favoring consistency over availability.</p>
+<p>This means that both Serf and XXX can continue to function under almost all circumstances, but data can be temporary differents between the network partitions. Such case can't happend in a Consul cluster.</p>
         </article>
     </section>
                     </div>

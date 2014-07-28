@@ -141,32 +141,32 @@
             </header>
 	    
             <h1>DNS Interface</h1>
-<p>One of the primary query interfaces for Consul is using DNS.
+<p>One of the primary query interfaces for XXX is using DNS.
 The DNS interface allows applications to make use of service
-discovery without any high-touch integration with Consul. For
-example, instead of making any HTTP API requests to Consul,
+discovery without any high-touch integration with XXX. For
+example, instead of making any HTTP API requests to XXX,
 a host can use the DNS server directly and just do a name lookup
-for "redis.service.east-aws.consul".</p>
+for "redis.service.east-aws.XXX".</p>
 <p>This query automatically translates to a lookup of nodes that
 provide the redis service, located in the "east-aws" datacenter,
 with no failing health checks. It's that simple!</p>
 <p>There are a number of <a href="/docs/agent/options.html">configuration options</a> that
 are important for the DNS interface. They are <code>client_addr</code>, <code>ports.dns</code>, <code>recursor</code>,
-<code>domain</code>, and <code>dns_config</code>. By default Consul will listen on 127.0.0.1:8600 for DNS queries
-in the "consul." domain, without support for DNS recursion. All queries are case-insensitive, a
-name lookup for <code>PostgreSQL.node.dc1.consul</code> will find all nodes named <code>postgresql</code>, no matter of case.</p>
+<code>domain</code>, and <code>dns_config</code>. By default XXX will listen on 127.0.0.1:8600 for DNS queries
+in the "XXX." domain, without support for DNS recursion. All queries are case-insensitive, a
+name lookup for <code>PostgreSQL.node.dc1.XXX</code> will find all nodes named <code>postgresql</code>, no matter of case.</p>
 <p>There are a few ways to use the DNS interface. One option is to use a custom
-DNS resolver library and point it at Consul. Another option is to set Consul
-as the DNS server for a node, and provide a <code>recursor</code> so that non-Consul queries
-can also be resolved. The last method is to forward all queries for the "consul."
-domain to a Consul agent from the existing DNS server. To play with the DNS server
+DNS resolver library and point it at XXX. Another option is to set XXX
+as the DNS server for a node, and provide a <code>recursor</code> so that non-XXX queries
+can also be resolved. The last method is to forward all queries for the "XXX."
+domain to a XXX agent from the existing DNS server. To play with the DNS server
 on the command line, dig can be used:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">dig</span> <span class="err">@</span><span class="mf">127.0.0.1</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8600</span> <span class="n">redis</span><span class="p">.</span><span class="n">service</span><span class="p">.</span><span class="n">dc1</span><span class="p">.</span><span class="n">consul</span><span class="p">.</span> <span class="n">ANY</span>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">dig</span> <span class="err">@</span><span class="mf">127.0.0.1</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8600</span> <span class="n">redis</span><span class="p">.</span><span class="n">service</span><span class="p">.</span><span class="n">dc1</span><span class="p">.</span><span class="n">XXX</span><span class="p">.</span> <span class="n">ANY</span>
 </pre></div>
 
 
 <h2>Node Lookups</h2>
-<p>For Consul to resolve names, it relies on a very specific format for queries.
+<p>For XXX to resolve names, it relies on a very specific format for queries.
 There are fundamentally two types of queries, node lookups and service lookups.
 A node lookup is a simple query for the address of a named node, and takes on
 the following format:</p>
@@ -175,15 +175,15 @@ the following format:</p>
 
 
 <p>So, for example, if we have a "foo" node with default settings, we could look for
-"foo.node.dc1.consul." The datacenter is an optional part of the FQDN, and if not
+"foo.node.dc1.XXX." The datacenter is an optional part of the FQDN, and if not
 provided defaults to the datacenter of the agent. So if we know "foo" is running in our
-same datacenter, we can instead use "foo.node.consul." Alternatively, we can do a
+same datacenter, we can instead use "foo.node.XXX." Alternatively, we can do a
 DNS lookup for nodes in other datacenters, with no additional effort.</p>
 <p>For a node lookup, the only records returned are A records with the IP address of
 the node.</p>
-<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.consul ANY
+<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.XXX ANY
 
-<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.consul ANY
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> foobar.node.XXX ANY
 <span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
 <span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
 <span class="p">;;</span> Got answer<span class="o">:</span>
@@ -192,13 +192,13 @@ the node.</p>
 <span class="p">;;</span> WARNING<span class="o">:</span> recursion requested but not available
 
 <span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
-<span class="p">;</span>foobar.node.consul.        IN  ANY
+<span class="p">;</span>foobar.node.XXX.       IN  ANY
 
 <span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
-foobar.node.consul. <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
+foobar.node.XXX.    <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
 
 <span class="p">;;</span> AUTHORITY SECTION<span class="o">:</span>
-consul.         <span class="m">0</span>   IN  SOA ns.consul. postmaster.consul. <span class="m">1392836399</span> <span class="m">3600</span> <span class="m">600</span> <span class="m">86400</span> <span class="m">0</span>
+XXX.            <span class="m">0</span>   IN  SOA ns.XXX. postmaster.XXX. <span class="m">1392836399</span> <span class="m">3600</span> <span class="m">600</span> <span class="m">86400</span> <span class="m">0</span>
 </pre></div>
 
 
@@ -211,9 +211,9 @@ providers. The format of a service lookup is like the following:</p>
 
 <p>As with node lookups, the <code>datacenter</code> is optional, as is the <code>tag</code>. If no tag is
 provided, then no filtering is done on tag. So, if we want to find any redis service
-providers in our local datacenter, we could lookup "redis.service.consul.", however
+providers in our local datacenter, we could lookup "redis.service.XXX.", however
 if we care about the PostgreSQL master in a particular datacenter, we could lookup
-"master.postgresql.service.dc2.consul."</p>
+"master.postgresql.service.dc2.XXX."</p>
 <p>The DNS query system makes use of health check information to prevent routing
 to unhealthy nodes. When a service query is made, any services failing their health
 check, or failing a node system check will be omitted from the results. To allow
@@ -224,9 +224,9 @@ as a simple foundation for an auto-healing service oriented architecture.</p>
 provide the port that a service is registered on, enabling services to avoid relying
 on well-known ports. SRV records are only served if the client specifically requests
 SRV records.</p>
-<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> consul.service.consul SRV
+<div class="highlight"><pre><span class="o">$</span> dig <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> XXX.service.XXX SRV
 
-<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> consul.service.consul ANY
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> XXX.service.XXX ANY
 <span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
 <span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
 <span class="p">;;</span> Got answer<span class="o">:</span>
@@ -235,22 +235,22 @@ SRV records.</p>
 <span class="p">;;</span> WARNING<span class="o">:</span> recursion requested but not available
 
 <span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
-<span class="p">;</span>consul.service.consul.     IN  SRV
+<span class="p">;</span>XXX.service.XXX.       IN  SRV
 
 <span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
-consul.service.consul.  <span class="m">0</span>   IN  SRV <span class="m">1</span> <span class="m">1</span> <span class="m">8300</span> foobar.node.dc1.consul.
+XXX.service.XXX.    <span class="m">0</span>   IN  SRV <span class="m">1</span> <span class="m">1</span> <span class="m">8300</span> foobar.node.dc1.XXX.
 
 <span class="p">;;</span> ADDITIONAL SECTION<span class="o">:</span>
-foobar.node.dc1.consul. <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
+foobar.node.dc1.XXX.    <span class="m">0</span>   IN  A   <span class="m">10.1.10.12</span>
 </pre></div>
 
 
-<p>When the DNS query is performed using UDP, Consul will truncate the results
+<p>When the DNS query is performed using UDP, XXX will truncate the results
 without setting the truncate bit. This is to prevent a redundant lookup over
 TCP which generate additional load. If the lookup is done over TCP, the results
 are not truncated.</p>
 <h2>Caching</h2>
-<p>By default, all DNS results served by Consul set a 0 TTL value. This disables
+<p>By default, all DNS results served by XXX set a 0 TTL value. This disables
 caching of DNS results. However, there are many situations in which caching is
 desirable for performance and scalability. This is discussed more in the guide
 for <a href="/docs/guides/dns-cache.html">DNS Caching</a>.</p>

@@ -9,9 +9,7 @@ It uses multiple central servers that are strongly consistent and
 fault tolerant. Nodes register services using an HTTP API, and
 queries can be made over HTTP or DNS to perform discovery.
 
-XXX is very similar, but provides a superset of features. XXX
-also relies on multiple central servers to provide strong consistency
-and fault tolerance. Nodes can use an HTTP API or use an agent to
+XXX is very similar, but provides a superset of features. Nodes can use an HTTP API or use an agent to
 register services, and queries are made over HTTP or DNS.
 
 However, the systems differ in many ways. XXX provides a much richer
@@ -31,7 +29,7 @@ suffer as requests must always be performed in a remote datacenter.
 
 XXX supports multiple datacenters out of the box, and it purposely
 scopes the managed data to be per-datacenter. This means each datacenter
-runs an independent cluster of servers. Requests are forwarded to remote
+runs an independent cluster of data nodes. Requests are forwarded to remote
 datacenters if necessary. This means requests for services within a datacenter
 never go over the WAN, and connectivity issues between datacenters do not
 affect availability within a datacenter. Additionally, the unavailability

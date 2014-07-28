@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Introduction to Consul / Some monitoring guys</title>
+        <title>Introduction to XXX / Some monitoring guys</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -87,74 +87,82 @@
             <header>
                 <h2>
                     <a href="/intro/index.html" rel="bookmark">
-                        Introduction to Consul
+                        Introduction to XXX
                     </a>
                 </h2>
             </header>
 	    
-            <h1>Introduction to Consul</h1>
-<p>Welcome to the intro guide to Consul! This guide is the best place to start
-with Consul. We cover what Consul is, what problems it can solve, how it compares
-to existing software, and a quick start for using Consul. If you are already familiar
-with the basics of Consul, the <a href="/docs/index.html">documentation</a> provides more
+            <h1>Introduction to XXX</h1>
+<p>Welcome to the intro guide to XXX! This guide is the best place to start
+with XXX. We cover what XXX is, what problems it can solve, how it compares
+to existing software, and a quick start for using XXX. If you are already familiar
+with the basics of XXX, the <a href="/docs/index.html">documentation</a> provides more
 of a reference for all available features.</p>
-<h2>What is Consul?</h2>
-<p>Consul has multiple components, but as a whole, it is a tool for discovering
-and configuring services in your infrastructure. It provides several
+<h2>What is XXX?</h2>
+<p>XXX has multiple components, but as a whole, it is a tool for discovering
+and monitoring services in your infrastructure. It provides several
 key features:</p>
 <ul>
 <li>
-<p><strong>Service Discovery</strong>: Clients of Consul can <em>provide</em> a service, such as
-  <code>api</code> or <code>mysql</code>, and other clients can use Consul to <em>discover</em> providers
+<p><strong>Service Discovery</strong>: Clients of XXX can <em>provide</em> a service, such as
+  <code>api</code> or <code>mysql</code>, and other clients can use XXX to <em>discover</em> providers
   of a given service. Using either DNS or HTTP, applications can easily find
   the services they depend upon.</p>
 </li>
 <li>
-<p><strong>Health Checking</strong>: Consul clients can provide any number of health checks,
+<p><strong>Health Checking</strong>: XXX clients can provide any number of health checks,
   either associated with a given service ("is the webserver returning 200 OK"), or
   with the local node ("is memory utilization below 90%"). This information can be
   used by an operator to monitor cluster health, and it is used by the service
   discovery components to route traffic away from unhealthy hosts.</p>
 </li>
 <li>
-<p><strong>Key/Value Store</strong>: Applications can make use of Consul's hierarchical key/value
-  store for any number of purposes including: dynamic configuration, feature flagging,
-  coordination, leader election, etc. The simple HTTP API makes it easy to use.</p>
+<p><strong>Metrology</strong>: XXX clients can export metrics and retrive them for a long perdiod of time. 
+  Clients can send metrics by both <a href="https://github.com/graphite-project">graphite</a> or <a href="https://github.com/etsy/statsd">statsd</a> formats.</p>
 </li>
 <li>
-<p><strong>Multi Datacenter</strong>: Consul supports multiple datacenters out of the box. This
-  means users of Consul do not have to worry about building additional layers of
+<p><strong>Key/Value Store</strong>: Applications can make use of XXX's hierarchical key/value
+  store for any number of purposes including: dynamic configuration, feature flagging, etc
+  The simple HTTP API makes it easy to use.</p>
+</li>
+<li>
+<p><strong>Multi Datacenter</strong>: XXX supports multiple datacenters out of the box. This
+  means users of XXX do not have to worry about building additional layers of
   abstraction to grow to multiple regions.</p>
 </li>
 </ul>
-<p>Consul is designed to be friendly to both the DevOps community and
-application developers, making it perfect for modern, elastic infrastructures.</p>
-<h2>Basic Architecture of Consul</h2>
-<p>Consul is a distributed, highly available system. There is an
+<p>XXX is designed to be match both the DevOps and application developers. It make their life easiers to build elastic infrastructures.</p>
+<h2>Basic Architecture of XXX</h2>
+<p>XXX is a distributed, highly available system. There is an
 <a href="/docs/internals/architecture.html">in-depth architecture overview</a> available,
 but this section will cover the basics so you can get an understanding
-of how Consul works. This section will purposely omit details to quickly
+of how XXX works. This section will purposely omit details to quickly
 provide an overview of the architecture.</p>
-<p>Every node that provides services to Consul runs a <em>Consul agent</em>. Running
+<p>Every node that provides services to XXX runs a <em>XXX agent</em>. Running
 an agent is not required for discovering other services or getting/setting
 key/value data. The agent is responsible for health checking the services
 on the node as well as the node itself.</p>
-<p>The agents talk to one or more <em>Consul servers</em>. The Consul servers are
-where data is stored and replicated. The servers themselves elect a leader.
-While Consul can function with one server, 3 to 5 is recommended to avoid
-data loss scenarios. A cluster of Consul servers is recommended for each
+<p>Some agents can have some specific roles used by the XXX cluster. Such roles are:</p>
+<ul>
+<li>
+<p><strong>KV</strong>: manage the data retention for the <em>key store</em> feature</p>
+</li>
+<li>
+<p><strong>TS</strong>: manage the data retention for the <em>time series/metrology</em> feature</p>
+</li>
+</ul>
+<p>Such agent will be named <strong>core nodes</strong>.</p>
+<p>For each feature the cluster manage to distribute and replicate the data accross the nodes. One agent can run both roles. 
+While each role can be manage with one server, 3 to 5 is recommended to avoid
+data loss scenarios. A cluster of XXX servers for each role is recommended for each
 datacenter.</p>
 <p>Components of your infrastructure that need to discover other services
-or nodes can query any of the Consul servers <em>or</em> any of the Consul agents.
-The agents forward queries to the servers automatically.</p>
-<p>Each datacenter runs a cluster of Consul servers. When a cross-datacenter
-service discovery or configuration request is made, the local Consul servers
-forward the request to the remote datacenter and return the result.</p>
+or nodes can query any of the XXX node.</p>
 <h2>Next Steps</h2>
-<p>See the page on <a href="/intro/vs/index.html">how Consul compares to other software</a>
+<p>See the page on <a href="/intro/vs/index.html">how XXX compares to other software</a>
 to see how it fits into your existing infrastructure. Or continue onwards with
 the <a href="/intro/getting-started/install.html">getting started guide</a> to get
-Consul up and running and see how it works.</p>
+XXX up and running and see how it works.</p>
         </article>
     </section>
                     </div>

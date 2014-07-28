@@ -167,7 +167,7 @@ or added at runtime over the HTTP interface.</p>
 an <code>id</code>, <code>tags</code>, <code>port</code>, and <code>check</code>.  The <code>id</code> is set to the <code>name</code> if not
 provided. It is required that all services have a unique ID per node, so if names
 might conflict then unique ID's should be provided.</p>
-<p>The <code>tags</code> is a list of opaque value to Consul, but can be used to distinguish
+<p>The <code>tags</code> is a list of opaque value to XXX, but can be used to distinguish
 between "master" or "slave" nodes, different versions, or any other service level labels.
 The <code>port</code> can be used as well to make a service oriented architecture
 simpler to configure. This way the address and port of a service can
@@ -184,7 +184,7 @@ check must be of the script or TTL type. If it is a script type, <code>script</c
 provided. The check name is automatically generated as "service:<service-id>".</p>
 <p>To configure a service, either provide it as a <code>-config-file</code> option to the
 agent, or place it inside the <code>-config-dir</code> of the agent. The file must
-end in the ".json" extension to be loaded by Consul. Check definitions can
+end in the ".json" extension to be loaded by XXX. Check definitions can
 also be updated by sending a <code>SIGHUP</code> to the agent. Alternatively, the
 service can be registered dynamically using the <a href="/docs/agent/http.html">HTTP API</a>.</p>
         </article>

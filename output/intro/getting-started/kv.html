@@ -128,11 +128,11 @@
 	    
             <h1>Key/Value Data</h1>
 <p>In addition to providing service discovery and integrated health checking,
-Consul provides an easy to use Key/Value store. This can be used to hold
+XXX provides an easy to use Key/Value store. This can be used to hold
 dynamic configuration, assist in service coordination, build leader election,
 and anything else a developer can think to build. The
 <a href="/docs/agent/http.html">HTTP API</a> fully documents the features of the K/V store.</p>
-<p>This page assumes you have at least one Consul agent already running.</p>
+<p>This page assumes you have at least one XXX agent already running.</p>
 <h2>Simple Usage</h2>
 <p>To demonstrate how simple it is to get started, we will manipulate a few keys
 in the K/V store.</p>
@@ -148,7 +148,7 @@ User-Agent: curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/
 Host: localhost:8500
 Accept: <em>/</em></p>
 <p>&lt; HTTP/1.1 404 Not Found
-&lt; X-Consul-Index: 1
+&lt; X-XXX-Index: 1
 &lt; Date: Fri, 11 Apr 2014 02:10:28 GMT
 &lt; Content-Length: 0
 &lt; Content-Type: text/plain; charset=utf-8
@@ -172,7 +172,7 @@ $ curl http://localhost:8500/v1/kv/?recurse
 <p>Here we have created 3 keys, each with the value of "test". Note that the
 <code>Value</code> field returned is base64 encoded to allow non-UTF8
 characters. For the "web/key2" key, we set a <code>flag</code> value of 42. All keys
-support setting a 64bit integer flag value. This is opaque to Consul but can
+support setting a 64bit integer flag value. This is opaque to XXX but can
 be used by clients for any purpose.</p>
 <p>After setting the values, we then issued a GET request to retrieve multiple
 keys using the <code>?recurse</code> parameter.</p>
@@ -186,7 +186,7 @@ $ curl http://localhost:8500/v1/kv/web?recurse
 [{"CreateIndex":97,"ModifyIndex":97,"Key":"web/key1","Flags":0,"Value":"dGVzdA=="},
  {"CreateIndex":98,"ModifyIndex":98,"Key":"web/key2","Flags":42,"Value":"dGVzdA=="}]</code></p>
 <p>A key can be updated by setting a new value by issuing the same PUT request.
-Additionally, Consul provides a Check-And-Set operation, enabling atomic
+Additionally, XXX provides a Check-And-Set operation, enabling atomic
 key updates. This is done by providing the <code>?cas=</code> paramter with the last
 <code>ModifyIndex</code> value from the GET request. For example, suppose we wanted
 to update "web/key1":</p>

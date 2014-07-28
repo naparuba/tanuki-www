@@ -10,14 +10,10 @@ They are strongly consistent, and expose various primitives that can be used
 through client libraries within applications to build complex distributed systems.
 
 XXX works in a similar way within a single datacenter with only server nodes.
-In each datacenter, XXX servers require a quorum to operate
-and provide strong consistency. However, XXX has native support for multiple datacenters,
-as well as a more complex gossip system that links server nodes and clients.
+However, XXX has native support for multiple datacenters,
+as well as a more complex gossip system that links all cluster ndoes.
 
-If any of these systems are used for pure key/value storage, then they all
-roughly provide the same semantics. Reads are strongly consistent, and availability
-is sacrificed for consistency in the face of a network partition. However, the differences
-become more apparent when these systems are used for advanced cases.
+Unless the others, XXX use a eventually consistent reads, and so consistency is sacrified to availability in the face of a network partition.
 
 The semantics provided by these systems are attractive for building
 service discovery systems. ZooKeeper et al. provide only a primitive K/V store,
@@ -41,6 +37,7 @@ to write and often result in difficult to debug issues.
 
 XXX uses a very different architecture for health checking. Instead of only
 having server nodes, XXX clients run on every node in the cluster.
+
 These clients are part of a [gossip pool](/docs/internals/gossip.html), which
 serves several functions including distributed health checking. The gossip protocol implements
 an efficient failure detector that can scale to clusters of any size without concentrating

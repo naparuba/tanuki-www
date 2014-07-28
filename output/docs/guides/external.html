@@ -138,11 +138,11 @@
             <h1>Registering an External Service</h1>
 <p>Very few infrastructures are entirely self-contained, and often rely on
 a multitude of external service providers. Most services are registered
-in Consul through the use of a <a href="/docs/agent/services.html">service definition</a>,
+in XXX through the use of a <a href="/docs/agent/services.html">service definition</a>,
 however that registers the local node as the service provider. In the case
 of external services, we want to register a service as being provided by
 an external provider.</p>
-<p>Consul supports this, however it requires manually registering the service
+<p>XXX supports this, however it requires manually registering the service
 with the catalog. Once registered, the DNS interface will be able to return
 the appropriate A records or CNAME records for the service. The service will
 also appear in standard queries against the API.</p>
@@ -154,7 +154,7 @@ also appear in standard queries against the API.</p>
 
 
 <p>If we do a DNS lookup now, we can see the new search service:</p>
-<div class="highlight"><pre><span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> search.service.consul.
+<div class="highlight"><pre><span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> DiG <span class="m">9.8.3</span><span class="o">-</span>P1 <span class="o">&lt;&lt;&gt;&gt;</span> <span class="o">@</span><span class="m">127.0.0.1</span> <span class="o">-</span>p <span class="m">8600</span> search.service.XXX.
 <span class="p">;</span> <span class="p">(</span><span class="m">1</span> server found<span class="p">)</span>
 <span class="p">;;</span> global options<span class="o">:</span> <span class="o">+</span>cmd
 <span class="p">;;</span> Got answer<span class="o">:</span>
@@ -162,10 +162,10 @@ also appear in standard queries against the API.</p>
 <span class="p">;;</span> flags<span class="o">:</span> qr aa rd ra<span class="p">;</span> QUERY<span class="o">:</span> <span class="m">1</span><span class="p">,</span> ANSWER<span class="o">:</span> <span class="m">4</span><span class="p">,</span> AUTHORITY<span class="o">:</span> <span class="m">0</span><span class="p">,</span> ADDITIONAL<span class="o">:</span> <span class="m">0</span>
 
 <span class="p">;;</span> QUESTION SECTION<span class="o">:</span>
-<span class="p">;</span>search.service.consul.     IN  A
+<span class="p">;</span>search.service.XXX.        IN  A
 
 <span class="p">;;</span> ANSWER SECTION<span class="o">:</span>
-search.service.consul.  <span class="m">0</span>   IN  CNAME   www.google.com.
+search.service.XXX. <span class="m">0</span>   IN  CNAME   www.google.com.
 www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.114</span>
 www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.115</span>
 www.google.com.     <span class="m">264</span> IN  A   <span class="m">74.125.239.116</span>

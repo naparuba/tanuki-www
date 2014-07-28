@@ -4,11 +4,10 @@ Slug: intro/vs/custom
 
 # XXX vs. Custom Solutions
 
-As a code base grows, a monolithic app usually evolves into a Service Oriented Architecture (SOA).
-A universal pain point for SOA is service discovery and configuration. In many
-cases, this leads to organizations building home grown solutions.
+As a code base grows, a monolithic app usually evolves into a Service Oriented Architecture (SOA). And in such architecture manage service discovery and configuration leads to organizations building home grown solutions.
+
 It is an undisputed fact that distributed systems are hard; building one is error prone and time consuming.
-Most systems cut corners by introducing single points of failure such
+Most systems simplify the problem by introducing single points of failure such
 as a single Redis or RDBMS to maintain cluster state. These solutions may work in the short term,
 but they are rarely fault tolerant or scalable. Besides these limitations,
 they require time and resources to build and maintain.

@@ -13,7 +13,7 @@ of a reference for all available features.
 ## What is XXX?
 
 XXX has multiple components, but as a whole, it is a tool for discovering
-and configuring services in your infrastructure. It provides several
+and monitoring services in your infrastructure. It provides several
 key features:
 
 * **Service Discovery**: Clients of XXX can _provide_ a service, such as
@@ -27,16 +27,19 @@ key features:
   used by an operator to monitor cluster health, and it is used by the service
   discovery components to route traffic away from unhealthy hosts.
 
+* **Metrology**: XXX clients can export metrics and retrive them for a long perdiod of time. 
+  Clients can send metrics by both [graphite](https://github.com/graphite-project) or [statsd](https://github.com/etsy/statsd) formats.
+
+
 * **Key/Value Store**: Applications can make use of XXX's hierarchical key/value
-  store for any number of purposes including: dynamic configuration, feature flagging,
-  coordination, leader election, etc. The simple HTTP API makes it easy to use.
+  store for any number of purposes including: dynamic configuration, feature flagging, etc
+  The simple HTTP API makes it easy to use.
 
 * **Multi Datacenter**: XXX supports multiple datacenters out of the box. This
   means users of XXX do not have to worry about building additional layers of
   abstraction to grow to multiple regions.
 
-XXX is designed to be friendly to both the DevOps community and
-application developers, making it perfect for modern, elastic infrastructures.
+XXX is designed to be match both the DevOps and application developers. It make their life easiers to build elastic infrastructures.
 
 ## Basic Architecture of XXX
 
@@ -51,19 +54,21 @@ an agent is not required for discovering other services or getting/setting
 key/value data. The agent is responsible for health checking the services
 on the node as well as the node itself.
 
-The agents talk to one or more _XXX servers_. The XXX servers are
-where data is stored and replicated. The servers themselves elect a leader.
-While XXX can function with one server, 3 to 5 is recommended to avoid
-data loss scenarios. A cluster of XXX servers is recommended for each
+Some agents can have some specific roles used by the XXX cluster. Such roles are:
+
+* **KV**: manage the data retention for the _key store_ feature
+
+* **TS**: manage the data retention for the _time series/metrology_ feature
+
+Such agent will be named **core nodes**.
+
+For each feature the cluster manage to distribute and replicate the data accross the nodes. One agent can run both roles. 
+While each role can be manage with one server, 3 to 5 is recommended to avoid
+data loss scenarios. A cluster of XXX servers for each role is recommended for each
 datacenter.
 
 Components of your infrastructure that need to discover other services
-or nodes can query any of the XXX servers _or_ any of the XXX agents.
-The agents forward queries to the servers automatically.
-
-Each datacenter runs a cluster of XXX servers. When a cross-datacenter
-service discovery or configuration request is made, the local XXX servers
-forward the request to the remote datacenter and return the result.
+or nodes can query any of the XXX node.
 
 ## Next Steps
 

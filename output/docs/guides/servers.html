@@ -136,10 +136,10 @@
             </header>
 	    
             <h1>Adding/Removing Servers</h1>
-<p>Consul is designed to require minimal operator involvement, however any changes
-to the set of Consul servers must be handled carefully. To better understand
+<p>XXX is designed to require minimal operator involvement, however any changes
+to the set of XXX servers must be handled carefully. To better understand
 why, reading about the <a href="/docs/internals/consensus.html">consensus protocol</a> will
-be useful. In short, the Consul servers perform leader election and replication.
+be useful. In short, the XXX servers perform leader election and replication.
 For changes to be processed, a minimum quorum of servers (N/2)+1 must be available.
 That means if there are 3 server nodes, at least 2 must be available.</p>
 <p>In general, if you are ever adding and removing nodes simultaneously, it is better
@@ -155,7 +155,7 @@ any cluster, and should emit something like:</p>
 <p>This means that it does not know about any peers and is not configured to elect itself.
 This is expected, and we can now add this node to the existing cluster using <code>join</code>.
 From the new server, we can join any member of the existing cluster:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">consul</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">Address</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">XXX</span> <span class="n">join</span> <span class="o">&lt;</span><span class="n">Node</span> <span class="n">Address</span><span class="o">&gt;</span>
 <span class="n">Successfully</span> <span class="n">joined</span> <span class="n">cluster</span> <span class="n">by</span> <span class="n">contacting</span> <span class="mi">1</span> <span class="n">nodes</span><span class="p">.</span>
 </pre></div>
 
@@ -170,7 +170,7 @@ Once the node has joined, the existing cluster leader should log something like:
 <p>This means that raft, the underlying consensus protocol, has added the peer and begun
 replicating state. Since the existing cluster may be very far ahead, it can take some
 time for the new node to catch up. To check on this, run <code>info</code> on the leader:</p>
-<p><code>$ consul info
+<p><code>$ XXX info
 ...
 raft:
     applied_index = 47244
@@ -206,7 +206,7 @@ can handle a node leaving, the actual process is simple. You simply issue a
 <code>leave</code> command to the server.</p>
 <p>The server leaving should contain logs like:</p>
 <div class="highlight"><pre><span class="p">...</span>
-<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">server</span> <span class="n">starting</span> <span class="n">leave</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">server</span> <span class="n">starting</span> <span class="n">leave</span>
 <span class="p">...</span>
 <span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">Removed</span> <span class="n">ourself</span><span class="p">,</span> <span class="n">transitioning</span> <span class="n">to</span> <span class="n">follower</span>
 <span class="p">...</span>
@@ -215,7 +215,7 @@ can handle a node leaving, the actual process is simple. You simply issue a
 
 <p>The leader should also emit various logs including:</p>
 <div class="highlight"><pre><span class="p">...</span>
-<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">consul</span><span class="o">:</span> <span class="n">member</span> <span class="err">&#39;</span><span class="n">node</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">8</span><span class="err">&#39;</span> <span class="n">left</span><span class="p">,</span> <span class="n">deregistering</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">XXX</span><span class="o">:</span> <span class="n">member</span> <span class="err">&#39;</span><span class="n">node</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">8</span><span class="err">&#39;</span> <span class="n">left</span><span class="p">,</span> <span class="n">deregistering</span>
 <span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">Removed</span> <span class="n">peer</span> <span class="mf">10.0.1.8</span><span class="o">:</span><span class="mi">8300</span><span class="p">,</span> <span class="n">stopping</span> <span class="n">replication</span>
 <span class="p">...</span>
 </pre></div>
