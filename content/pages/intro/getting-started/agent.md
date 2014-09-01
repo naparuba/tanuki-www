@@ -4,46 +4,20 @@ Slug: intro/getting-started/agent
 
 # Run the XXX Agent
 
-After XXX is installed, the agent must be run. The agent can either run
-in a server or client mode. Each datacenter must have at least one server,
-although 3 or 5 is recommended. A single server deployment is _**highly**_ discouraged
+After XXX is installed, the agent must be run. At least one server must have a TS and/or KV role, although at least 3 is recommended. A single server deployment is _**highly**_ discouraged
 as data loss is inevitable in a failure scenario. [This guide](/docs/guides/bootstrapping.html)
-covers bootstrapping a new datacenter. All other agents run in client mode, which
-is a very lightweight process that registers services, runs health checks,
-and forwards queries to servers. The agent must be run for every node that
-will be part of the cluster.
+covers bootstrapping a new datacenter. All other agents run health checks,
+and forwards queries to servers.
 
 ## Starting the Agent
 
 For simplicity, we'll run a single XXX agent in server mode right now:
 
 ```
-$ XXX agent -server -bootstrap-expect 1 -data-dir /tmp/XXX
-==> WARNING: BootstrapExpect Mode is specified as 1; this is the same as Bootstrap mode.
-==> WARNING: Bootstrap mode enabled! Do not enable unless necessary
-==> WARNING: It is highly recommended to set GOMAXPROCS higher than 1
-==> Starting XXX agent...
-==> Starting XXX agent RPC...
-==> XXX agent running!
-       Node name: 'Armons-MacBook-Air'
-      Datacenter: 'dc1'
-          Server: true (bootstrap: true)
-     Client Addr: 127.0.0.1 (HTTP: 8500, DNS: 8600, RPC: 8400)
-    Cluster Addr: 10.1.10.38 (LAN: 8301, WAN: 8302)
+$ /etc/init.d/XXX start
 
-==> Log data will now stream in as it occurs:
-
-[INFO] serf: EventMemberJoin: Armons-MacBook-Air.local 10.1.10.38
-[INFO] raft: Node at 10.1.10.38:8300 [Follower] entering Follower state
-[INFO] XXX: adding server for datacenter: dc1, addr: 10.1.10.38:8300
-[ERR] agent: failed to sync remote state: rpc error: No cluster leader
-[WARN] raft: Heartbeat timeout reached, starting election
-[INFO] raft: Node at 10.1.10.38:8300 [Candidate] entering Candidate state
-[INFO] raft: Election won. Tally: 1
-[INFO] raft: Node at 10.1.10.38:8300 [Leader] entering Leader state
-[INFO] XXX: cluster leadership acquired
-[INFO] XXX: New leader elected: Armons-MacBook-Air
-[INFO] XXX: member 'Armons-MacBook-Air' joined, marking health alive
+XXX state
+YYYYYYYYYYYYYYYYYYYYYYYYYYYY
 ```
 
 As you can see, the XXX agent has started and has output some log
@@ -51,12 +25,6 @@ data. From the log data, you can see that our agent is running in server mode,
 and has claimed leadership of the cluster. Additionally, the local member has
 been marked as a healthy member of the cluster.
 
-<div class="alert alert-block alert-warning">
-<strong>Note for OS X Users:</strong> XXX uses your hostname as the
-default node name. If your hostname contains periods, DNS queries to
-that node will not work with XXX. To avoid this, explicitly set
-the name of your node with the <code>-node</code> flag.
-</div>
 
 ## Cluster Members
 
@@ -71,19 +39,11 @@ Armons-MacBook-Air      10.1.10.38:8301     alive   server  0.3.0  2
 ```
 
 The output shows our own node, the address it is running on, its
-health state, its role in the cluster, as well as some versioning information.
+health state, its role in the cluster.
 Additional metadata can be viewed by providing the `-detailed` flag.
 
 The output from the `members` command is generated based on the
 [gossip protocol](/docs/internals/gossip.html) and is eventually consistent.
-For a strongly consistent view of the world, use the
-[HTTP API](/docs/agent/http.html), which forwards the request to the
-XXX servers:
-
-```
-$ curl localhost:8500/v1/catalog/nodes
-[{"Node":"Armons-MacBook-Air","Address":"10.1.10.38"}]
-```
 
 In addition to the HTTP API, the
 [DNS interface](/docs/agent/dns.html) can be used to query the node. Note

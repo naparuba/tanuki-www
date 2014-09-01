@@ -48,10 +48,10 @@
 <nav>
   <ul>
     <li class="what">
-      <a href="/intro/index.html">What is Consul?</a>
+      <a href="/intro/index.html">What is XXX?</a>
     </li>
     <li class="vs-other">
-      <a href="/intro/vs/index.html">Consul vs. Other Software</a>
+      <a href="/intro/vs/index.html">XXX vs. Other Software</a>
       
       <ul class="nav">
 	<li class='vs-other-zk'>
@@ -75,7 +75,7 @@
                     </li>
 
 	<li class="vs-other-serf-consul">
-	  <a href="/intro/vs/serf-consul.html">Serf, Consul</a>
+	  <a href="/intro/vs/serf-consul.html">Serf, XXX</a>
         </li>
 
 	<li class="vs-other-custom">
@@ -146,7 +146,7 @@ filtering. Clients can then request only the service providers which have
 matching tags.</p>
 <p>The systems also differ in how they manage health checking.
 Nerve's performs local health checks in a manner similar to XXX agents.
-However, XXX maintains separate catalog and health systems, which allow
+However, XXX maintains the health state into the <em>KV</em> servers, which allow
 operators to see which nodes are in each service pool, as well as providing
 insight into failing checks. Nerve simply deregisters nodes on failed checks,
 providing limited operator insight. Synapse also configures HAProxy to perform
@@ -155,10 +155,7 @@ liveness. With large fleets, this N-to-N style health checking may be prohibitiv
 expensive.</p>
 <p>XXX generally provides a much richer health checking system. XXX supports
 Nagios style plugins, enabling a vast catalog of checks to be used. It also
-allows for service and host-level checks. There is also a "dead man's switch"
-check that allows applications to easily integrate custom health checks. All of this
-is also integrated into a Health and Catalog system with APIs enabling operator
-to gain insight into the broader system.</p>
+allows for service and host-level checks.</p>
 <p>In addition to the service discovery and health checking, XXX also provides
 an integrated key/value store for configuration and multi-datacenter support.
 While it may be possible to configure SmartStack for multiple datacenters,

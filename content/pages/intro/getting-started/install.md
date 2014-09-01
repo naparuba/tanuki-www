@@ -5,35 +5,14 @@ Slug: intro/getting-started/install
 # Install XXX
 
 XXX must first be installed on every node that will be a member of a
-XXX cluster. To make installation easy, XXX is distributed as a
-[binary package](/downloads.html) for all supported platforms and
-architectures. This page will not cover how to compile XXX from
-source.
+XXX cluster. To make installation easy, XXX is provides with [repositories](/downloads.html) for all supported platforms and
+architectures. This page will not cover how to install XXX from source.
 
 ## Installing XXX
 
-To install XXX, find the [appropriate package](/downloads.html) for
-your system and download it. XXX is packaged as a "zip" archive.
+To install XXX, find the [appropriate repository](/downloads.html) for
+your system.
 
-After downloading XXX, unzip the package. Copy the `XXX` binary to
-somewhere on the PATH so that it can be executed. On Unix systems,
-`~/bin` and `/usr/local/bin` are common installation directories,
-depending on if you want to restrict the install to a single user or
-expose it to the entire system. On Windows systems, you can put it wherever
-you would like.
-
-### OS X
-
-If you are using [homebrew](http://brew.sh/#install) as a package manager,
-than you can install XXX as simple as:
-```
-brew cask install XXX
-```
-
-if you are missing the [cask plugin](http://caskroom.io/) you can install it with:
-```
-brew install caskroom/cask/brew-cask
-```
 
 ## Verifying the Installation
 

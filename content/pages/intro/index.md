@@ -4,11 +4,7 @@ Part: intro
 
 # Introduction to XXX
 
-Welcome to the intro guide to XXX! This guide is the best place to start
-with XXX. We cover what XXX is, what problems it can solve, how it compares
-to existing software, and a quick start for using XXX. If you are already familiar
-with the basics of XXX, the [documentation](/docs/index.html) provides more
-of a reference for all available features.
+Welcome to the intro guide to XXX! In this guide we will what XXX is, what problems it can solve for you, how it compares to your existing software, and a quick start for using XXX. If you are already familiar with XXX, the [documentation](/docs/index.html) provides more of a reference for all available features.
 
 ## What is XXX?
 
@@ -35,9 +31,7 @@ key features:
   store for any number of purposes including: dynamic configuration, feature flagging, etc
   The simple HTTP API makes it easy to use.
 
-* **Multi Datacenter**: XXX supports multiple datacenters out of the box. This
-  means users of XXX do not have to worry about building additional layers of
-  abstraction to grow to multiple regions.
+* **Distributed command execution**: XXX can help you to run distributed commands on all your nodes or just some of them with a specific role.
 
 XXX is designed to be match both the DevOps and application developers. It make their life easiers to build elastic infrastructures.
 
@@ -49,16 +43,13 @@ but this section will cover the basics so you can get an understanding
 of how XXX works. This section will purposely omit details to quickly
 provide an overview of the architecture.
 
-Every node that provides services to XXX runs a _XXX agent_. Running
-an agent is not required for discovering other services or getting/setting
-key/value data. The agent is responsible for health checking the services
-on the node as well as the node itself.
+Every node that provides services or you want to monitor must run XXX. Running a daemon for discovering other services or getting/setting key/value data. The daemon is responsible for health checking the services on the node as well as the node itself.
 
 Some agents can have some specific roles used by the XXX cluster. Such roles are:
 
 * **KV**: manage the data retention for the _key store_ feature
 
-* **TS**: manage the data retention for the _time series/metrology_ feature
+* **TS**: manage listening port for the _time series/metrology_ feature
 
 Such agent will be named **core nodes**.
 
