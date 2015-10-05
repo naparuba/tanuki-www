@@ -155,9 +155,9 @@ When starting <code>Node A</code> something like the following will be logged:</
 
 <p>Once <code>Node A</code> is running, we can start the next set of servers. There is a <a href="/docs/internals/consensus.html#toc_3">deployment table</a>
 that covers various options, but it is recommended to have 3 or 5 total servers per data center.
-A single server deployment is <em><strong>highly</strong></em> discouraged as data loss is inevitable in a failure scenario.
-We start the next servers <strong>without</strong> specifying <code>-bootstrap</code>. This is critical, since only one server
-should ever be running in bootstrap mode*. Once <code>Node B</code> and <code>Node C</code> are started, you should see a
+A single server deployment is <strong><em>highly</em>*_ discouraged as data loss is inevitable in a failure scenario.
+We start the next servers </strong>without*<em> specifying <code>-bootstrap</code>. This is critical, since only one server
+should ever be running in bootstrap mode</em>. Once <code>Node B</code> and <code>Node C</code> are started, you should see a
 message to the effect of:</p>
 <div class="highlight"><pre><span class="p">[</span><span class="n">WARN</span><span class="p">]</span> <span class="n">raft</span><span class="o">:</span> <span class="n">EnableSingleNode</span> <span class="n">disabled</span><span class="p">,</span> <span class="n">and</span> <span class="n">no</span> <span class="n">known</span> <span class="n">peers</span><span class="p">.</span> <span class="n">Aborting</span> <span class="n">election</span><span class="p">.</span>
 </pre></div>
